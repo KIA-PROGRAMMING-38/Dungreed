@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Utils
 {
@@ -7,7 +8,7 @@ namespace Utils
     {
         public static Vector2 GetMousePosition()
         {
-            return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            return Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         }
         public static float GetAngle(Vector2 lhs, Vector2 rhs){
             float angle = Vector2.Angle(lhs - rhs, Vector2.up);

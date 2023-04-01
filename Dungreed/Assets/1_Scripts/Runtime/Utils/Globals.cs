@@ -32,6 +32,7 @@ public static class Globals
 
     public static class TagLiteral
     {
-
-    }   
+        public static readonly string InvisibleTile = "InvisibleTile";
+        public static readonly string OnewayPlatform = "OnewayPlatform";
+    }
 }
