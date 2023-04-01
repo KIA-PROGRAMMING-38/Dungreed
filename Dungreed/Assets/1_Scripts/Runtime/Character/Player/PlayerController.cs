@@ -19,9 +19,7 @@ public class PlayerController : BaseController
     public SpriteRenderer Renderer { get { return _renderer; } }
     public PlayerHorizontalMovement HorizontalMovement { get { return _horizontalMovement; } }
 
-    [SerializeField]
-    private Ghost _ghost;
-    public Ghost ghost { get { return _ghost; } }
+
     #endregion
 
 
