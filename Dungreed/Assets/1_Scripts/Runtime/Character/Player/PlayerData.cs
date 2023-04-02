@@ -23,14 +23,11 @@ public class PlayerData : MonoBehaviour
 
     #region Dash
     [Header("Dash Data")]
-    public bool CanDash= true;
+    public bool CanDash = true;
     public int MaxDashCount = 2;
     public int CurrentDashCount= 0;
     public float DashCountInterval = 2f;
     public float DashPower;
     public float DashTime;
-
-
-
     #endregion
 }
