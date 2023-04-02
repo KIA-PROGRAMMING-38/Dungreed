@@ -1,9 +1,18 @@
+using System;
 using UnityEngine;
-using static BaseController;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class BaseController : MonoBehaviour
 {
+    [Header("Show CollisionInfo")]
+    [Header("------------------------")]
+    [ShowOnly, SerializeField] private bool IsGrounded;
+    [ShowOnly, SerializeField] private bool IsOnewayGrounded;
+    [ShowOnly, SerializeField] private bool left;
+    [ShowOnly, SerializeField] private bool right;
+    [Header("------------------------")]
+    
+
     [SerializeField] 
     protected LevelBounds _bounds;
     public LevelBounds Bounds { get { return _bounds; } }
@@ -44,7 +53,8 @@ public class BaseController : MonoBehaviour
     public float TopBound { get => _collider.bounds.center.y + _collider.bounds.extents.y; }
     public float BottomBound { get => _collider.bounds.center.y - _collider.bounds.extents.y; }
 
-    public CollisionsInfo CollisionInfo = new CollisionsInfo();
+    [ShowOnly] public CollisionsInfo CollisionInfo;
+  
 
     protected virtual void Awake()
     {
@@ -53,15 +63,20 @@ public class BaseController : MonoBehaviour
 
         CalcRaySpacing();
     }
-    protected virtual void Start()
-    {
-
-    }
+    protected virtual void Start() { }
     public void CheckRayAll()
     {
         CollisionInfo.Reset();
         VerticalCheck();
         HorizontalCheck();
+        UpdateShowonlyProperty();
+    }
+    public void UpdateShowonlyProperty()
+    {
+        IsGrounded = CollisionInfo.IsGrounded;
+        IsOnewayGrounded = CollisionInfo.IsOnewayGrounded;
+        left = CollisionInfo.left; 
+        right = CollisionInfo.right;
     }
 
     public void CalcRaySpacing()
@@ -159,6 +174,7 @@ public class BaseController : MonoBehaviour
         Rig2D.position = pos;
     }
 
+    [Serializable]
     public struct CollisionsInfo
     {
         public bool left, right;

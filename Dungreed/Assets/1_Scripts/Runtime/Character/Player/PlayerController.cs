@@ -1,8 +1,6 @@
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using EnumTypes;
 
 public class PlayerController : BaseController
 {
@@ -54,7 +52,7 @@ public class PlayerController : BaseController
         StartCoroutine(IncreaseDashCount());
     }
 
-    void Update()
+    protected void Update()
     {
         CheckRayAll();
         Flip();
