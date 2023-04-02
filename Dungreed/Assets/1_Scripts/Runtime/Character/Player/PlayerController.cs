@@ -6,8 +6,8 @@ using EnumTypes;
 
 public class PlayerController : BaseController
 {
-    private Bounds _playerBound;
     #region Components
+    private Health _health;
     private PlayerData _data;
     private PlayerInput _input;
     private Animator _animator;
@@ -18,12 +18,7 @@ public class PlayerController : BaseController
     public PlayerInput Input { get { return _input; } }
     public SpriteRenderer Renderer { get { return _renderer; } }
     public PlayerHorizontalMovement HorizontalMovement { get { return _horizontalMovement; } }
-
-
     #endregion
-
-
-    private Vector3 _mousePosition;
 
     public static readonly string DieAnimParam = "Die";
     public static readonly string JumpAnimParam = "Jump";
@@ -43,26 +38,20 @@ public class PlayerController : BaseController
     protected override void Awake()
     {
         base.Awake();
-
+     
         _data = GetComponent<PlayerData>();
+        _health = GetComponent<Health>();
         _animator = GetComponentInChildren<Animator>();
         _rig2D = GetComponent<Rigidbody2D>();
         _input = GetComponent<PlayerInput>();
         _renderer = GetComponentInChildren<SpriteRenderer>();
         _horizontalMovement = GetComponent<PlayerHorizontalMovement>();
     }
+
     protected override void Start()
     {
         base.Start();
         StartCoroutine(IncreaseDashCount());
-    }
-    protected void OnEnable()
-    {
-    }
-
-    protected void OnDisable()
-    {
-
     }
 
     void Update()
@@ -88,8 +77,6 @@ public class PlayerController : BaseController
 
     private void Flip()
     {
-        _mousePosition = Utils.Utility2D.GetMousePosition();
-
         Vector2 scale = transform.localScale;
         scale.x = transform.IsMouseOnLeft() switch
         {
