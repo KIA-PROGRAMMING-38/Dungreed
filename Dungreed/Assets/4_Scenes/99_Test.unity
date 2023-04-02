@@ -408,15 +408,15 @@ MonoBehaviour:
   MoveSpeed: 7
   <MoveParticle>k__BackingField: {fileID: 0}
   JumpForce: 12
-  JumpTime: 0.3
+  JumpTime: 0.15
   IsJumping: 0
   JumpTimeCounter: 0
   CanDash: 1
   MaxDashCount: 2
   CurrentDashCount: 0
   DashCountInterval: 2
-  DashPower: 0
-  DashTime: 0
+  DashPower: 10
+  DashTime: 0.2
 --- !u!114 &196949060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -484,6 +484,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c41ec01b5630d747894464ffe057ede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsGrounded: 0
+  IsOnewayGrounded: 0
+  left: 0
+  right: 0
   _bounds: {fileID: 554771610}
   _platformMask:
     serializedVersion: 2
@@ -497,6 +501,11 @@ MonoBehaviour:
   _raycastDistance: 0.1
   _verticalRayCount: 4
   _horizontalRayCount: 3
+  CollisionInfo:
+    left: 0
+    right: 0
+    IsGrounded: 0
+    IsOnewayGrounded: 0
 --- !u!61 &196949064
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1012,6 +1021,10 @@ PrefabInstance:
     - target: {fileID: 7028112239783227758, guid: 0c76be895f0240b469dce1d293dd3077, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7028112239783227758, guid: 0c76be895f0240b469dce1d293dd3077, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c76be895f0240b469dce1d293dd3077, type: 3}
