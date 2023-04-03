@@ -18,11 +18,10 @@ public class PlayerDash : StateMachineBehaviour
         _data = _data ?? animator.GetComponentInParent<PlayerData>();
 
         _controller.DecreaseDashCount();
-
         _controller.Rig2D.velocity = Vector2.zero;
 
         _dashTime = 0f;
-        _dir = ((Vector3)Utils.Utility2D.GetMousePosition() - _data.transform.position).normalized;
+        _dir = _data.transform.position.MouseDir();
         _Force = _dir * _data.DashPower;
         _controller.Rig2D.velocity = _Force;
 

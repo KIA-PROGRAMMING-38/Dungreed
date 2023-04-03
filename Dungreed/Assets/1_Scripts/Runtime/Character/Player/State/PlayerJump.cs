@@ -15,6 +15,8 @@ public class PlayerJump : StateMachineBehaviour
         _data.JumpTimeCounter = _data.JumpTime;
         _data.IsJumping = true;
         _controller.Rig2D.velocity = new Vector2(_controller.Rig2D.velocity.x, _data.JumpForce);
+
+        CreateJumpFx();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -48,8 +50,15 @@ public class PlayerJump : StateMachineBehaviour
         {
             _data.IsJumping = false;
         }
-
+        
         _controller.HorizontalMovement.HorizontalMove();
+    }
+
+    void CreateJumpFx()
+    {
+        Vector2 pos = _controller.BoundCenter;
+        pos.y = _controller.BoundCenter.y;
+        GameManager.Instance.FxPooler.GetFx("JumpFx", pos, Quaternion.identity);
     }
 
     //OnStateExit is called when a transition ends and the state machine finishes evaluating this state

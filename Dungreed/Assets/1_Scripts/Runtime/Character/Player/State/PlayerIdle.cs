@@ -13,6 +13,7 @@ public class PlayerIdle : StateMachineBehaviour
         vel.x = 0;
         _controller.Rig2D.velocity = vel;
     }
+
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.Space) && _controller.CollisionInfo.IsOnewayGrounded)

@@ -7,8 +7,6 @@ public class PlayerData : MonoBehaviour
 
     [Header("Move Data")]
     public float MoveSpeed;
-    [field: SerializeField]
-    public ParticleSystem MoveParticle { get; private set; }
 
 
     #region Jump

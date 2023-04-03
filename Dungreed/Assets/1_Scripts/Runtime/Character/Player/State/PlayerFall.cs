@@ -9,10 +9,9 @@ public class PlayerFall : StateMachineBehaviour
     {
         _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
         _data = _data ?? animator.GetComponentInParent<PlayerData>();
-        Debug.Log("Fall State");
+
         if(true == _controller.CollisionInfo.IsOnewayGrounded)
         {
-            Debug.Log("OnewayFall State");
             _controller.StartCoroutine(_controller.DisableCollision());
         }
     }

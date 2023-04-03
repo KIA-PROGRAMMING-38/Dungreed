@@ -13,10 +13,9 @@ public class FxPooler : MonoBehaviour
 
     public FxObject GetFx(string name, Vector3 position, Quaternion rotate, Vector3 scale)
     {
-        var clip = AnimationClipPath.GetAnimationClipResource(name);
-        var pooledObject = FxPool.Get();
-        pooledObject.SetAnimationClip(clip);
-        pooledObject.SetTransform(position, rotate, scale);
+        FxObject pooledObject = GetFx(name, position, rotate);
+        pooledObject.transform.localScale = scale;
+
         return pooledObject;
     }
 
@@ -26,6 +25,7 @@ public class FxPooler : MonoBehaviour
         var pooledObject = FxPool.Get();
         pooledObject.SetAnimationClip(clip);
         pooledObject.SetTransform(position, rotate);
+
         return pooledObject;
     }
 
