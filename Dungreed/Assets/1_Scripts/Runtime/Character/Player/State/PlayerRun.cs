@@ -58,6 +58,8 @@ public class PlayerRun : StateMachineBehaviour
 
     void CreateMoveFx()
     {
+        if (!(_controller.CollisionInfo.IsGrounded || _controller.CollisionInfo.IsOnewayGrounded)) return;
+        if(_controller.CollisionInfo.left || _controller.CollisionInfo.right) return;
         _time = _moveFxSpawnInterval;
         _fxSpawnPosition = _controller.BoundCenter;
         _fxSpawnPosition.y = _controller.BottomBound;

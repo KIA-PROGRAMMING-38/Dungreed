@@ -46,7 +46,7 @@ public class PlayerDash : StateMachineBehaviour
 
         if (_dashTime >= _data.DashTime)
         {
-            animator.SetTrigger(_controller.Id_FallAnimationParameter);
+            animator.SetTrigger(_controller.Id_IdleAnimationParameter);
             return;
         }
     }

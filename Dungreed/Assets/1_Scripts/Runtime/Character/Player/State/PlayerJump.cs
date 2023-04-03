@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 public class PlayerJump : StateMachineBehaviour
 {
@@ -24,13 +21,11 @@ public class PlayerJump : StateMachineBehaviour
         if (_controller.Rig2D.velocity.y < 0)
         {
             animator.SetTrigger(_controller.Id_FallAnimationParameter);
-            return;
         }
 
         if (Input.GetMouseButtonDown(1) && _data.CanDash)
         {
             animator.SetTrigger(_controller.Id_DashAnimationParameter);
-            return;
         }
 
         if (Input.GetKey(KeyCode.Space) && _data.IsJumping == true)
@@ -43,6 +38,10 @@ public class PlayerJump : StateMachineBehaviour
             else
             {
                 _data.IsJumping = false;
+                if(_controller.CollisionInfo.IsGrounded || _controller.CollisionInfo.IsOnewayGrounded)
+                {
+                    animator.SetTrigger(_controller.Id_IdleAnimationParameter);
+                }
             }
         }
 
