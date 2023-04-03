@@ -23,11 +23,13 @@ public class PlayerJump : StateMachineBehaviour
         if (_controller.Rig2D.velocity.y < 0)
         {
             animator.SetTrigger(_controller.Id_FallAnimationParameter);
+            return;
         }
 
         if (Input.GetMouseButtonDown(1) && _data.CanDash)
         {
             animator.SetTrigger(_controller.Id_DashAnimationParameter);
+            return;
         }
 
         if (Input.GetKey(KeyCode.Space) && _data.IsJumping == true)

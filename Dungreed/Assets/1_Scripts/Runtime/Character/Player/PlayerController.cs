@@ -1,6 +1,7 @@
 
 using System.Collections;
 using UnityEngine;
+using Globals;
 
 public class PlayerController : BaseController
 {
@@ -18,19 +19,13 @@ public class PlayerController : BaseController
     public PlayerHorizontalMovement HorizontalMovement { get { return _horizontalMovement; } }
     #endregion
 
-    public static readonly string DieAnimParam = "Die";
-    public static readonly string JumpAnimParam = "Jump";
-    public static readonly string DashAnimParam = "Dash";
-    public static readonly string RunAnimParam = "Run";
-    public static readonly string IdleAnimParam = "Idle";
-    public static readonly string FallAnimParam = "Fall";
 
-    public readonly int Id_DieAnimationParameter = Animator.StringToHash(DashAnimParam);
-    public readonly int Id_DashAnimationParameter = Animator.StringToHash(DashAnimParam);
-    public readonly int Id_JumpAnimationParameter = Animator.StringToHash(JumpAnimParam);
-    public readonly int Id_RunAnimationParameter = Animator.StringToHash(RunAnimParam);
-    public readonly int Id_IdleAnimationParameter = Animator.StringToHash(IdleAnimParam);
-    public readonly int Id_FallAnimationParameter = Animator.StringToHash(FallAnimParam);
+    public readonly int Id_DieAnimationParameter    = Animator.StringToHash(PlayerAnimParmaeterLiteral.DieTrigger);
+    public readonly int Id_DashAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.DashTrigger);
+    public readonly int Id_JumpAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.JumpTrigger);
+    public readonly int Id_RunAnimationParameter    = Animator.StringToHash(PlayerAnimParmaeterLiteral.RunTrigger);
+    public readonly int Id_IdleAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.IdleTrigger);
+    public readonly int Id_FallAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.FallTrigger);
 
 
     protected override void Awake()
@@ -87,9 +82,10 @@ public class PlayerController : BaseController
 
     public IEnumerator DisableCollision()
     {
-        Physics2D.IgnoreCollision(_collider, _onewayPlatformCollider);
+        var platformCol = _onewayPlatformCollider;
+        Physics2D.IgnoreCollision(_collider, platformCol);
         yield return YieldCache.WaitForSeconds(0.25f);
-        Physics2D.IgnoreCollision(_collider, _onewayPlatformCollider, false);
+        Physics2D.IgnoreCollision(_collider, platformCol, false);
         _onewayPlatformCollider = null;
     }
     public IEnumerator IncreaseDashCount()

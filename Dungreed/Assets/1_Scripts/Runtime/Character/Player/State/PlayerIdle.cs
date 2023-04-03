@@ -9,7 +9,9 @@ public class PlayerIdle : StateMachineBehaviour
     {
         _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
         _data = _data ?? animator.GetComponentInParent<PlayerData>();
-        _controller.Rig2D.velocity = Vector2.zero;
+        Vector2 vel = _controller.Rig2D.velocity;
+        vel.x = 0;
+        _controller.Rig2D.velocity = vel;
         Debug.Log("Player Idle State");
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -19,6 +21,7 @@ public class PlayerIdle : StateMachineBehaviour
             animator.SetTrigger(_controller.Id_FallAnimationParameter);
             return;
         }
+
         if (Input.GetKeyDown(KeyCode.Space) && _controller.CollisionInfo.IsGrounded)
         {
             animator.SetTrigger(_controller.Id_JumpAnimationParameter);
