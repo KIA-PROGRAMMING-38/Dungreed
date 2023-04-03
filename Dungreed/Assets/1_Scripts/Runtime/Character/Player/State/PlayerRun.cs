@@ -60,7 +60,7 @@ public class PlayerRun : StateMachineBehaviour
     {
         _time = _moveFxSpawnInterval;
         _fxSpawnPosition = _controller.BoundCenter;
-        _fxSpawnPosition.y = _controller.BoundCenter.y;
+        _fxSpawnPosition.y = _controller.BottomBound;
         Vector3 newScale = new Vector3(Mathf.Sign(_controller.Input.X), 1, 1);
         GameManager.Instance.FxPooler.GetFx("MoveFx", _fxSpawnPosition, Quaternion.identity, newScale);
     }

@@ -57,7 +57,7 @@ public class PlayerJump : StateMachineBehaviour
     void CreateJumpFx()
     {
         Vector2 pos = _controller.BoundCenter;
-        pos.y = _controller.BoundCenter.y;
+        pos.y = _controller.BottomBound;
         GameManager.Instance.FxPooler.GetFx("JumpFx", pos, Quaternion.identity);
     }
 
