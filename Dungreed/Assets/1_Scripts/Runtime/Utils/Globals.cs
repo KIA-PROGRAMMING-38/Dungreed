@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Globals
+namespace Globals
 {
-    public static class LayerName
+    public class LayerName
     {
         // Layer name
         public static readonly string Default = "Default";
@@ -18,7 +18,7 @@ public static class Globals
         public static readonly string NonCollision = "NonCollision";
     }
 
-    public static class LayerMask
+    public class LayerMask
     {
         public static readonly int Default = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Default);
         public static readonly int Platform = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Platform);
@@ -30,7 +30,7 @@ public static class Globals
         public static readonly int NonCollision = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.NonCollision);
     }
 
-    public static class TagLiteral
+    public class TagLiteral
     {
         public static readonly string InvisibleTile = "InvisibleTile";
         public static readonly string OnewayPlatform = "OnewayPlatform";

@@ -11,18 +11,7 @@ public static class ComponentExtension
     /// <returns></returns>
     public static T GetComponentAllCheck<T>(this Component owner) where T : Component
     {
-        T comp = owner.gameObject.GetComponent<T>();
-
-        if (comp == null)
-        {
-            comp = owner.gameObject.GetComponentInChildren<T>();
-
-            if (comp == null)
-            {
-                comp = owner.gameObject.GetComponentInParent<T>();
-            }
-        }
-
+        T comp = owner.gameObject.GetComponentInChildren<T>() ?? owner.gameObject.GetComponentInParent<T>();
 
         return comp;
     }
