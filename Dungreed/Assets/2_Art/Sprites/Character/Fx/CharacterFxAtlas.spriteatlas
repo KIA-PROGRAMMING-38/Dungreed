@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CharacterFxAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 04795fa3e2d898b4a9142a36732ff730, type: 3}
+    - {fileID: 2800000, guid: 6848737aadcfc794c93d1a6c4eaacc8c, type: 3}
+    - {fileID: 2800000, guid: 2254d8639c855954abef026d09b51ce7, type: 3}
+    - {fileID: 2800000, guid: afcdd95496f49844b9d68543fd5fdc4f, type: 3}
+    - {fileID: 2800000, guid: c3c0ea1f11dfa0c4e95cc16be8038a1f, type: 3}
+    - {fileID: 2800000, guid: 0a263b66742772a458c5fef34267cc8c, type: 3}
+    - {fileID: 2800000, guid: 5fbb1faed237e4d47880be159002eb69, type: 3}
+    - {fileID: 2800000, guid: d75548c14b7b45f4db4e71922897335a, type: 3}
+    - {fileID: 2800000, guid: 9e738cf14fc39b8419a2b914fea8a175, type: 3}
+    - {fileID: 2800000, guid: 6df7c539786d4b543ac7f1d62f761281, type: 3}
+    - {fileID: 2800000, guid: e2a06d410424732489ba80873a01295c, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: e2a06d410424732489ba80873a01295c, type: 3}
+  - {fileID: 21300000, guid: d75548c14b7b45f4db4e71922897335a, type: 3}
+  - {fileID: 21300000, guid: 9e738cf14fc39b8419a2b914fea8a175, type: 3}
+  - {fileID: 21300000, guid: 2254d8639c855954abef026d09b51ce7, type: 3}
+  - {fileID: 21300000, guid: 04795fa3e2d898b4a9142a36732ff730, type: 3}
+  - {fileID: 21300000, guid: afcdd95496f49844b9d68543fd5fdc4f, type: 3}
+  - {fileID: 21300000, guid: 0a263b66742772a458c5fef34267cc8c, type: 3}
+  - {fileID: 21300000, guid: 6df7c539786d4b543ac7f1d62f761281, type: 3}
+  - {fileID: 21300000, guid: 6848737aadcfc794c93d1a6c4eaacc8c, type: 3}
+  - {fileID: 21300000, guid: 5fbb1faed237e4d47880be159002eb69, type: 3}
+  - {fileID: 21300000, guid: c3c0ea1f11dfa0c4e95cc16be8038a1f, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Dust6
+  - Dust3
+  - Dust4
+  - JumpFX2
+  - JumpFX0
+  - JumpFX3
+  - Dust1
+  - Dust5
+  - JumpFX1
+  - Dust2
+  - JumpFX4
+  m_RenderDataMap: {}
+  m_Tag: CharacterFxAtlas
+  m_IsVariant: 0
