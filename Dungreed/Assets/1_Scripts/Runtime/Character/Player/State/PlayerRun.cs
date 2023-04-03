@@ -8,12 +8,22 @@ public class PlayerRun : StateMachineBehaviour
 {
     private PlayerController _controller;
     private PlayerData _data;
+    private FxPooler pooler;
+    private Vector2 fxSpawnPosition;
+    private float moveFxSpawnInterval = 0.3f;
+    private float time;
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
         _data = _data ?? animator.GetComponentInParent<PlayerData>();
         Debug.Log("Player Run State");
+
+        pooler = GameManager.Instance.FxPooler;
+        fxSpawnPosition = _controller.BoundCenter;
+        fxSpawnPosition.y = _controller.BoundCenter.y;
+        Vector3 newScale = new Vector3(Mathf.Sign(_controller.Input.X), 1, 1);
+        pooler.GetFx("MoveFx", fxSpawnPosition,Quaternion.identity, newScale);
     }
 
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -48,11 +58,20 @@ public class PlayerRun : StateMachineBehaviour
         }
 
         _controller.HorizontalMovement.HorizontalMove();
+        time -= Time.deltaTime;
+        if(time <= 0f)
+        {
+            time = moveFxSpawnInterval;
+            fxSpawnPosition = _controller.BoundCenter;
+            fxSpawnPosition.y = _controller.BoundCenter.y;
+            Vector3 newScale = new Vector3(Mathf.Sign(_controller.Input.X), 1, 1);
+            pooler.GetFx("MoveFx", fxSpawnPosition, Quaternion.identity, newScale);
+        }
     }
 
     //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        time = moveFxSpawnInterval;
     }
 }

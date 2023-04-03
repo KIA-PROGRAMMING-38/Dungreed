@@ -18,8 +18,6 @@ public class PlayerHorizontalMovement : MonoBehaviour
 
     public void HorizontalMove()
     {
-        Debug.Log("Left : " + _controller.CollisionInfo.left);
-        Debug.Log("Rgiht : " + _controller.CollisionInfo.right);
         if (_controller.CollisionInfo.left == false && false == _controller.CollisionInfo.right)
         {
             if (_playerInput.IsInputXY)

@@ -29,6 +29,8 @@ public class Health : MonoBehaviour, IDamageable
     private void Awake()
     {
         _renderer = this.GetComponentAllCheck<SpriteRenderer>();
+        if (_renderer == null)
+            Debug.Log("rendere is null");
         Debug.Assert(_renderer != null, $"Invalid Renderer : {name}/{nameof(Health)}:Component");
 
         _invincibleCoroutine = InvincibleCoroutine();

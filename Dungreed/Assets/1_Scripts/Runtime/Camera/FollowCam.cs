@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class FollowCam : MonoBehaviour
 {
     [SerializeField] LevelBounds _levelBounds;
