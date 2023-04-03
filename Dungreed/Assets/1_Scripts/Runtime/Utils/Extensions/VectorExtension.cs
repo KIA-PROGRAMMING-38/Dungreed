@@ -2,6 +2,18 @@ using UnityEngine;
 
 public static class VectorExtension
 {
+    public static Vector3 MouseDir(this Vector3 pivot)
+    {
+        Vector3 mousePos = Utils.Utility2D.GetMousePosition();
+        return ( mousePos - pivot).normalized;
+    }
+
+    public static Vector2 MouseDir(this Vector2 pivot)
+    {
+        Vector2 mousePos = Utils.Utility2D.GetMousePosition();
+        return (mousePos - pivot).normalized;
+    }
+
     public static float AngleZ(this Vector2 angle)
     {
         if (angle == Vector2.zero)
