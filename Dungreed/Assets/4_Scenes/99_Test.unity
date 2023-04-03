@@ -415,7 +415,7 @@ MonoBehaviour:
   MaxDashCount: 2
   CurrentDashCount: 0
   DashCountInterval: 2
-  DashPower: 10
+  DashPower: 15
   DashTime: 0.2
 --- !u!114 &196949060
 MonoBehaviour:
