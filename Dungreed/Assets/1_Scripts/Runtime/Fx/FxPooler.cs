@@ -41,7 +41,7 @@ public class FxPooler : MonoBehaviour
     public FxObject CreateFx()
     {
         FxObject obj = MonoBehaviour.Instantiate<FxObject>(DefaultFxObject, Vector3.zero, Quaternion.identity, transform);        
-        obj.poolOwner = this;
+        obj.PoolOwner = this;
         return obj;
     }
 

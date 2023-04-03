@@ -6,12 +6,12 @@ public class PlayerDash : StateMachineBehaviour
     private PlayerData _data;
 
     
-    float _dashFxInterval = 0.03f;
-    float _dashTime = 0f;
-    float _dashFxTime = 0f;
-    Vector2 dir;
-    Vector2 Force;
-    //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+    private float _dashFxInterval = 0.03f;
+    private float _dashTime = 0f;
+    private float _dashFxTime = 0f;
+    private Vector2 _dir;
+    private Vector2 _Force;
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
@@ -22,9 +22,9 @@ public class PlayerDash : StateMachineBehaviour
         _controller.Rig2D.velocity = Vector2.zero;
 
         _dashTime = 0f;
-        dir = ((Vector3)Utils.Utility2D.GetMousePosition() - _data.transform.position).normalized;
-        Force = dir * _data.DashPower;
-        _controller.Rig2D.velocity = Force;
+        _dir = ((Vector3)Utils.Utility2D.GetMousePosition() - _data.transform.position).normalized;
+        _Force = _dir * _data.DashPower;
+        _controller.Rig2D.velocity = _Force;
 
         if (_controller.CollisionInfo.IsOnewayGrounded)
             _controller.StartCoroutine(_controller.DisableCollision());
@@ -32,11 +32,10 @@ public class PlayerDash : StateMachineBehaviour
         CreateDashFx();
     }
 
-    //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
-        _controller.Rig2D.velocity = Force;
+        _controller.Rig2D.velocity = _Force;
         
         _dashTime += Time.deltaTime;
         _dashFxTime += Time.deltaTime;

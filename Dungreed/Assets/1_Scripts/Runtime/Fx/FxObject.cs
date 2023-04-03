@@ -2,7 +2,7 @@
 
 public class FxObject : MonoBehaviour
 {
-    public FxPooler poolOwner { private get; set; }
+    public FxPooler PoolOwner { private get; set; }
     private AnimatorOverrideController overrideController;
 
     
@@ -32,7 +32,7 @@ public class FxObject : MonoBehaviour
     {
         if(_animator?.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
         {
-            poolOwner?.Release(this);
+            PoolOwner?.Release(this);
         }
     }
 

@@ -22,7 +22,7 @@ public class PlayerFall : StateMachineBehaviour
         if (_controller.CollisionInfo.IsGrounded == true || _controller.CollisionInfo.IsOnewayGrounded)
         {
             //_data.MoveParticle.Play();
-            animator.SetTrigger(_controller.Id_IdleAnimationParameter);
+            animator.SetTrigger(_controller.Id_FallAnimationParameter);
         }
 
 

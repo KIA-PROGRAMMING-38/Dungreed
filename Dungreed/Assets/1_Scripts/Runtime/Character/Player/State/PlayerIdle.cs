@@ -12,7 +12,6 @@ public class PlayerIdle : StateMachineBehaviour
         Vector2 vel = _controller.Rig2D.velocity;
         vel.x = 0;
         _controller.Rig2D.velocity = vel;
-        Debug.Log("Player Idle State");
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

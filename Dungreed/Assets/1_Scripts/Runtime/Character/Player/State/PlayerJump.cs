@@ -7,7 +7,7 @@ public class PlayerJump : StateMachineBehaviour
 {
     private PlayerController _controller;
     private PlayerData _data;
-    //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
@@ -17,7 +17,6 @@ public class PlayerJump : StateMachineBehaviour
         _controller.Rig2D.velocity = new Vector2(_controller.Rig2D.velocity.x, _data.JumpForce);
     }
 
-    //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (_controller.Rig2D.velocity.y < 0)
