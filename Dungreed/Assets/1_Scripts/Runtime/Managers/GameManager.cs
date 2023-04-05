@@ -7,6 +7,8 @@ public class GameManager : Singleton<GameManager>
 
     [field: SerializeField]
     public FxPooler FxPooler { get; private set; }
+    [field: SerializeField]
+    public WeaponDataManager WeaponDataManager { get; private set; }
 
     protected override void Awake()
     {

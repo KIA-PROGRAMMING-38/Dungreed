@@ -4,12 +4,14 @@ public class FxObject : MonoBehaviour
 {
     public FxPooler PoolOwner { private get; set; }
     private AnimatorOverrideController overrideController;
+    private Material _defaultFxMaterial;
 
     
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _spriteRenderer= GetComponent<SpriteRenderer>();
+        _defaultFxMaterial = _spriteRenderer.material;
     }
 
     public void SetAnimationClip(AnimationClip clip)
@@ -87,6 +89,7 @@ public class FxObject : MonoBehaviour
     public void Reset()
     {
         SetTransform(Vector3.zero, Quaternion.identity, Vector3.one);
+        _spriteRenderer.material = _defaultFxMaterial;
     }
 
     private SpriteRenderer _spriteRenderer;
