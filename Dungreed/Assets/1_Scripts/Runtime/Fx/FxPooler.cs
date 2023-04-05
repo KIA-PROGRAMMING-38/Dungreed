@@ -35,6 +35,7 @@ public class FxPooler : MonoBehaviour
     }
 
     public ObjectPool<FxObject> FxPool { get; private set; }
+
     private FxObject DefaultFxObject;
 
 

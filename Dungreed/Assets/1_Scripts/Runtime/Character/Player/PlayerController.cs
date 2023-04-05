@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using Globals;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerController : BaseController
 {
@@ -11,6 +12,7 @@ public class PlayerController : BaseController
     private PlayerInput _input;
     private Animator _animator;
     private SpriteRenderer _renderer;
+
     private PlayerHorizontalMovement _horizontalMovement;
 
     public Animator Anim { get { return _animator; } }
@@ -53,6 +55,11 @@ public class PlayerController : BaseController
         Flip();
 
         CharacterMovementBoundaryCheck();
+
+        if (CollisionInfo.IsSlope)
+        {
+            Rig2D.velocity = Vector2.zero;
+        }
     }
 
     private void DirectionUpdate()

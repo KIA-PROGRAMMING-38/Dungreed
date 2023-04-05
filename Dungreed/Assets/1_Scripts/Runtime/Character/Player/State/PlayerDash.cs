@@ -27,7 +27,6 @@ public class PlayerDash : StateMachineBehaviour
 
         if (_controller.CollisionInfo.IsOnewayGrounded)
             _controller.StartCoroutine(_controller.DisableCollision());
-
         CreateDashFx();
     }
 
@@ -36,8 +35,6 @@ public class PlayerDash : StateMachineBehaviour
 
         _controller.Rig2D.velocity = _Force;
         
-        _dashTime += Time.deltaTime;
-        _dashFxTime += Time.deltaTime;
         if(_dashFxTime >= _dashFxInterval)
         {
             CreateDashFx();
@@ -49,6 +46,9 @@ public class PlayerDash : StateMachineBehaviour
             animator.SetTrigger(_controller.Id_IdleAnimationParameter);
             return;
         }
+
+        _dashTime += Time.deltaTime;
+        _dashFxTime += Time.deltaTime;
     }
 
     public void CreateDashFx()
@@ -56,13 +56,26 @@ public class PlayerDash : StateMachineBehaviour
         _dashFxTime = 0f;
         SpriteRenderer render = GameManager.Instance.FxPooler.GetFx("AfterImageFx", _controller.transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
         render.sprite = _controller.Renderer.sprite;
+
+
+        GameManager.Instance.FxPooler.GetFx("AfterImageFx", _controller.transform.position, Quaternion.identity);
+    }
+
+    public void CreateKickFx()
+    {
+        Vector3 SpawnPosition = _controller.BoundCenter;
+        SpawnPosition.y = _controller.BottomBound;
+        FxObject obj = GameManager.Instance.FxPooler.GetFx("KickFx", SpawnPosition, Quaternion.identity, _controller.transform.localScale);
+        obj.ChangeLayerOrder(2);
     }
 
     //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        CreateKickFx();
         Vector2 vel = _controller.Rig2D.velocity;
         vel.x = 0f;
         _controller.Rig2D.velocity = vel;
+        _dashTime = 0f;
     }
 }
