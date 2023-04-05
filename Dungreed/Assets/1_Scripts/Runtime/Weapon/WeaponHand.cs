@@ -1,33 +1,57 @@
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class WeaponHand : MonoBehaviour
 {
-    [SerializeField] private Transform _owner;
+    [field: SerializeField] public Transform Owner { get; private set; }
+    
+    [SerializeField] private Transform _handModel;
 
-    private WeaponBase _currentWeapon;
+    [SerializeField] private SortingGroup _sortingGroup;
+
+    private SpriteRenderer _ownerRenderer;
+
+    [SerializeField] private WeaponBase _equippedWeapon;
+    [SerializeField] private WeaponData _equippedWeaponData;
+
+    private float _faceDirX;
+    private Vector2 _mouseDir;
     private bool _isFlip = false;
-    void SetOwner(Transform owner) => _owner = owner;
+    void SetOwner(Transform owner) => Owner = owner;
+    
+
+    private void Awake()
+    {
+        _ownerRenderer = Owner.GetComponentAllCheck<SpriteRenderer>();
+
+        _sortingGroup = GetComponent<SortingGroup>();
+
+        EquipWeapon(_equippedWeaponData);
+    }
 
     private void Update()
     {
         if(Input.GetMouseButtonDown(0))
         {
-            _isFlip = !_isFlip;
-            Vector3 mouseDir = _owner.position.MouseDir();
-            float angle = Utils.Utility2D.DirectionToAngle(mouseDir.x, mouseDir.y);
-            float offsetAngle = -90f;
-            angle += offsetAngle;
-            Vector2 fxPos = transform.position + (mouseDir * 1f);
-
-            GameManager.Instance.FxPooler.GetFx("SwingFx", fxPos, Quaternion.Euler(0, 0, angle));
+            FlipTriggerOn();
+            _equippedWeapon.Attack();
         }
         HandRotate();
     }
 
     // 무기 장착을 위한 메서드
-    private void EquipWeapon()
+    public void EquipWeapon(WeaponData weaponData)
     {
+        if(_equippedWeapon != null)
+        {
+            Destroy(_equippedWeapon.gameObject);
+        }
 
+        _equippedWeapon = Instantiate(weaponData.Prefab, transform).GetComponent<WeaponBase>();
+        _equippedWeapon.transform.localPosition = _equippedWeaponData.OffsetInitPosition;
+        _equippedWeapon.SetHand(this);
+        _equippedWeaponData = weaponData;
     }
 
     // 마우스 방향으로 무기를 회전시킬 메서드
@@ -35,15 +59,21 @@ public class WeaponHand : MonoBehaviour
     {
         // -1 : 왼쪽
         // 1 : 오른쪽
-        float faceDir= Mathf.Sign(_owner.localScale.x);
-        Vector2 mouseDir = _owner.position.MouseDir();
-        //mouseDir = mouseDir.RotateZ(45f);
-        transform.right = mouseDir;
-        // transform.Rotate(0,0 )
-        Vector2 scale = new Vector2(faceDir, 1);
-        float y = mouseDir.x < 0 ? -1 : 1;
-        scale.y = y;
+        _faceDirX  = Mathf.Sign(Owner.localScale.x);
+        _mouseDir = Owner.position.MouseDir();
+        transform.right = _mouseDir;
 
-        transform.localScale = _isFlip ? -1f * scale : scale;
+        float offsetAngle = _equippedWeaponData.RotateAngleOffset;
+        transform.Rotate(0, 0, offsetAngle);
+        Vector3 scale = new Vector2(_faceDirX, 1);
+        scale.y = _mouseDir.x < 0 ? -1 : 1;
+        
+        transform.localScale = _isFlip ? -(scale) : scale;
+    }
+
+    private void FlipTriggerOn()
+    {
+        _isFlip = !_isFlip;
+        _sortingGroup.sortingOrder = _isFlip ? _ownerRenderer.sortingOrder + 1 : _ownerRenderer.sortingOrder - 1;
     }
 }
