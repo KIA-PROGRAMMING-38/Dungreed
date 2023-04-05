@@ -10,6 +10,7 @@ public class BaseController : MonoBehaviour
     [ShowOnly, SerializeField] private bool IsOnewayGrounded;
     [ShowOnly, SerializeField] private bool left;
     [ShowOnly, SerializeField] private bool right;
+    [ShowOnly, SerializeField] private bool IsSlope;
     [Header("------------------------")]
     
 
@@ -53,6 +54,8 @@ public class BaseController : MonoBehaviour
     public float TopBound { get => _collider.bounds.center.y + _collider.bounds.extents.y; }
     public float BottomBound { get => _collider.bounds.center.y - _collider.bounds.extents.y; }
 
+
+    private float _maxSlopeAngle = 70f;
     [ShowOnly] public CollisionsInfo CollisionInfo;
   
 
@@ -77,6 +80,7 @@ public class BaseController : MonoBehaviour
         IsOnewayGrounded = CollisionInfo.IsOnewayGrounded;
         left = CollisionInfo.left; 
         right = CollisionInfo.right;
+        IsSlope = CollisionInfo.IsSlope;
     }
 
     public void CalcRaySpacing()
@@ -84,7 +88,7 @@ public class BaseController : MonoBehaviour
         Bounds bounds = _collider.bounds;
 
         _verticalRaySpacing = bounds.size.x / (_verticalRayCount - 1);
-        _horizontalRaySpacing = bounds.size.x / (_horizontalRayCount- 1);
+        _horizontalRaySpacing = bounds.size.y / (_horizontalRayCount- 1);
     }
     public void VerticalCheck()
     {
@@ -137,6 +141,12 @@ public class BaseController : MonoBehaviour
 
             if (hitCount > 0)
             {
+                float angle = Vector3.Angle(_hit[0].normal, Vector2.up);
+                if(angle <= _maxSlopeAngle)
+                {
+                    CollisionInfo.IsSlope = true;
+                    //_rig2D.MovePosition(new Vector2(_rig2D.position.x, _hit[0].distance));
+                } 
                 CollisionInfo.left  = (Mathf.Sign(_direction.x) == -1f) ? true : false;
                 CollisionInfo.right = (Mathf.Sign(_direction.x) == 1f) ? true : false;
                 break;
@@ -180,10 +190,12 @@ public class BaseController : MonoBehaviour
         public bool left, right;
         public bool IsGrounded;
         public bool IsOnewayGrounded;
+        public bool IsSlope;
         public void Reset()
         {
             left = right = false;
             IsGrounded = IsOnewayGrounded = false;
+            IsSlope = false;
         }
     }
 
