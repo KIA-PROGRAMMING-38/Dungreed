@@ -3,13 +3,12 @@ using EnumTypes;
 [CreateAssetMenu(fileName = "WeaponData", menuName = "Data/WeaponData")]
 public class WeaponData : ScriptableObject
 {
-    [Header("Weapon Prefab")]
     public GameObject   Prefab;
-
     public GameObject   ProjectTile;
-    public GameObject   AttackEffect;
-    [Space(10)]
-    [Header("Weapon Datas")]
+
+    public string SwingFxName;
+
+    public int Id;
     public string Name;
     public string Description;
 
@@ -24,5 +23,11 @@ public class WeaponData : ScriptableObject
     public int MinDamage;
     public int MaxDamage;
     public float AttackSpeedPerSecond;
+
+    public float MeleeAttackRange;
+
+    public float ProjectTileMinRange;
+    public float ProjectTileMaxRange;
+
 
 }

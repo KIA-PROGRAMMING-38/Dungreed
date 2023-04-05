@@ -26,8 +26,12 @@ public class WeaponHand : MonoBehaviour
         _ownerRenderer = Owner.GetComponentAllCheck<SpriteRenderer>();
 
         _sortingGroup = GetComponent<SortingGroup>();
+    }
 
-        EquipWeapon(_equippedWeaponData);
+    private void Start()
+    {
+        if (_equippedWeaponData == null)
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(1));
     }
 
     private void Update()
@@ -48,10 +52,20 @@ public class WeaponHand : MonoBehaviour
             Destroy(_equippedWeapon.gameObject);
         }
 
-        _equippedWeapon = Instantiate(weaponData.Prefab, transform).GetComponent<WeaponBase>();
+        SetWeaponData(weaponData);
+        InitWeapon(weaponData);
+    }
+
+    public void SetWeaponData(WeaponData data)
+    {
+        _equippedWeaponData = data;
+    }
+
+    public void InitWeapon(WeaponData data)
+    {
+        _equippedWeapon = Instantiate(data.Prefab, transform).GetComponent<WeaponBase>();
         _equippedWeapon.transform.localPosition = _equippedWeaponData.OffsetInitPosition;
         _equippedWeapon.SetHand(this);
-        _equippedWeaponData = weaponData;
     }
 
     // 마우스 방향으로 무기를 회전시킬 메서드

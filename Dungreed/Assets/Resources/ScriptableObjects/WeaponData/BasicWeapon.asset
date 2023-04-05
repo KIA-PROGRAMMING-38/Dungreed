@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Prefab: {fileID: 3498809467256004637, guid: 52aa7a358bf411d4ab0e061e16208863, type: 3}
   ProjectTile: {fileID: 0}
-  AttackEffect: {fileID: 0}
+  SwingFxName: SwingFx
+  Id: 0
   Name: "\uC20F\uC18C\uB4DC"
   Description: "\"\uAC00\uBCCD\uACE0 \uD718\uB450\uB974\uAE30 \uD3B8\uD55C \uAC80\""
   RotateAngleOffset: 30
@@ -25,4 +26,7 @@ MonoBehaviour:
   Rarity: 0
   MinDamage: 8
   MaxDamage: 10
-  AttackSpeedPerSecond: 0
+  AttackSpeedPerSecond: 1
+  MeleeAttackRange: 1
+  ProjectTileMinRange: 0
+  ProjectTileMaxRange: 0

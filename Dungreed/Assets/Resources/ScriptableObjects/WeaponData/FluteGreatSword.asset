@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be57c4fa70f840943a1660819964b004, type: 3}
-  m_Name: BasicWeapon
+  m_Name: FluteGreatSword
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 3498809467256004637, guid: 52aa7a358bf411d4ab0e061e16208863, type: 3}
+  Prefab: {fileID: 0}
   ProjectTile: {fileID: 0}
   SwingFxName: SwingFx
-  Id: 0
-  Name: "\uC20F\uC18C\uB4DC"
-  Description: "\"\uAC00\uBCCD\uACE0 \uD718\uB450\uB974\uAE30 \uD3B8\uD55C \uAC80\""
-  RotateAngleOffset: 30
-  SpriteDefaultRotateAngle: -90
-  OffsetInitPosition: {x: 0.3, y: 0.5}
+  Id: 1
+  Name: FluteGreateSword
+  Description: 
+  RotateAngleOffset: 0
+  SpriteDefaultRotateAngle: 0
+  OffsetInitPosition: {x: 0.23, y: 0.65}
   AttackType: 0
   EquipType: 0
   Rarity: 0
-  MinDamage: 8
-  MaxDamage: 10
-  AttackSpeedPerSecond: 1
-  MeleeAttackRange: 1
+  MinDamage: 0
+  MaxDamage: 0
+  AttackSpeedPerSecond: 0
+  MeleeAttackRange: 0
   ProjectTileMinRange: 0
   ProjectTileMaxRange: 0

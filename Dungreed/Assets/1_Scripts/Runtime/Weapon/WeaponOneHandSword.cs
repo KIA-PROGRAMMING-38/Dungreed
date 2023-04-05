@@ -10,6 +10,6 @@ public class WeaponOneHandSword : WeaponBase
         angle += offsetAngle;
         Vector2 fxPos = _hand.transform.position + (mouseDir * 1f);
 
-        GameManager.Instance.FxPooler.GetFx("SwingFx", fxPos, Quaternion.Euler(0, 0, angle));
+        GameManager.Instance.FxPooler.GetFx(Data.SwingFxName, fxPos, Quaternion.Euler(0, 0, angle));
     }
 }
