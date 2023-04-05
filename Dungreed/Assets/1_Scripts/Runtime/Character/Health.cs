@@ -12,13 +12,15 @@ public class Health : MonoBehaviour, IDamageable
     private bool _initialized;
     public float InvincibleTime;
 
-    [SerializeField] private float FlickingTime;
-    [SerializeField] private Color FlickingColor;
+    [SerializeField] private float _flickingTime;
+    [SerializeField] private Color _flickingColor;
+
+    [SerializeField] 
+    private Material _flickingMaterial;
+    private Material _defaultMaterial;
+
     private Renderer _renderer;
     public bool IsInvincible { get; private set; }
-    private IEnumerator _invincibleCoroutine;
-    private IEnumerator _flickingCoroutine;
-
 
     public event Action OnInvincible;
     public event Action OnHit;
@@ -33,9 +35,10 @@ public class Health : MonoBehaviour, IDamageable
             Debug.Log("rendere is null");
         Debug.Assert(_renderer != null, $"Invalid Renderer : {name}/{nameof(Health)}:Component");
 
-        _invincibleCoroutine = InvincibleCoroutine();
-        _flickingCoroutine = FlickingCoroutine();
+        _defaultMaterial = _renderer.material;
+
     }
+
     private void Start()
     {
         // Start전에 초기화함수를 호출해주지 않았으면 Inspector에서 설정한 MaxHp로 초기화
@@ -91,20 +94,20 @@ public class Health : MonoBehaviour, IDamageable
 
     private void Invincible()
     {
-        StartCoroutine(_invincibleCoroutine);
+        StartCoroutine(InvincibleCoroutine());
     }
     private void Flicking()
     {
-        StartCoroutine(_flickingCoroutine);
+        StartCoroutine(FlickingCoroutine());
     }
 
     IEnumerator FlickingCoroutine()
     {
-        Color prev = _renderer.material.color;
-        _renderer.material.color = FlickingColor;
-        yield return YieldCache.WaitForSeconds(FlickingTime);
-        _renderer.material.color = prev;
+        _renderer.material = _flickingMaterial;
+        yield return YieldCache.WaitForSeconds(_flickingTime);
+        _renderer.material = _defaultMaterial;
     }
+
     IEnumerator InvincibleCoroutine()
     {
         IsInvincible = true;
@@ -114,5 +117,6 @@ public class Health : MonoBehaviour, IDamageable
         yield return YieldCache.WaitForSeconds(InvincibleTime);
 
         IsInvincible = false;
+        Debug.Log(IsInvincible);
     }
 }
