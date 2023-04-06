@@ -30,7 +30,7 @@ public class PlayerDash : StateMachineBehaviour
         if (_controller.CollisionInfo.IsOnewayGrounded)
             _controller.StartCoroutine(_controller.DisableCollision());
 
-        _hitMaterial = Resources.Load<Material>("Materials/HitMaterial");
+        _hitMaterial = ResourceCache.GetResource<Material>("Materials/HitMaterial");
 
         CreateDashFx();
         _kickFx = CreateKickFx();

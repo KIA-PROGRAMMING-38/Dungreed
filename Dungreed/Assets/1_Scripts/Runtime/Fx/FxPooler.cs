@@ -8,7 +8,7 @@ public class FxPooler : MonoBehaviour
         FxPool = new ObjectPool<FxObject>(CreateFx, ActionOnGet, ActionOnRelease, ActionOnDestroy,
   true, 100, 1000);
 
-        DefaultFxObject = Resources.Load<FxObject>("Prefabs/DefaultFxObject");
+        DefaultFxObject = ResourceCache.GetResource<FxObject>("Prefabs/DefaultFxObject");
     }
 
     public FxObject GetFx(string name, Vector3 position, Quaternion rotate, Vector3 scale)

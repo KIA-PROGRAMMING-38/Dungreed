@@ -8,7 +8,7 @@ public static class AnimationClipPath
     public static AnimationClip GetAnimationClipResource(string filename, string folderPath = null)
     {
         string path = Path.Combine(DefaultFxClipPath, filename);
-        var clip = Resources.Load<AnimationClip>(path);
+        var clip = ResourceCache.GetResource<AnimationClip>(path);
         Debug.Assert(clip != null, "AnimationClipPath was Wrong");
         return clip;
     }
