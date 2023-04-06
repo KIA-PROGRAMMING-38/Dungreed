@@ -6,7 +6,6 @@ public class WeaponHand : MonoBehaviour
 {
     [field: SerializeField] public Transform Owner { get; private set; }
     
-    [SerializeField] private Transform _handModel;
 
     [SerializeField] private SortingGroup _sortingGroup;
 
@@ -24,22 +23,21 @@ public class WeaponHand : MonoBehaviour
     private void Awake()
     {
         _ownerRenderer = Owner.GetComponentAllCheck<SpriteRenderer>();
-
         _sortingGroup = GetComponent<SortingGroup>();
     }
 
     private void Start()
     {
         if (_equippedWeaponData == null)
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(1));
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(2));
     }
 
     private void Update()
     {
         if(Input.GetMouseButtonDown(0))
         {
-            FlipTriggerOn();
             _equippedWeapon.Attack();
+            FlipTriggerOn();
         }
         HandRotate();
     }
@@ -77,17 +75,26 @@ public class WeaponHand : MonoBehaviour
         _mouseDir = Owner.position.MouseDir();
         transform.right = _mouseDir;
 
-        float offsetAngle = _equippedWeaponData.RotateAngleOffset;
-        transform.Rotate(0, 0, offsetAngle);
-        Vector3 scale = new Vector2(_faceDirX, 1);
-        scale.y = _mouseDir.x < 0 ? -1 : 1;
-        
-        transform.localScale = _isFlip ? -(scale) : scale;
+        if (_equippedWeaponData?.AttackType == EnumTypes.WeaponAttackType.Melee)
+        {
+            float offsetAngle = _equippedWeaponData.RotateAngleOffset;
+            transform.Rotate(0, 0, offsetAngle);
+            Vector3 scale = new Vector2(_faceDirX, 1);
+            scale.y = _mouseDir.x < 0 ? -1 : 1;
+            transform.localScale = _isFlip ? -(scale) : scale;
+        }
+        else if(_equippedWeaponData?.AttackType == EnumTypes.WeaponAttackType.Ranged)
+        {
+            transform.localScale = new Vector3(_faceDirX, 1);
+        }
     }
 
     private void FlipTriggerOn()
     {
-        _isFlip = !_isFlip;
-        _sortingGroup.sortingOrder = _isFlip ? _ownerRenderer.sortingOrder + 1 : _ownerRenderer.sortingOrder - 1;
+        if(_equippedWeaponData?.AttackType == EnumTypes.WeaponAttackType.Melee)
+        {
+            _isFlip = !_isFlip;
+            _sortingGroup.sortingOrder = _isFlip ? _ownerRenderer.sortingOrder + 1 : _ownerRenderer.sortingOrder - 1;
+        }
     }
 }

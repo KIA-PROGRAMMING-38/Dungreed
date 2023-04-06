@@ -1,8 +1,11 @@
 using UnityEngine;
 
-public class WeaponOneHandSword : WeaponMelee
+public class WeaponTwoHandSword : WeaponMelee
 {
-   
+    protected void Start()
+    {
+
+    }
 
     public override void Attack()
     {
@@ -10,7 +13,7 @@ public class WeaponOneHandSword : WeaponMelee
         float angle = Utils.Utility2D.DirectionToAngle(mouseDir.x, mouseDir.y);
         float offsetAngle = Data.SpriteDefaultRotateAngle;
         angle += offsetAngle;
-        Vector2 fxPos = _hand.transform.position + (mouseDir * 1f);
+        Vector2 fxPos = _hand.transform.position + (mouseDir * Data.MeleeAttackRange);
         GameManager.Instance.FxPooler.GetFx(Data.SwingFxName, fxPos, Quaternion.Euler(0, 0, angle));
 
         OnAttack?.Invoke();
@@ -18,6 +21,6 @@ public class WeaponOneHandSword : WeaponMelee
 
     protected override void EnemyHitCheck()
     {
-        
+        throw new System.NotImplementedException();
     }
 }
