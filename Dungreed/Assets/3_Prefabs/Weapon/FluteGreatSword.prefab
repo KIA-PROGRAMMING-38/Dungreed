@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1313419249369942228}
   - component: {fileID: 1313419249369942231}
-  - component: {fileID: 5264891504660878773}
+  - component: {fileID: 1402843347672862490}
   m_Layer: 0
   m_Name: FluteGreatSword
   m_TagString: Untagged
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5264891504660878773
+--- !u!114 &1402843347672862490
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1313419249369942229}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5401a4ecc9305404fa6e15984a165fb2, type: 3}
+  m_Script: {fileID: 11500000, guid: adbaeea01f2f12647b2de9ef9fd3f295, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: a7a58867434b9c849bc739c85cc97e89, type: 2}
