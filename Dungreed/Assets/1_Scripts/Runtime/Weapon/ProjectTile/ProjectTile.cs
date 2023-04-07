@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Pool;
-using UnityEngine.UIElements;
 
 public class ProjectTile : MonoBehaviour
 {
@@ -13,11 +12,12 @@ public class ProjectTile : MonoBehaviour
     protected LayerMask _collisionMask;
     protected Vector2 _startPosition;
 
+    protected bool _isReleased;
+
     protected void OnEnable()
     {
         _renderer = this.GetComponentAllCheck<SpriteRenderer>();
         _collider = this.GetComponentAllCheck<BoxCollider2D>();
-
     }
 
     public void SetOwner(ObjectPool<ProjectTile> owner)
@@ -53,16 +53,18 @@ public class ProjectTile : MonoBehaviour
         _startPosition = Vector2.zero;
         _direction = Vector3.zero;
         _collider.size = Vector3.zero;
+        _isReleased = false;
     }
 
     protected virtual void FixedUpdate()
     {
-        if (_data == null) return;
+        if (_data == null || _isReleased == true) return;
 
         float startToCurrentDist = Vector2.Distance(_startPosition, transform.position);
 
         if(startToCurrentDist > _data.Range)
         {
+            _isReleased = true;
             _owner.Release(this);
             return;
         }
@@ -72,7 +74,10 @@ public class ProjectTile : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D collision)
     {
-        if((_collisionMask & 1 << collision.gameObject.layer ) == 1 << collision.gameObject.layer)
+        if (_isReleased == true) return;
+
+
+        if ((_collisionMask & 1 << collision.gameObject.layer ) == 1 << collision.gameObject.layer)
         {
            IDamageable obj = collision.GetComponent<IDamageable>();
             obj?.Hit(_damage, gameObject);
@@ -81,6 +86,7 @@ public class ProjectTile : MonoBehaviour
             Quaternion rot = Quaternion.Euler(0, 0, angle);
             GameManager.Instance.FxPooler.GetFx("MoveFx", collision.ClosestPoint(transform.position), rot, Vector3.one);
 
+            _isReleased = true;
             _owner.Release(this);
         }
     }

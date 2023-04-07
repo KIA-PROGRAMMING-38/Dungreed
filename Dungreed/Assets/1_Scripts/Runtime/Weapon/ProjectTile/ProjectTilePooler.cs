@@ -5,10 +5,11 @@ public class ProjectTilePooler : MonoBehaviour
 {
     public ObjectPool<ProjectTile> pool;
 
-    [SerializeField] ProjectTile _defaultProjectTilePrefab;
+    ProjectTile _defaultProjectTilePrefab;
 
     private void Awake()
     {
+        _defaultProjectTilePrefab = ResourceCache.GetResource<ProjectTile>("Prefabs/DefaultProjectTile");
          pool = new ObjectPool<ProjectTile>(CreateProjectTile, ActionOnGet, ActionOnRelease, ActionOnDestroy, true, 20, 100);
     }
 
