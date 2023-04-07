@@ -13,6 +13,7 @@ namespace Globals
         public static readonly string Slope = "Slope";
         public static readonly string Player = "Player";
         public static readonly string Enemy = "Enemy";
+        public static readonly string Prop = "Prop";
         public static readonly string UI = "UI";
 
         public static readonly string NonCollision = "NonCollision";
@@ -26,6 +27,7 @@ namespace Globals
         public static readonly int Slope = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Slope);
         public static readonly int Player = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Player);
         public static readonly int Enemy = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Enemy);
+        public static readonly int Prop = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Prop);
         public static readonly int UI = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.UI);
         public static readonly int NonCollision = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.NonCollision);
     }

@@ -8,13 +8,12 @@ public class Health : MonoBehaviour, IDamageable
 
     [SerializeField]
     private int _maxHp;
+    [ShowOnly, SerializeField]
     private int _currentHp;
     private bool _initialized;
     public float InvincibleTime;
 
     [SerializeField] private float _flickingTime;
-    [SerializeField] private Color _flickingColor;
-
     [SerializeField] 
     private Material _flickingMaterial;
     private Material _defaultMaterial;
@@ -35,6 +34,7 @@ public class Health : MonoBehaviour, IDamageable
             Debug.Log("rendere is null");
         Debug.Assert(_renderer != null, $"Invalid Renderer : {name}/{nameof(Health)}:Component");
 
+        _flickingMaterial = _flickingMaterial ?? ResourceCache.GetResource<Material>("Materials/HitMaterial");
         _defaultMaterial = _renderer.material;
 
     }
@@ -117,6 +117,5 @@ public class Health : MonoBehaviour, IDamageable
         yield return YieldCache.WaitForSeconds(InvincibleTime);
 
         IsInvincible = false;
-        Debug.Log(IsInvincible);
     }
 }

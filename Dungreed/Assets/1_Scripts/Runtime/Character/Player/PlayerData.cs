@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerData : MonoBehaviour
@@ -28,4 +26,5 @@ public class PlayerData : MonoBehaviour
     public float DashPower;
     public float DashTime;
     #endregion
+
 }

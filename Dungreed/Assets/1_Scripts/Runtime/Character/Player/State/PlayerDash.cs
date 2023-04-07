@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerDash : StateMachineBehaviour
@@ -6,23 +8,34 @@ public class PlayerDash : StateMachineBehaviour
     private PlayerData _data;
 
     
-    private float _dashFxInterval = 0.03f;
-    private float _dashTime = 0f;
+    private float _dashFxInterval;
     private float _dashFxTime = 0f;
+    private float _dashFxMaxTime = 0f;
+    private float _dashTime = 0f;
     private Vector2 _dir;
     private Vector2 _Force;
     private FxObject _kickFx;
     private Material _hitMaterial;
+
+    private float _colliderRadius = 0.7f;
+    private Collider2D[] _hit;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
         _data = _data ?? animator.GetComponentInParent<PlayerData>();
 
+        if (_hit == null)
+        {
+            _hit = new Collider2D[10];
+        }
         _controller.DecreaseDashCount();
         _controller.Rig2D.velocity = Vector2.zero;
 
         _dashTime = 0f;
+        _dashFxMaxTime = _data.DashTime * 0.8f;
+        _dashFxInterval = _dashFxMaxTime / 5f;
+
         _dir = _data.transform.position.MouseDir();
         _Force = _dir * _data.DashPower;
         _controller.Rig2D.velocity = _Force;
@@ -38,19 +51,18 @@ public class PlayerDash : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
-        _controller.Rig2D.velocity = _Force;
-        
-        if(_dashFxTime >= _dashFxInterval)
-        {
-            CreateDashFx();
-            _dashFxTime = 0f;
-        }
+        _controller.Rig2D.velocity = _Force;        
 
         if (_dashTime >= _data.DashTime)
         {
             animator.SetTrigger(_controller.Id_FallAnimationParameter);
             return;
+        }
+
+        if (_dashFxMaxTime >= _dashTime && _dashFxTime >= _dashFxInterval)
+        {
+            CreateDashFx();
+            _dashFxTime = 0f;
         }
 
         _dashTime += Time.deltaTime;
@@ -62,12 +74,22 @@ public class PlayerDash : StateMachineBehaviour
         _kickFx.transform.position = kickFxPosition;
     }
 
+    // TODO: 캐릭터 능력치 대쉬 공격력 적용해야함
+    private void DashAttack()
+    {
+        int hitCount = Physics2D.OverlapCircleNonAlloc(_controller.transform.position, _colliderRadius, _hit);
+        for(int i =0;i < hitCount;i++)
+        {
+            IDamageable obj = _hit[i].GetComponent<IDamageable>();
+
+            // TODO : obj?.Hit(캐릭터 대쉬 공격력, gameObject);
+        }
+    }
+
     public void CreateDashFx()
     {
-        _dashFxTime = 0f;
-
         FxObject obj = GameManager.Instance.FxPooler.GetFx("AfterImageFx", _controller.transform.position, Quaternion.identity);
-        obj.ChangeLayerOrder(0);
+        // obj.ChangeLayerOrder(0);
         SpriteRenderer render = obj.GetComponent<SpriteRenderer>();
         render.sprite = _controller.Renderer.sprite;
 
@@ -91,6 +113,5 @@ public class PlayerDash : StateMachineBehaviour
         Vector2 vel = _controller.Rig2D.velocity;
         vel.x = 0f;
         _controller.Rig2D.velocity = vel;
-        _dashTime = 0f;
     }
 }
