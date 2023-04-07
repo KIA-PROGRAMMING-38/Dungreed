@@ -32,16 +32,17 @@ public static class VectorExtension
     }
     public static Vector2 RotateZ(this Vector2 v, float angle)
     {
-        float num = Mathf.Sin(angle * 0.017453292f);
-        float num2 = Mathf.Cos(angle * 0.017453292f);
+      
+        float num = Mathf.Sin(angle * Mathf.Deg2Rad);
+        float num2 = Mathf.Cos(angle * Mathf.Deg2Rad);
         float x = v.x;
         float y = v.y;
         return new Vector2(num2 * x - num * y, num2 * y + num * x);
     }
     public static Vector3 RotateZ(this Vector3 v, float angle)
     {
-        float num = Mathf.Sin(angle * 0.017453292f);
-        float num2 = Mathf.Cos(angle * 0.017453292f);
+        float num = Mathf.Sin(angle * Mathf.Deg2Rad);
+        float num2 = Mathf.Cos(angle * Mathf.Deg2Rad);
         float x = v.x;
         float y = v.y;
         return new Vector3(num2 * x - num * y, num2 * y + num * x, v.z);
