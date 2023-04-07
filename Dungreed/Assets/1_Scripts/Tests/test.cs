@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class test : MonoBehaviour
 {
-    public Health Test;
+    public ProjectTileData d;
+    public LayerMask l;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,9 +13,5 @@ public class test : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            Test.Hit(0);
-        }
     }
 }
