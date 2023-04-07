@@ -8,9 +8,12 @@ public abstract class WeaponBase : MonoBehaviour, IAttackable
     public          WeaponData Data;
     public          Action OnAttack;
 
+    public virtual void Initialize() { }
     public void SetHand(WeaponHand hand) => _hand = hand;
 
-    public virtual void EnemyHitCheck() { }
     public abstract void Attack();
+
+    protected virtual void Reload() { }
+    public virtual void WeaponHandle() { }
 
 }

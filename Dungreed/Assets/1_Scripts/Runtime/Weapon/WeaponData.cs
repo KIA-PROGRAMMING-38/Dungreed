@@ -4,7 +4,7 @@ using EnumTypes;
 public class WeaponData : ScriptableObject
 {
     public GameObject   Prefab;
-    public GameObject   ProjectTile;
+    public ProjectTileData   ProjectTile;
 
     public string SwingFxName;
 
@@ -26,8 +26,9 @@ public class WeaponData : ScriptableObject
 
     public float MeleeAttackRange;
 
+    // 탄창 최대 수
+    public int   MaxAmmoCount;
+    public float ReloadTime;
     public float ProjectTileMinRange;
     public float ProjectTileMaxRange;
-
-
 }

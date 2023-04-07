@@ -4,6 +4,8 @@ using UnityEngine.UIElements;
 
 public class WeaponHand : MonoBehaviour
 {
+    // test
+    public int initId = 0;
     [field: SerializeField] public Transform Owner { get; private set; }
     
 
@@ -18,27 +20,60 @@ public class WeaponHand : MonoBehaviour
     private Vector2 _mouseDir;
     private bool _isFlip = false;
     void SetOwner(Transform owner) => Owner = owner;
-    
+
+    private float _attackTimer;
+    private float _attackSpeedPerSecond;
+    private bool _canAttack;
 
     private void Awake()
     {
         _ownerRenderer = Owner.GetComponentAllCheck<SpriteRenderer>();
         _sortingGroup = GetComponent<SortingGroup>();
+        _canAttack = true;
+        _attackTimer = 0f;
     }
 
     private void Start()
     {
         if (_equippedWeaponData == null)
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(2));
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(initId));
     }
 
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(_canAttack == false)
+        {
+            _attackTimer -= Time.deltaTime;
+            if(_attackTimer < 0f)
+            {
+                _canAttack = true;
+                _attackTimer = _attackSpeedPerSecond;
+            }
+        }
+
+        if(Input.GetMouseButtonDown(0) && _canAttack == true)
         {
             _equippedWeapon.Attack();
             FlipTriggerOn();
+            _canAttack = false;
         }
+
+        // Test Code
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log(0);
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(0));
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(1));
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(2));
+        }
+
+        _equippedWeapon?.WeaponHandle();
         HandRotate();
     }
 
@@ -64,6 +99,16 @@ public class WeaponHand : MonoBehaviour
         _equippedWeapon = Instantiate(data.Prefab, transform).GetComponent<WeaponBase>();
         _equippedWeapon.transform.localPosition = _equippedWeaponData.OffsetInitPosition;
         _equippedWeapon.SetHand(this);
+        _equippedWeapon.Initialize();
+
+        _canAttack = true;
+        _attackSpeedPerSecond = 1f / data.AttackSpeedPerSecond;
+        _attackTimer = _attackSpeedPerSecond;
+
+        if (_equippedWeaponData?.AttackType == EnumTypes.WeaponAttackType.Ranged)
+        {
+            _sortingGroup.sortingOrder = _ownerRenderer.sortingOrder + 1;
+        }
     }
 
     // 마우스 방향으로 무기를 회전시킬 메서드
@@ -85,7 +130,7 @@ public class WeaponHand : MonoBehaviour
         }
         else if(_equippedWeaponData?.AttackType == EnumTypes.WeaponAttackType.Ranged)
         {
-            transform.localScale = new Vector3(_faceDirX, 1);
+            transform.localScale = new Vector3(_faceDirX, _faceDirX);
         }
     }
 
