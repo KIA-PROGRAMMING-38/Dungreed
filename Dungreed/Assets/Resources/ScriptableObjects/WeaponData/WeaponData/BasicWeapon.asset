@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be57c4fa70f840943a1660819964b004, type: 3}
-  m_Name: DemonBlade
+  m_Name: BasicWeapon
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 0}
+  Prefab: {fileID: 3498809467256004637, guid: ccc02e0c29e66ee4b8de838e2161806d, type: 3}
   ProjectTile: {fileID: 0}
-  SwingFxName: DemonBladeSwingFx
+  SwingFxName: SwingFx
   Id: 0
-  Name: 
-  Description: 
-  RotateAngleOffset: 0
-  SpriteDefaultRotateAngle: 0
-  OffsetInitPosition: {x: 0, y: 0}
+  Name: "\uC20F\uC18C\uB4DC"
+  Description: "\uAC00\uBCCD\uACE0 \uD718\uB450\uB974\uAE30 \uD3B8\uD55C \uAC80"
+  RotateAngleOffset: 30
+  SpriteDefaultRotateAngle: -90
+  OffsetInitPosition: {x: 0.3, y: 0.5}
   AttackType: 0
-  EquipType: 1
+  EquipType: 0
   Rarity: 0
-  MinDamage: 0
-  MaxDamage: 0
-  AttackSpeedPerSecond: 0
-  MeleeAttackRange: 0
+  MinDamage: 8
+  MaxDamage: 10
+  AttackSpeedPerSecond: 3.03
+  MeleeAttackRange: 2
   ProjectTileMinRange: 0
   ProjectTileMaxRange: 0

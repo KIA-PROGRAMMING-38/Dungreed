@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be57c4fa70f840943a1660819964b004, type: 3}
+  m_Name: Hecate
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 5387368166023488001, guid: 5eebbf9c91bd2b843a3cb1b5fecc0024, type: 3}
+  ProjectTile: {fileID: 11400000, guid: 7435cc657220e6543a03d752ce55c7f7, type: 2}
+  SwingFxName: 
+  Id: 4
+  Name: "\uD5E4\uCE74\uD14C \uB300\uBB3C \uC800\uACA9\uC6A9 \uCD1D"
+  Description: "\uBA85\uACC4\uC758 \uC5EC\uC655\uC5D0\uAC8C \uC81C\uBB3C\uC744 \uBC14\uCCD0\uB77C."
+  RotateAngleOffset: 0
+  SpriteDefaultRotateAngle: 0
+  OffsetInitPosition: {x: 0.1, y: 0.1}
+  AttackType: 1
+  EquipType: 1
+  Rarity: 4
+  MinDamage: 20
+  MaxDamage: 20
+  AttackSpeedPerSecond: 0.87
+  MeleeAttackRange: 0
+  MaxAmmoCount: 5
+  ReloadTime: 0
+  ProjectTileMinRange: 0
+  ProjectTileMaxRange: 0
