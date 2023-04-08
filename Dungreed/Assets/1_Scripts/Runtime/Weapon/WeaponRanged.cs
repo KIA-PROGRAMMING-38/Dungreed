@@ -9,6 +9,8 @@ public abstract class WeaponRanged : WeaponBase
     public event Action<float> OnReload;
 
     protected bool _isReloading = false;
+    protected float _reloadElapsedTime = 0f;
+    protected float _reloadTime = 0f;
 
     protected int _currentAmmoCount;
 
@@ -31,10 +33,23 @@ public abstract class WeaponRanged : WeaponBase
     {
         base.Initialize();
         _currentAmmoCount = Data.MaxAmmoCount;
+        _reloadElapsedTime = Time.time;
+        _reloadTime = Data.ReloadTime;
+        OnReload += _hand.Owner.GetComponentAllCheck<ReloadBar>().Reload;
     }
 
     public override void WeaponHandle()
     {
+        if(_isReloading == true)
+        {
+            _reloadElapsedTime += Time.deltaTime;
+            if(_reloadElapsedTime > _reloadTime)
+            {
+                _reloadElapsedTime = 0;
+                _isReloading = false;
+            }
+        }
+
         // R버튼 누르면 장전
         if(Input.GetKeyDown(KeyCode.R))
         {
@@ -45,6 +60,8 @@ public abstract class WeaponRanged : WeaponBase
         {
             Reload();
         }
+
+        
     }
     protected virtual void Fire()
     {
@@ -56,8 +73,11 @@ public abstract class WeaponRanged : WeaponBase
     }
 
     protected override void Reload() 
-    { 
+    {
         // Reload 애니메이션 용 이벤트
+        if (_isReloading == true) return;
+
+        _isReloading = true;
         OnReload?.Invoke(Data.ReloadTime);
         _currentAmmoCount = Data.MaxAmmoCount;
     }

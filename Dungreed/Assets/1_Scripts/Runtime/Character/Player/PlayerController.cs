@@ -54,12 +54,16 @@ public class PlayerController : BaseController
         CheckRayAll();
         Flip();
 
-        CharacterMovementBoundaryCheck();
 
         if (CollisionInfo.IsSlope)
         {
             Rig2D.velocity = Vector2.zero;
         }
+    }
+
+    protected void LateUpdate()
+    {
+        CharacterMovementBoundaryCheck();
     }
 
     private void DirectionUpdate()

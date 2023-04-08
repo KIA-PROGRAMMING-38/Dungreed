@@ -72,6 +72,10 @@ public class WeaponHand : MonoBehaviour
         {
             EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(2));
         }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(4));
+        }
 
         _equippedWeapon?.WeaponHandle();
         HandRotate();

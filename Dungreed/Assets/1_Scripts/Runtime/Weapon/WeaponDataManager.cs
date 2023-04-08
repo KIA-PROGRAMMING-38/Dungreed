@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponDataManager
+public class WeaponDataManager : MonoBehaviour
 {
     public WeaponData[] WeaponData;
 
     public Dictionary<int, WeaponData> _weaponDatas;
 
-    public WeaponDataManager()
+    private void Awake()
     {
         WeaponData = Resources.LoadAll<WeaponData>("ScriptableObjects/WeaponData");
         _weaponDatas = new Dictionary<int, WeaponData>();

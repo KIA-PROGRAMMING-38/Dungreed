@@ -7,8 +7,8 @@ public class ProjectTile : MonoBehaviour
     protected SpriteRenderer _renderer;
     protected BoxCollider2D _collider;
     protected ProjectTileData _data;
-    protected int       _damage;
-    protected Vector2   _direction;
+    protected int _damage;
+    protected Vector2 _direction;
     protected LayerMask _collisionMask;
     protected Vector2 _startPosition;
 
@@ -39,7 +39,7 @@ public class ProjectTile : MonoBehaviour
         _direction = dir;
         float angle = Utils.Utility2D.GetAngleFromVector(dir);
         Debug.Log(angle);
-        transform.rotation = Quaternion.Euler(0,0, angle);
+        transform.rotation = Quaternion.Euler(0, 0, angle);
         _collider.size = _renderer.sprite.bounds.size;
         _damage = damage;
     }
@@ -62,7 +62,7 @@ public class ProjectTile : MonoBehaviour
 
         float startToCurrentDist = Vector2.Distance(_startPosition, transform.position);
 
-        if(startToCurrentDist > _data.Range)
+        if (startToCurrentDist > _data.Range)
         {
             _isReleased = true;
             _owner.Release(this);
@@ -72,19 +72,26 @@ public class ProjectTile : MonoBehaviour
         transform.position += (Vector3)(_direction * (_data.Speed * Time.fixedDeltaTime));
     }
 
-    protected void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (_isReleased == true) return;
 
 
-        if ((_collisionMask & 1 << collision.gameObject.layer ) == 1 << collision.gameObject.layer)
+        if ((_collisionMask & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
         {
-           IDamageable obj = collision.GetComponent<IDamageable>();
+            IDamageable obj = collision.GetComponent<IDamageable>();
             obj?.Hit(_damage, gameObject);
             Vector2 direction = (collision.transform.position - transform.position).normalized;
             float angle = Utils.Utility2D.GetAngle(transform.right, direction);
             Quaternion rot = Quaternion.Euler(0, 0, angle);
-            GameManager.Instance.FxPooler.GetFx("MoveFx", collision.ClosestPoint(transform.position), rot, Vector3.one);
+
+            if ((Globals.LayerMask.Enemy & 1 << collision.gameObject.layer) != 0
+                && _data.Type == EnumTypes.ProjectTileType.Through)
+            {
+                return;
+            }
+
+            GameManager.Instance.FxPooler.GetFx(_data.HitFxPath, collision.ClosestPoint(transform.position), rot, Vector3.one);
 
             _isReleased = true;
             _owner.Release(this);
