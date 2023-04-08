@@ -49,10 +49,10 @@ public class BaseController : MonoBehaviour
     public float BoundWidthHalf { get => _collider.size.x * 0.5f; }
     public float BoundHeight { get => _collider.size.y; }
     public float BoundHeightHalf { get => _collider.size.x * 0.5f; }
-    public float LeftBound { get => _collider.bounds.center.x - _collider.bounds.extents.x; }
-    public float RightBound { get => _collider.bounds.center.x + _collider.bounds.extents.x; }
-    public float TopBound { get => _collider.bounds.center.y + _collider.bounds.extents.y; }
-    public float BottomBound { get => _collider.bounds.center.y - _collider.bounds.extents.y; }
+    public float LeftBound { get => _collider.bounds.min.x; }
+    public float RightBound { get => _collider.bounds.max.x; }
+    public float TopBound { get => _collider.bounds.max.y; }
+    public float BottomBound { get => _collider.bounds.min.y; }
 
 
     private float _maxSlopeAngle = 70f;
@@ -161,7 +161,7 @@ public class BaseController : MonoBehaviour
         Bounds levelBounds= _bounds.Bounds;
         if (Rig2D.velocity.x < 0 && LeftBound <= levelBounds.min.x)
         {
-            pos.x = levelBounds.min.x+ BoundWidthHalf;
+            pos.x = levelBounds.min.x + BoundWidthHalf;
             vel.x = 0;
         }
         else if (Rig2D.velocity.x > 0 && RightBound >= levelBounds.max.x)

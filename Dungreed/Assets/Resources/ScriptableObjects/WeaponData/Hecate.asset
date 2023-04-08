@@ -29,6 +29,6 @@ MonoBehaviour:
   AttackSpeedPerSecond: 0.87
   MeleeAttackRange: 0
   MaxAmmoCount: 5
-  ReloadTime: 0
+  ReloadTime: 3
   ProjectTileMinRange: 0
   ProjectTileMaxRange: 0

@@ -40,4 +40,11 @@ namespace EnumTypes
         Epic,
         Legendary,
     }
+
+    public enum ProjectTileType
+    {
+        Normal,
+        Through,
+    }
+
 }
