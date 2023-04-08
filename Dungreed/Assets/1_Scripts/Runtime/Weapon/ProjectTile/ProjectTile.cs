@@ -84,13 +84,15 @@ public class ProjectTile : MonoBehaviour
             Vector2 direction = (collision.transform.position - transform.position).normalized;
             float angle = Utils.Utility2D.GetAngle(transform.right, direction);
             Quaternion rot = Quaternion.Euler(0, 0, angle);
-            GameManager.Instance.FxPooler.GetFx("MoveFx", collision.ClosestPoint(transform.position), rot, Vector3.one);
 
             if ((Globals.LayerMask.Enemy & 1 << collision.gameObject.layer) != 0
                 && _data.Type == EnumTypes.ProjectTileType.Through)
             {
                 return;
             }
+
+            GameManager.Instance.FxPooler.GetFx(_data.HitFxPath, collision.ClosestPoint(transform.position), rot, Vector3.one);
+
             _isReleased = true;
             _owner.Release(this);
         }
