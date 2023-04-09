@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public abstract class WeaponBase : MonoBehaviour, IAttackable
@@ -9,7 +8,8 @@ public abstract class WeaponBase : MonoBehaviour, IAttackable
     public          WeaponData Data;
     public          Action OnAttack;
 
-    public virtual void Initialize() { }
+    public virtual void Initialize() {}
+
     public void SetHand(WeaponHand hand) => _hand = hand;
 
     public abstract void Attack();
