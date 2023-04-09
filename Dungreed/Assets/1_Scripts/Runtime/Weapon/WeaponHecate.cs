@@ -15,40 +15,67 @@ public class WeaponHecate : WeaponTwoHandGun
     {
         base.Initialize();
         _laser = _laserTransform.GetComponent<LineRenderer>();
+
+        duration = (1f / Data.AttackSpeedPerSecond);
     }
 
     private void UpdateLaserPosition()
     {
-        _laserStartPoint = _laserTransform.position;
         _laser.SetPosition(0, _laserStartPoint);
         _laser.SetPosition(1, _laserEndPoint);
     }
     public override void Attack()
     {
         base.Attack();
-
         if (_isReloading == true) return;
-            CreateFx();
+        CreateFx();
+        GameManager.Instance.CameraEffectManager.PlayChromaticAbberation(0.25f, 0.4f);
+        GameManager.Instance.CameraEffectManager.PlayScreenShake(0.25f, 0.3f);
+        knockback = true;
+        float x = Mathf.Sign(_hand.transform.localScale.x);
+        float angle = x == 1f ? 40F : -40F;
+        _hand.transform.rotation = _hand.transform.rotation * Quaternion.Euler(0,0,angle);
+        p = _hand.transform.right;
     }
+    Vector2 p;
+    bool knockback = false;
+    float duration;
+    float t;
     public override void WeaponHandle()
     {
         base.WeaponHandle();
-        UpdateLaserPosition();
-        RaycastHit2D hit = Physics2D.Raycast(_laserStartPoint, _hand.transform.right, 10f, _laserCollisionMask);
 
-        if(hit.collider != null)
+
+        if(knockback == true)
+        {
+            t += Time.deltaTime;
+            Vector3 mouseVec = _hand.Owner.transform.position.MouseDir();
+            _hand.transform.right = Utils.Math.Utility2D.EaseInOutBounce(p, mouseVec, t / duration);
+            if(t > duration)
+            {
+                t = 0f;
+                knockback = false;
+            }
+        }
+
+        _laserStartPoint = _laserTransform.position;
+        RaycastHit2D hit = Physics2D.Raycast(_laserStartPoint, transform.right, 50f, _laserCollisionMask);
+
+        if (hit.collider != null)
         {
             _laserEndPoint = hit.point;
         }
         else
         {
-            _laserEndPoint = _laserStartPoint + _laserStartPoint.MouseDir() * 100f;
+            _laserEndPoint = _laserStartPoint + (Vector2)transform.right * 100f;
         }
+
+        UpdateLaserPosition();
     }
 
     private void CreateFx()
     {
-        Vector2 mouseDir =  _hand.transform.position.MouseDir();
+        Vector2 mouseDir = _hand.transform.position.MouseDir();
         float angle = -90f + Utils.Utility2D.DirectionToAngle(mouseDir.x, mouseDir.y);
         Debug.Log($"Angle : {angle}");
         Quaternion rot = Quaternion.Euler(0, 0, angle);

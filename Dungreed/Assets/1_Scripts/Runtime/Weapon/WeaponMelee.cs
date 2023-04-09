@@ -3,6 +3,12 @@
 public abstract class WeaponMelee : WeaponBase
 {
     protected Collider2D[] _hit = new Collider2D[20];
+
+    public override void Initialize()
+    {
+        base.Initialize();
+    }
+
     public override void Attack() 
     {
         Vector3 mouseDir = _hand.Owner.position.MouseDir();
@@ -12,7 +18,6 @@ public abstract class WeaponMelee : WeaponBase
         Vector2 fxPos = _hand.transform.position + (mouseDir * Data.MeleeAttackRange);
         GameManager.Instance.FxPooler.GetFx(Data.SwingFxName, fxPos, Quaternion.Euler(0, 0, angle));
 
-        OnAttack?.Invoke();
         EnemyHitCheck(ref mouseDir);
     }
 

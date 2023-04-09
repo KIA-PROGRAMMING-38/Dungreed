@@ -77,8 +77,8 @@ public class WeaponHand : MonoBehaviour
             EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(4));
         }
 
-        _equippedWeapon?.WeaponHandle();
         HandRotate();
+        _equippedWeapon?.WeaponHandle();
     }
 
     // 무기 장착을 위한 메서드
@@ -122,6 +122,7 @@ public class WeaponHand : MonoBehaviour
         // 1 : 오른쪽
         _faceDirX  = Mathf.Sign(Owner.localScale.x);
         _mouseDir = Owner.position.MouseDir();
+        
         transform.right = _mouseDir;
 
         if (_equippedWeaponData?.AttackType == EnumTypes.WeaponAttackType.Melee)
@@ -136,6 +137,7 @@ public class WeaponHand : MonoBehaviour
         {
             transform.localScale = new Vector3(_faceDirX, _faceDirX);
         }
+
     }
 
     private void FlipTriggerOn()
