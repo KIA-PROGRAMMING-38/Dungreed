@@ -4,13 +4,20 @@ public class PlayerJump : StateMachineBehaviour
 {
     private PlayerController _controller;
     private PlayerData _data;
-
+    private float _jumpTimeCounter;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
-        _data = _data ?? animator.GetComponentInParent<PlayerData>();
-        _data.JumpTimeCounter = _data.JumpTime;
-        _data.IsJumping = true;
+        if (_controller == null)
+        {
+            _controller = animator.GetComponentInParent<PlayerController>();
+        }
+        if (_data == null)
+        {
+            _data = animator.GetComponentInParent<PlayerData>();
+        }
+
+        _jumpTimeCounter = PlayerData.DEFAULT_JUMP_TIME;
+        _controller.IsJumping = true;
         _controller.Rig2D.velocity = new Vector2(_controller.Rig2D.velocity.x, _data.JumpForce);
 
         CreateJumpFx();
@@ -23,21 +30,21 @@ public class PlayerJump : StateMachineBehaviour
             animator.SetTrigger(_controller.Id_FallAnimationParameter);
         }
 
-        if (Input.GetMouseButtonDown(1) && _data.CanDash)
+        if (Input.GetMouseButtonDown(1) && _controller.CanDash)
         {
             animator.SetTrigger(_controller.Id_DashAnimationParameter);
         }
 
-        if (Input.GetKey(KeyCode.Space) && _data.IsJumping == true)
+        if (Input.GetKey(KeyCode.Space) && _controller.IsJumping == true)
         {
-            if (_data.JumpTimeCounter > 0)
+            if (_jumpTimeCounter > 0)
             {
                 _controller.Rig2D.velocity = new Vector2(_controller.Rig2D.velocity.x, _data.JumpForce);
-                _data.JumpTimeCounter -= Time.deltaTime;
+                _jumpTimeCounter -= Time.deltaTime;
             }
             else
             {
-                _data.IsJumping = false;
+                _controller.IsJumping = false;
                 if(_controller.CollisionInfo.IsGrounded || _controller.CollisionInfo.IsOnewayGrounded)
                 {
                     animator.SetTrigger(_controller.Id_IdleAnimationParameter);
@@ -47,7 +54,7 @@ public class PlayerJump : StateMachineBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            _data.IsJumping = false;
+            _controller.IsJumping = false;
         }
         
         _controller.HorizontalMovement.HorizontalMove();

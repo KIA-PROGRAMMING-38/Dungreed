@@ -1,17 +1,20 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class test : MonoBehaviour
 {
-    public ProjectTileData d;
-    public LayerMask l;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public UnityEvent SaveEvent;
+    public UnityEvent LoadEvent;
 
-    // Update is called once per frame
-    void Update()
+    public void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            SaveEvent?.Invoke();
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            LoadEvent?.Invoke();
+        }
     }
 }

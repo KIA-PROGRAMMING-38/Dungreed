@@ -1,8 +1,4 @@
-using EnumTypes;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 public class PlayerRun : StateMachineBehaviour
 {
@@ -10,13 +6,21 @@ public class PlayerRun : StateMachineBehaviour
     private PlayerData _data;
 
     private Vector2 _fxSpawnPosition;
-    private float _moveFxSpawnInterval = 0.3f;
+    private float _moveFxSpawnInterval;
     private float _time;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
-        _data = _data ?? animator.GetComponentInParent<PlayerData>();
+        _moveFxSpawnInterval = PlayerData.MOVE_FX_SPAWN_INTERVAL;
+
+        if (_controller == null)
+        {
+            _controller = animator.GetComponentInParent<PlayerController>();
+        }
+        if (_data == null)
+        {
+            _data = animator.GetComponentInParent<PlayerData>();
+        }
 
         CreateMoveFx();
     }
@@ -30,7 +34,7 @@ public class PlayerRun : StateMachineBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(1) && _data.CanDash)
+        if (Input.GetMouseButtonDown(1) && _controller.CanDash)
         {
             animator.SetTrigger(_controller.Id_DashAnimationParameter);
             return;
@@ -63,11 +67,10 @@ public class PlayerRun : StateMachineBehaviour
         _time = _moveFxSpawnInterval;
         _fxSpawnPosition = _controller.BoundCenter;
         _fxSpawnPosition.y = _controller.BottomBound;
-        Vector3 newScale = new Vector3(Mathf.Sign(_controller.Input.X), 1, 1);
+        Vector3 newScale = new(Mathf.Sign(_controller.Input.X), 1, 1);
         GameManager.Instance.FxPooler.GetFx("MoveFx", _fxSpawnPosition, Quaternion.identity, newScale);
     }
 
-    //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _time = _moveFxSpawnInterval;

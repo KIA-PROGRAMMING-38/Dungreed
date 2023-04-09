@@ -54,8 +54,9 @@ public class BaseController : MonoBehaviour
     public float TopBound { get => _collider.bounds.max.y; }
     public float BottomBound { get => _collider.bounds.min.y; }
 
-
-    private float _maxSlopeAngle = 70f;
+    protected bool _isJumping;
+    public bool CanDash { get; set; } = true;
+    public bool IsJumping { get { return _isJumping; } set { _isJumping = value; } }
     [ShowOnly] public CollisionsInfo CollisionInfo;
   
 
@@ -142,11 +143,6 @@ public class BaseController : MonoBehaviour
             if (hitCount > 0)
             {
                 float angle = Vector3.Angle(_hit[0].normal, Vector2.up);
-                if(angle <= _maxSlopeAngle)
-                {
-                    CollisionInfo.IsSlope = true;
-                    //_rig2D.MovePosition(new Vector2(_rig2D.position.x, _hit[0].distance));
-                } 
                 CollisionInfo.left  = (Mathf.Sign(_direction.x) == -1f) ? true : false;
                 CollisionInfo.right = (Mathf.Sign(_direction.x) == 1f) ? true : false;
                 break;

@@ -7,10 +7,16 @@ public class PlayerFall : StateMachineBehaviour
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
-        _data = _data ?? animator.GetComponentInParent<PlayerData>();
+        if (_controller == null)
+        {
+            _controller = animator.GetComponentInParent<PlayerController>();
+        }
+        if (_data == null)
+        {
+            _data = animator.GetComponentInParent<PlayerData>();
+        }
 
-        if(true == _controller.CollisionInfo.IsOnewayGrounded)
+        if (true == _controller.CollisionInfo.IsOnewayGrounded)
         {
             _controller.StartCoroutine(_controller.DisableCollision());
         }
@@ -24,7 +30,7 @@ public class PlayerFall : StateMachineBehaviour
         }
 
 
-        if (Input.GetMouseButtonDown(1) && _data.CanDash)
+        if (Input.GetMouseButtonDown(1) && _controller.CanDash)
         {
             animator.SetTrigger(_controller.Id_DashAnimationParameter);
         }

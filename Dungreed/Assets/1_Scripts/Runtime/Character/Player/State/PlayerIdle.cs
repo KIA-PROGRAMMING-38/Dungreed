@@ -7,8 +7,15 @@ public class PlayerIdle : StateMachineBehaviour
     
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
-        _data = _data ?? animator.GetComponentInParent<PlayerData>();
+        if (_controller == null)
+        {
+            _controller = animator.GetComponentInParent<PlayerController>();
+        }
+        if (_data == null)
+        {
+            _data = animator.GetComponentInParent<PlayerData>();
+        }
+
         Vector2 vel = _controller.Rig2D.velocity;
         vel.x = 0;
         _controller.Rig2D.velocity = vel;
@@ -33,7 +40,7 @@ public class PlayerIdle : StateMachineBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(1) && _data.CanDash)
+        if (Input.GetMouseButtonDown(1) && _controller.CanDash)
         {
             animator.SetTrigger(_controller.Id_DashAnimationParameter);
             return;

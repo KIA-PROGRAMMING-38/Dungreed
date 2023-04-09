@@ -11,6 +11,8 @@ public class GameManager : Singleton<GameManager>
     public ProjectTilePooler ProjectTilePooler { get; private set; }
     [field: SerializeField]
     public WeaponDataManager WeaponDataManager { get; private set; }
+    [field: SerializeField]
+    public CameraEffectManager CameraEffectManager { get; private set; }
 
     protected override void Awake()
     {
