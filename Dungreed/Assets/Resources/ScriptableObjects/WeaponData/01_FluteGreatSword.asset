@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be57c4fa70f840943a1660819964b004, type: 3}
+  m_Name: 01_FluteGreatSword
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 1313419249369942229, guid: 1e820bddbd5af30429031f2711561bf0, type: 3}
+  ProjectTile: {fileID: 0}
+  SwingFxName: SwingFx
+  Id: 1
+  Name: "\uD751\uC7A5\uBBF8"
+  Description: "\uC8FC\uBC29\uC758 \uD544\uC218\uD488\uC774 \uB2E4\uC2DC \uB3CC\uC544\uC654\uC2B5\uB2C8\uB2E4."
+  RotateAngleOffset: 30
+  SpriteDefaultRotateAngle: -90
+  OffsetInitPosition: {x: 0.23, y: 0.65}
+  AttackType: 0
+  EquipType: 1
+  Rarity: 1
+  MinDamage: 5
+  MaxDamage: 8
+  AttackSpeedPerSecond: 5.77
+  MeleeAttackRange: 2
+  ProjectTileMinRange: 0
+  ProjectTileMaxRange: 0

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be57c4fa70f840943a1660819964b004, type: 3}
-  m_Name: DemonBlade
+  m_Name: 02_DemonBlade
   m_EditorClassIdentifier: 
   Prefab: {fileID: 928672801551940534, guid: 9c45ef5b3b2966743aa24316f69efd15, type: 3}
   ProjectTile: {fileID: 0}

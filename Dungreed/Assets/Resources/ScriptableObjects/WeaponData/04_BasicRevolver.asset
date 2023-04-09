@@ -10,23 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be57c4fa70f840943a1660819964b004, type: 3}
-  m_Name: BasicWeapon
+  m_Name: 04_BasicRevolver
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 3498809467256004637, guid: ccc02e0c29e66ee4b8de838e2161806d, type: 3}
-  ProjectTile: {fileID: 0}
-  SwingFxName: SwingFx
-  Id: 0
-  Name: "\uC20F\uC18C\uB4DC"
-  Description: "\uAC00\uBCCD\uACE0 \uD718\uB450\uB974\uAE30 \uD3B8\uD55C \uAC80"
-  RotateAngleOffset: 30
-  SpriteDefaultRotateAngle: -90
-  OffsetInitPosition: {x: 0.3, y: 0.5}
+  Prefab: {fileID: 5339689875842594911, guid: 24478ae78d9da6a4cb800d2f7d49ba2d, type: 3}
+  ProjectTile: {fileID: 11400000, guid: 36308bee87c3fdf48b23b6e69f22330a, type: 2}
+  SwingFxName: 
+  Id: 5
+  Name: 
+  Description: 
+  RotateAngleOffset: 0
+  SpriteDefaultRotateAngle: 0
+  OffsetInitPosition: {x: 0, y: 0}
   AttackType: 0
   EquipType: 0
   Rarity: 0
-  MinDamage: 8
-  MaxDamage: 10
-  AttackSpeedPerSecond: 3.03
-  MeleeAttackRange: 2
+  MinDamage: 0
+  MaxDamage: 0
+  AttackSpeedPerSecond: 0
+  MeleeAttackRange: 0
+  MaxAmmoCount: 0
+  ReloadTime: 0
   ProjectTileMinRange: 0
   ProjectTileMaxRange: 0

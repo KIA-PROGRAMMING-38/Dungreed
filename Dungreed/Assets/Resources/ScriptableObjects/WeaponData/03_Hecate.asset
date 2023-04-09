@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be57c4fa70f840943a1660819964b004, type: 3}
-  m_Name: Hecate
+  m_Name: 03_Hecate
   m_EditorClassIdentifier: 
   Prefab: {fileID: 5387368166023488001, guid: 5eebbf9c91bd2b843a3cb1b5fecc0024, type: 3}
   ProjectTile: {fileID: 11400000, guid: 7435cc657220e6543a03d752ce55c7f7, type: 2}

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 426871a2d2a075546af7c057271d4601, type: 3}
-  m_Name: HecateProjectTile
+  m_Name: NormalProjectile
   m_EditorClassIdentifier: 
-  Type: 1
-  SpritePath: Sprites/Bullet
-  HitFxPath: HecateFireExplosionFx
-  Speed: 49
-  Range: 30
+  Type: 0
+  SpritePath: 
+  HitFxPath: 
+  Speed: 0
+  Range: 0
