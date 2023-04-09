@@ -1,8 +1,6 @@
 
 using System.Collections;
 using UnityEngine;
-using Globals;
-using UnityEngine.InputSystem.XR;
 
 public class PlayerController : BaseController
 {
@@ -104,13 +102,14 @@ public class PlayerController : BaseController
         while (true)
         {
             _data.CurrentDashCount = Mathf.Clamp(_data.CurrentDashCount + 1, 0, _data.MaxDashCount);
-            _data.CanDash = _data.CurrentDashCount != 0;
-            yield return YieldCache.WaitForSeconds(_data.DashCountInterval);
+            CanDash = _data.CurrentDashCount != 0;
+            yield return YieldCache.WaitForSeconds(PlayerData.DEFAULT_DASH_COUNT_INTERVAL);
         }
     }
+
     public void DecreaseDashCount()
     {
         _data.CurrentDashCount = Mathf.Clamp(_data.CurrentDashCount - 1, 0, _data.MaxDashCount);
-        _data.CanDash = _data.CurrentDashCount != 0;
+        CanDash = _data.CurrentDashCount != 0;
     }
 }

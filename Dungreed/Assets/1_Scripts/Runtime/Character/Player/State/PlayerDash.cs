@@ -22,22 +22,30 @@ public class PlayerDash : StateMachineBehaviour
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _controller = _controller ?? animator.GetComponentInParent<PlayerController>();
-        _data = _data ?? animator.GetComponentInParent<PlayerData>();
+        if (_controller == null)
+        {
+            _controller = animator.GetComponentInParent<PlayerController>();
+        }
+        if (_data == null)
+        {
+            _data = animator.GetComponentInParent<PlayerData>();
+        }
+
 
         if (_hit == null)
         {
             _hit = new Collider2D[10];
         }
+
         _controller.DecreaseDashCount();
         _controller.Rig2D.velocity = Vector2.zero;
 
         _dashTime = 0f;
-        _dashFxMaxTime = _data.DashTime * 0.8f;
+        _dashFxMaxTime = PlayerData.DEFAULT_DASH_TIME* 0.8f;
         _dashFxInterval = _dashFxMaxTime / 5f;
 
         _dir = _data.transform.position.MouseDir();
-        _Force = _dir * _data.DashPower;
+        _Force = _dir * PlayerData.DEFAULT_DASH_POWER;
         _controller.Rig2D.velocity = _Force;
 
         if (_controller.CollisionInfo.IsOnewayGrounded)
@@ -53,7 +61,7 @@ public class PlayerDash : StateMachineBehaviour
     {
         _controller.Rig2D.velocity = _Force;        
 
-        if (_dashTime >= _data.DashTime)
+        if (_dashTime >= PlayerData.DEFAULT_DASH_TIME)
         {
             animator.SetTrigger(_controller.Id_FallAnimationParameter);
             return;
