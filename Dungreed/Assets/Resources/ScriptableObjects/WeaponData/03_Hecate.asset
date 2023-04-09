@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 03_Hecate
   m_EditorClassIdentifier: 
   Prefab: {fileID: 5387368166023488001, guid: 5eebbf9c91bd2b843a3cb1b5fecc0024, type: 3}
-  ProjectTile: {fileID: 11400000, guid: 7435cc657220e6543a03d752ce55c7f7, type: 2}
+  Projectile: {fileID: 11400000, guid: 7435cc657220e6543a03d752ce55c7f7, type: 2}
   SwingFxName: 
-  Id: 4
+  Id: 3
   Name: "\uD5E4\uCE74\uD14C \uB300\uBB3C \uC800\uACA9\uC6A9 \uCD1D"
   Description: "\uBA85\uACC4\uC758 \uC5EC\uC655\uC5D0\uAC8C \uC81C\uBB3C\uC744 \uBC14\uCCD0\uB77C."
   RotateAngleOffset: 0
@@ -30,5 +30,4 @@ MonoBehaviour:
   MeleeAttackRange: 0
   MaxAmmoCount: 5
   ReloadTime: 3
-  ProjectTileMinRange: 0
-  ProjectTileMaxRange: 0
+  ReboundPower: 40

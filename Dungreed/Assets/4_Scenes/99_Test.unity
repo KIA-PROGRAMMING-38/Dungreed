@@ -651,17 +651,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e537d6ce53aa6c44d892a0a98684dc3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 7
-  JumpForce: 14
-  JumpTime: 0.15
-  IsJumping: 0
-  JumpTimeCounter: 0
-  CanDash: 1
-  MaxDashCount: 2
+  _status:
+    AttackPower: 0
+    MoveSpeed: 0
+    Defense: 0
+    JumpPower: 0
+    MaxHp: 0
+    DashDamage: 0
+    MaxDashCount: 0
+    CriticalChance: 0
+    CriticalDamage: 0
+    Evade: 0
+    Exp: 0
+    Level: 0
   CurrentDashCount: 2
-  DashCountInterval: 2
-  DashPower: 18
-  DashTime: 0.15
 --- !u!114 &196949060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,7 +992,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3e00f7df1b410b428e50f377a7ba140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initId: 4
+  initId: 3
   <Owner>k__BackingField: {fileID: 196949065}
   _sortingGroup: {fileID: 0}
   _equippedWeapon: {fileID: 0}
@@ -1647,7 +1650,7 @@ GameObject:
   - component: {fileID: 1520058570}
   - component: {fileID: 1520058571}
   m_Layer: 0
-  m_Name: ProjectTilePool
+  m_Name: ProjectilePool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2027,6 +2030,10 @@ PrefabInstance:
     - target: {fileID: 1987367474670810530, guid: 0c76be895f0240b469dce1d293dd3077, type: 3}
       propertyPath: m_Name
       value: HongRyeon
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987367474670810530, guid: 0c76be895f0240b469dce1d293dd3077, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3924501646469639212, guid: 0c76be895f0240b469dce1d293dd3077, type: 3}
       propertyPath: m_RootOrder
