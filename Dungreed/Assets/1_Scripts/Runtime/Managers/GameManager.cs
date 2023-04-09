@@ -8,7 +8,7 @@ public class GameManager : Singleton<GameManager>
     [field: SerializeField]
     public FxPooler FxPooler { get; private set; }
     [field: SerializeField]
-    public ProjectTilePooler ProjectTilePooler { get; private set; }
+    public ProjectilePooler ProjectTilePooler { get; private set; }
     [field: SerializeField]
     public WeaponDataManager WeaponDataManager { get; private set; }
     [field: SerializeField]

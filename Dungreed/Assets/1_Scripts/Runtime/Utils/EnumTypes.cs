@@ -41,7 +41,7 @@ namespace EnumTypes
         Legendary,
     }
 
-    public enum ProjectTileType
+    public enum ProjectileType
     {
         Normal,
         Through,

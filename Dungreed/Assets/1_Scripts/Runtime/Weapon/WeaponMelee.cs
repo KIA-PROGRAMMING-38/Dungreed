@@ -19,6 +19,7 @@ public abstract class WeaponMelee : WeaponBase
         GameManager.Instance.FxPooler.GetFx(Data.SwingFxName, fxPos, Quaternion.Euler(0, 0, angle));
 
         EnemyHitCheck(ref mouseDir);
+        CameraEffect();
     }
 
     // 공격 시 근접 공격 범위안에 적이 있는지

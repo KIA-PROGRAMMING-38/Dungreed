@@ -6,7 +6,6 @@ public abstract class WeaponBase : MonoBehaviour, IAttackable
 
     protected       WeaponHand _hand;
     public          WeaponData Data;
-    public          Action OnAttack;
 
     public virtual void Initialize() {}
 
@@ -16,5 +15,6 @@ public abstract class WeaponBase : MonoBehaviour, IAttackable
 
     protected virtual void Reload() { }
     public virtual void WeaponHandle() { }
+    protected virtual void CameraEffect(){ }
 
 }

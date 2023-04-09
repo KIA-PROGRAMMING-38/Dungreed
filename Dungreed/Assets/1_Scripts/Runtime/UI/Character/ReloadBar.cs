@@ -9,6 +9,7 @@ public class ReloadBar : MonoBehaviour
     [SerializeField] private RectTransform _base;
     [SerializeField] private RectTransform _cursor;
 
+    private Vector3 pos = Vector3.up * 1.5f;
     private float _startPos;
     private float _endPos;
 
@@ -28,7 +29,7 @@ public class ReloadBar : MonoBehaviour
 
     void LateUpdate()
     {
-        transform.position = Player.position + Vector3.up;
+        transform.position = Player.position + pos;
     }
 
     public void Reload(float reloadTime)

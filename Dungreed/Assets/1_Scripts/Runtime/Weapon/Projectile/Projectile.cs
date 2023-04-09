@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class ProjectTile : MonoBehaviour
+public class Projectile : MonoBehaviour
 {
-    protected ObjectPool<ProjectTile> _owner;
+    protected ObjectPool<Projectile> _owner;
     protected SpriteRenderer _renderer;
     protected BoxCollider2D _collider;
-    protected ProjectTileData _data;
+    protected ProjectileData _data;
     protected int _damage;
     protected Vector2 _direction;
     protected LayerMask _collisionMask;
@@ -20,7 +20,7 @@ public class ProjectTile : MonoBehaviour
         _collider = this.GetComponentAllCheck<BoxCollider2D>();
     }
 
-    public void SetOwner(ObjectPool<ProjectTile> owner)
+    public void SetOwner(ObjectPool<Projectile> owner)
     {
         _owner = owner;
     }
@@ -30,7 +30,7 @@ public class ProjectTile : MonoBehaviour
         _collisionMask = collision;
     }
 
-    public void InitProjectTile(Vector3 position, Vector3 dir, ProjectTileData data, int damage)
+    public void InitProjectTile(Vector3 position, Vector3 dir, ProjectileData data, int damage)
     {
         transform.position = position;
         _data = data;
@@ -81,12 +81,13 @@ public class ProjectTile : MonoBehaviour
         {
             IDamageable obj = collision.GetComponent<IDamageable>();
             obj?.Hit(_damage, gameObject);
-            Vector2 direction = (collision.transform.position - transform.position).normalized;
-            float angle = Utils.Utility2D.GetAngle(transform.right, direction);
+            Vector2 direction = _startPosition.MouseDir();
+            float angle = Utils.Utility2D.DirectionToAngle(direction.x, direction.y);
+            angle += _data.SpriteAngleOffset;
             Quaternion rot = Quaternion.Euler(0, 0, angle);
 
             if ((Globals.LayerMask.Enemy & 1 << collision.gameObject.layer) != 0
-                && _data.Type == EnumTypes.ProjectTileType.Through)
+                && _data.Type == EnumTypes.ProjectileType.Through)
             {
                 return;
             }
