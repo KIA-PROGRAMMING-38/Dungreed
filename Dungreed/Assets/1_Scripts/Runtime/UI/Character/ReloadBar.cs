@@ -49,7 +49,6 @@ public class ReloadBar : MonoBehaviour
             Vector2 localPos = _cursor.localPosition;
             localPos.x = Utils.Math.Utility2D.EaseInBounce(_startPos, _endPos, t/reloadTime);
             _cursor.localPosition = localPos;
-            Debug.Log(t);
             yield return null;
         }
 

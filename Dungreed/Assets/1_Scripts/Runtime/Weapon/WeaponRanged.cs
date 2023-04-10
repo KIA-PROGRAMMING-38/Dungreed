@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -52,6 +53,7 @@ public abstract class WeaponRanged : WeaponBase
 
     public override void WeaponHandle()
     {
+        ReloadProcess();
         ReboundProcess();
 
         // R버튼 누르면 장전
@@ -64,23 +66,8 @@ public abstract class WeaponRanged : WeaponBase
         {
             Reload();
         }
-
-        if (_recoveryAim == true)
-        {
-            _recoveryAimElapsedTime += Time.deltaTime;
-            Vector3 mouseVec = _hand.Owner.transform.position.MouseDir();
-            _hand.transform.right = Utils.Math.Utility2D.EaseInOutBounce(_reboundAimDirection, mouseVec, _recoveryAimElapsedTime / _recoveryAimDuration);
-            if (_recoveryAimElapsedTime > _recoveryAimDuration)
-            {
-                _recoveryAimElapsedTime = 0f;
-                _recoveryAim = false;
-            }
-        }
-
-
     }
-
-    protected virtual void ReboundProcess()
+    protected virtual void ReloadProcess()
     {
         if (_isReloading == true)
         {
@@ -89,6 +76,22 @@ public abstract class WeaponRanged : WeaponBase
             {
                 _reloadElapsedTime = 0;
                 _isReloading = false;
+            }
+        }
+    }
+    protected virtual void ReboundProcess()
+    {
+        if (_recoveryAim == true)
+        {
+            _recoveryAimElapsedTime += Time.deltaTime;
+            Vector3 mouseVec = _hand.Owner.transform.position.MouseDir();
+
+            _hand.transform.right = Utils.Math.Utility2D.EaseInBack(_reboundAimDirection, mouseVec, _recoveryAimElapsedTime / _recoveryAimDuration);
+
+            if (_recoveryAimElapsedTime > _recoveryAimDuration)
+            {
+                _recoveryAimElapsedTime = 0f;
+                _recoveryAim = false;
             }
         }
     }
