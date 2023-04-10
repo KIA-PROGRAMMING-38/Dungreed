@@ -10,7 +10,7 @@ public class GameManager : Singleton<GameManager>
     [field: SerializeField]
     public ProjectilePooler ProjectTilePooler { get; private set; }
     [field: SerializeField]
-    public WeaponDataManager WeaponDataManager { get; private set; }
+    public WeaponManager WeaponDataManager { get; private set; }
     [field: SerializeField]
     public CameraEffectManager CameraEffectManager { get; private set; }
 

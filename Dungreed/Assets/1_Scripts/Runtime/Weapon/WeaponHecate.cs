@@ -53,8 +53,8 @@ public class WeaponHecate : WeaponTwoHandGun
         float angle = -90f + Utils.Utility2D.DirectionToAngle(mouseDir.x, mouseDir.y);
         Debug.Log($"Angle : {angle}");
         Quaternion rot = Quaternion.Euler(0, 0, angle);
-        var fx = GameManager.Instance.FxPooler.GetFx(_fireFxName, _firePosition.position, rot);
-        var fx2 = GameManager.Instance.FxPooler.GetFx(_fireAfterFxName, _firePosition.position, rot);
+        GameManager.Instance.FxPooler.GetFx(_fireFxName, _firePosition.position, rot);
+        GameManager.Instance.FxPooler.GetFx(_fireAfterFxName, _firePosition.position, rot);
     }
 
     protected override void CameraEffect()

@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class BaseController : MonoBehaviour
 {
+    // TODO : Delete
     [Header("Show CollisionInfo")]
     [Header("------------------------")]
     [ShowOnly, SerializeField] private bool IsGrounded;
@@ -75,6 +76,8 @@ public class BaseController : MonoBehaviour
         HorizontalCheck();
         UpdateShowonlyProperty();
     }
+
+    // TODO: Delete
     public void UpdateShowonlyProperty()
     {
         IsGrounded = CollisionInfo.IsGrounded;

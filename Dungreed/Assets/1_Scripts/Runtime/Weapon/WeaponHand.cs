@@ -18,7 +18,7 @@ public class WeaponHand : MonoBehaviour
     private float _faceDirX;
     private Vector2 _mouseDir;
     private bool _isFlip = false;
-    void SetOwner(Transform owner) => Owner = owner;
+    public void SetOwner(Transform owner) => Owner = owner;
 
     private float _attackTimer;
     private float _attackSpeedPerSecond;
@@ -35,7 +35,7 @@ public class WeaponHand : MonoBehaviour
     private void Start()
     {
         if (_equippedWeaponData == null)
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(initId));
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(initId));
     }
 
     private void Update()
@@ -60,20 +60,23 @@ public class WeaponHand : MonoBehaviour
         // Test Code
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log(0);
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(0));
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(0));
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(1));
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(1));
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(2));
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(2));
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeaponData(4));
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(3));
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(4));
         }
 
         HandRotate();
@@ -81,7 +84,7 @@ public class WeaponHand : MonoBehaviour
     }
 
     // 무기 장착을 위한 메서드
-    public void EquipWeapon(WeaponData weaponData)
+    public void EquipWeapon(WeaponBase weaponData)
     {
         if(_equippedWeapon != null)
         {
@@ -92,20 +95,20 @@ public class WeaponHand : MonoBehaviour
         InitWeapon(weaponData);
     }
 
-    public void SetWeaponData(WeaponData data)
+    public void SetWeaponData(WeaponBase weapon)
     {
-        _equippedWeaponData = data;
+        _equippedWeaponData = weapon.Data;
     }
 
-    public void InitWeapon(WeaponData data)
+    public void InitWeapon(WeaponBase weapon)
     {
-        _equippedWeapon = Instantiate(data.Prefab, transform).GetComponent<WeaponBase>();
+        _equippedWeapon = Instantiate(weapon, transform).GetComponent<WeaponBase>();
         _equippedWeapon.transform.localPosition = _equippedWeaponData.OffsetInitPosition;
         _equippedWeapon.SetHand(this);
         _equippedWeapon.Initialize();
 
         _canAttack = true;
-        _attackSpeedPerSecond = 1f / data.AttackSpeedPerSecond;
+        _attackSpeedPerSecond = 1f / weapon.Data.AttackSpeedPerSecond;
         _attackTimer = _attackSpeedPerSecond;
 
         if (_equippedWeaponData?.AttackType == EnumTypes.WeaponAttackType.Ranged)
