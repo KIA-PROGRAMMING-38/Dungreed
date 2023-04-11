@@ -1,6 +1,3 @@
-
-using UnityEngine;
-
 public class WeaponTwoHandGun : WeaponRanged
 {
     public override void Initialize()

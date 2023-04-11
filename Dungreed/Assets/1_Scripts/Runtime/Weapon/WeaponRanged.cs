@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-public abstract class WeaponRanged : WeaponBase
+public class WeaponRanged : WeaponBase
 {
     [SerializeField] protected Transform _firePosition;
     [SerializeField] protected LayerMask _enemyLayerMask;
@@ -21,7 +21,7 @@ public abstract class WeaponRanged : WeaponBase
 
     public override void Attack()
     {
-        if (_isReloading == true) return;
+        if (_isReloading == true || _recoveryAim == true) return;
 
         if (_currentAmmoCount <= 0)
         {
@@ -29,14 +29,16 @@ public abstract class WeaponRanged : WeaponBase
             return;
         }
 
+        _currentAmmoCount = Mathf.Max(0, _currentAmmoCount - 1);
+
+        Fire();
+
         _recoveryAim = true;
         float x = Mathf.Sign(_hand.transform.localScale.x);
         float angle = x == 1f ? Data.ReboundPower : -Data.ReboundPower;
         _hand.transform.rotation = _hand.transform.rotation * Quaternion.Euler(0, 0, angle);
         _reboundAimDirection = _hand.transform.right;
 
-        _currentAmmoCount = Mathf.Max(0, _currentAmmoCount - 1);
-        Fire();
         CameraEffect();
     }
 
@@ -55,18 +57,17 @@ public abstract class WeaponRanged : WeaponBase
         ReloadProcess();
         ReboundProcess();
 
-        // R¹öÆ° ´©¸£¸é ÀåÀü
         if (Input.GetKeyDown(KeyCode.R))
         {
             Reload();
         }
 
-        if(_currentAmmoCount == 0)
+        if (_currentAmmoCount == 0)
         {
             Reload();
         }
     }
-    protected virtual void ReloadProcess()
+    private void ReloadProcess()
     {
         if (_isReloading == true)
         {
@@ -78,15 +79,14 @@ public abstract class WeaponRanged : WeaponBase
             }
         }
     }
-    protected virtual void ReboundProcess()
+    private void ReboundProcess()
     {
         if (_recoveryAim == true)
         {
             _recoveryAimElapsedTime += Time.deltaTime;
-            Vector3 mouseVec = _hand.Owner.transform.position.MouseDir();
+            Vector3 mouseVec = _hand.transform.position.MouseDir();
 
-            _hand.transform.right = Utils.Math.Utility2D.EaseInBack(_reboundAimDirection, mouseVec, _recoveryAimElapsedTime / _recoveryAimDuration);
-
+            _hand.transform.right = Utils.Math.Utility2D.EaseInOutCirc(_reboundAimDirection, mouseVec, _recoveryAimElapsedTime / _recoveryAimDuration);
             if (_recoveryAimElapsedTime > _recoveryAimDuration)
             {
                 _recoveryAimElapsedTime = 0f;
@@ -94,18 +94,18 @@ public abstract class WeaponRanged : WeaponBase
             }
         }
     }
+
     protected virtual void Fire()
     {
-        // ¹ß»çÃ¼ »ý¼º ÈÄ ÃÊ±âÈ­
         var projectTile = GameManager.Instance.ProjectTilePooler.Get();
         int damage = UnityEngine.Random.Range(Data.MinDamage, Data.MaxDamage + 1);
-        projectTile.InitProjectTile(_firePosition.position, _firePosition.position.MouseDir(), Data.Projectile, damage);
+        projectTile.InitProjectTile(_firePosition.position, transform.right, Data.Projectile, damage);
         projectTile.SetCollisionMask(_enemyLayerMask);
     }
 
-    protected override void Reload() 
+    private void Reload() 
     {
-        // Reload ¾Ö´Ï¸ÞÀÌ¼Ç ¿ë ÀÌº¥Æ®
+        // Reload ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ ï¿½Ìºï¿½Æ®
         if (_isReloading == true) return;
 
         _isReloading = true;
