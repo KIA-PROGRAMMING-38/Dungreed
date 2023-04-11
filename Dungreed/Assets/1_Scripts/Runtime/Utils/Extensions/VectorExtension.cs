@@ -5,7 +5,7 @@ public static class VectorExtension
     public static Vector3 MouseDir(this Vector3 pivot)
     {
         Vector3 mousePos = Utils.Utility2D.GetMousePosition();
-        return ( mousePos - pivot).normalized;
+        return (mousePos - pivot).normalized;
     }
 
     public static Vector2 MouseDir(this Vector2 pivot)

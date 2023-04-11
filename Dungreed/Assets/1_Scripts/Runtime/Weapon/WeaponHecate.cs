@@ -25,9 +25,14 @@ public class WeaponHecate : WeaponTwoHandGun
     public override void Attack()
     {
         base.Attack();
-        if (_isReloading == true) return;
-        CreateFx();
     }
+
+    protected override void Fire()
+    {
+        CreateFx();
+        base.Fire();
+    }
+
     public override void WeaponHandle()
     {
         base.WeaponHandle();
@@ -49,9 +54,8 @@ public class WeaponHecate : WeaponTwoHandGun
 
     private void CreateFx()
     {
-        Vector2 mouseDir = _hand.transform.position.MouseDir();
+        Vector2 mouseDir = transform.position.MouseDir();
         float angle = -90f + Utils.Utility2D.DirectionToAngle(mouseDir.x, mouseDir.y);
-        Debug.Log($"Angle : {angle}");
         Quaternion rot = Quaternion.Euler(0, 0, angle);
         GameManager.Instance.FxPooler.GetFx(_fireFxName, _firePosition.position, rot);
         GameManager.Instance.FxPooler.GetFx(_fireAfterFxName, _firePosition.position, rot);
@@ -59,7 +63,7 @@ public class WeaponHecate : WeaponTwoHandGun
 
     protected override void CameraEffect()
     {
-        GameManager.Instance.CameraEffectManager.PlayChromaticAbberation(0.25f, 0.4f);
-        GameManager.Instance.CameraEffectManager.PlayScreenShake(0.25f, 0.3f);
+        GameManager.Instance.CameraEffectManager.PlayChromaticAbberation(1f/ Data.AttackSpeedPerSecond, 0.7f);
+        GameManager.Instance.CameraEffectManager.PlayScreenShake(0.15f, 0.3f);
     }
 }
