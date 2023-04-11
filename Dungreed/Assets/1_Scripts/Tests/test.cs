@@ -1,20 +1,20 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 public class test : MonoBehaviour
 {
-    public UnityEvent SaveEvent;
-    public UnityEvent LoadEvent;
-
-    public void Update()
+    public void Awake()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            SaveEvent?.Invoke();
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            LoadEvent?.Invoke();
-        }
+        gameObject.SetActive(false);
+    }
+
+    public void OnObject()
+    {
+        Debug.Log($"OnObject");
+        gameObject.SetActive(true);
+    }
+
+    public void OffObject()
+    {
+        gameObject.SetActive(false);
     }
 }
