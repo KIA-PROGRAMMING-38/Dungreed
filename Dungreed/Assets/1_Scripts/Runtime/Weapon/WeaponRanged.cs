@@ -97,15 +97,14 @@ public class WeaponRanged : WeaponBase
 
     protected virtual void Fire()
     {
-        var projectTile = GameManager.Instance.ProjectTilePooler.Get();
+        var projectile = GameManager.Instance.ProjectilePooler.Get();
         int damage = UnityEngine.Random.Range(Data.MinDamage, Data.MaxDamage + 1);
-        projectTile.InitProjectTile(_firePosition.position, transform.right, Data.Projectile, damage);
-        projectTile.SetCollisionMask(_enemyLayerMask);
+        projectile.InitProjectTile(_firePosition.position, transform.right, Data.Projectile, damage);
+        projectile.SetCollisionMask(_enemyLayerMask);
     }
 
     private void Reload() 
     {
-        // Reload �ִϸ��̼� �� �̺�Ʈ
         if (_isReloading == true) return;
 
         _isReloading = true;

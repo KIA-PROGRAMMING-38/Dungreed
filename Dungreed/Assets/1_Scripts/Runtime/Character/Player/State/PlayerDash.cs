@@ -7,7 +7,7 @@ public class PlayerDash : StateMachineBehaviour
     private PlayerController _controller;
     private PlayerData _data;
 
-    
+
     private float _dashFxInterval;
     private float _dashFxTime = 0f;
     private float _dashFxMaxTime = 0f;
@@ -41,7 +41,7 @@ public class PlayerDash : StateMachineBehaviour
         _controller.Rig2D.velocity = Vector2.zero;
 
         _dashTime = 0f;
-        _dashFxMaxTime = PlayerData.DEFAULT_DASH_TIME* 0.8f;
+        _dashFxMaxTime = PlayerData.DEFAULT_DASH_TIME * 0.8f;
         _dashFxInterval = _dashFxMaxTime / 5f;
 
         _dir = _data.transform.position.MouseDir();
@@ -59,7 +59,7 @@ public class PlayerDash : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _controller.Rig2D.velocity = _Force;        
+        _controller.Rig2D.velocity = _Force;
 
         if (_dashTime >= PlayerData.DEFAULT_DASH_TIME)
         {
@@ -86,7 +86,7 @@ public class PlayerDash : StateMachineBehaviour
     private void DashAttack()
     {
         int hitCount = Physics2D.OverlapCircleNonAlloc(_controller.transform.position, _colliderRadius, _hit);
-        for(int i =0;i < hitCount;i++)
+        for (int i = 0; i < hitCount; i++)
         {
             IDamageable obj = _hit[i].GetComponent<IDamageable>();
 
@@ -121,5 +121,12 @@ public class PlayerDash : StateMachineBehaviour
         Vector2 vel = _controller.Rig2D.velocity;
         vel.x = 0f;
         _controller.Rig2D.velocity = vel;
+
+        _dashFxInterval = 0f;
+        _dashFxTime = 0f;
+        _dashFxMaxTime = 0f;
+        _dashTime = 0f;
+        _dir = Vector2.zero;
+        _Force = Vector3.zero;
     }
 }

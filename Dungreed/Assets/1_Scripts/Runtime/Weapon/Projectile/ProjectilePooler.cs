@@ -1,5 +1,6 @@
 ﻿using UnityEngine.Pool;
 using UnityEngine;
+using System.IO;
 
 public class ProjectilePooler : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class ProjectilePooler : MonoBehaviour
 
     private void Awake()
     {
-        _defaultProjectTilePrefab = ResourceCache.GetResource<Projectile>("Prefabs/DefaultProjectile");
+        _defaultProjectTilePrefab = ResourceCache.GetResource<Projectile>(Path.Combine(ResourcePath.DefaultPrefabsPath, "DefaultProjectile"));
          pool = new ObjectPool<Projectile>(CreateProjectTile, ActionOnGet, ActionOnRelease, ActionOnDestroy, true, 20, 100);
     }
 

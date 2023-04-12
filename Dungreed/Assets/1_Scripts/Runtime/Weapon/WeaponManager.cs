@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
@@ -7,7 +8,7 @@ public class WeaponManager : MonoBehaviour
 
     private void Awake()
     {
-        WeaponBase[] weapons = Resources.LoadAll<WeaponBase>("Prefabs/Weapon");
+        WeaponBase[] weapons = Resources.LoadAll<WeaponBase>(Path.Combine(ResourcePath.DefaultPrefabsPath, "Weapon"));
         _weapons = new Dictionary<int, WeaponBase>();
         foreach(var weapon in weapons)
         {
