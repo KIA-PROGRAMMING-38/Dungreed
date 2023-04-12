@@ -69,7 +69,7 @@ public class CameraEffectManager : MonoBehaviour
         }
 
         _volumeProfile = _mainCamera?.GetComponent<Volume>().profile;
-        // Debug.Assert(_volumeProfile == null, "VolumeProfile is Null", _volumeProfile);
+        Debug.Assert(_volumeProfile != null, "VolumeProfile is Null", _volumeProfile);
 
         _chromaticAberration = GetVolumeComponent<ChromaticAberration>(_volumeProfile);
         _vignette = GetVolumeComponent<Vignette>(_volumeProfile);
@@ -101,8 +101,6 @@ public class CameraEffectManager : MonoBehaviour
     {
         float t = duration == 0f ? _cameraShakeDuration : duration;
         float shakeIntensity = intensity == 0f ? _cameraShakeIntensity : intensity;
-
-        Vector3 originPos = _mainCamera.transform.position;
 
         while (t > 0f)
         {

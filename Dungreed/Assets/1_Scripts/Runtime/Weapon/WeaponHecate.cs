@@ -71,7 +71,7 @@ public class WeaponHecate : WeaponTwoHandGun
         GameManager.Instance.FxPooler.GetFx(_fireAfterFxName, _firePosition.position, rot);
     }
 
-    protected override void CameraEffect()
+    protected override void PlayCameraEffect()
     {
         GameManager.Instance.CameraEffectManager.PlayChromaticAbberation(1f/ Data.AttackSpeedPerSecond, 0.7f);
         GameManager.Instance.CameraEffectManager.PlayScreenShake(0.15f, 0.3f);

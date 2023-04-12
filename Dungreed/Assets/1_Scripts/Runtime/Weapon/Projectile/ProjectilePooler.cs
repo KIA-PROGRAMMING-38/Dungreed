@@ -14,7 +14,7 @@ public class ProjectilePooler : MonoBehaviour
          pool = new ObjectPool<Projectile>(CreateProjectTile, ActionOnGet, ActionOnRelease, ActionOnDestroy, true, 20, 100);
     }
 
-    public Projectile Get()
+    public Projectile GetProjectile()
     {
         return pool.Get();
     }

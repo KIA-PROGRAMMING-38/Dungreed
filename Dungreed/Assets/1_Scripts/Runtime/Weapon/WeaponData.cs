@@ -4,6 +4,7 @@ using EnumTypes;
 [CreateAssetMenu(fileName = "WeaponData", menuName = "Data/WeaponData")]
 public class WeaponData : ScriptableObject
 {
+    public Sprite DefaultSprite;
     public ProjectileData   Projectile;
 
     public string SwingFxName;

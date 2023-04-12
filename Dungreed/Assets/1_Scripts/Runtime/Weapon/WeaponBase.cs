@@ -14,6 +14,6 @@ public abstract class WeaponBase : MonoBehaviour, IAttackable
     public abstract void Attack();
 
     public virtual void WeaponHandle() { }
-    protected virtual void CameraEffect(){ }
+    protected virtual void PlayCameraEffect(){ }
 
 }
