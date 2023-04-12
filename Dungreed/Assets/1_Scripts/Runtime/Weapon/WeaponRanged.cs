@@ -39,7 +39,7 @@ public class WeaponRanged : WeaponBase
         _hand.transform.rotation = _hand.transform.rotation * Quaternion.Euler(0, 0, angle);
         _reboundAimDirection = _hand.transform.right;
 
-        CameraEffect();
+        PlayCameraEffect();
     }
 
     public override void Initialize()
@@ -97,7 +97,7 @@ public class WeaponRanged : WeaponBase
 
     protected virtual void Fire()
     {
-        var projectile = GameManager.Instance.ProjectilePooler.Get();
+        var projectile = GameManager.Instance.ProjectilePooler.GetProjectile();
         int damage = UnityEngine.Random.Range(Data.MinDamage, Data.MaxDamage + 1);
         projectile.InitProjectTile(_firePosition.position, transform.right, Data.Projectile, damage);
         projectile.SetCollisionMask(_enemyLayerMask);

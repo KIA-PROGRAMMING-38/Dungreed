@@ -224,8 +224,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PlayerPrefab>k__BackingField: {fileID: 0}
   <FxPooler>k__BackingField: {fileID: 7636159228528008638}
-  <ProjectTilePooler>k__BackingField: {fileID: 7636159229324719821}
-  <WeaponDataManager>k__BackingField: {fileID: 7636159229036755644}
+  <ProjectilePooler>k__BackingField: {fileID: 7636159229324719821}
+  <WeaponManager>k__BackingField: {fileID: 7636159229036755644}
   <CameraEffectManager>k__BackingField: {fileID: 7636159228528380386}
 --- !u!1 &7636159229324719823
 GameObject:

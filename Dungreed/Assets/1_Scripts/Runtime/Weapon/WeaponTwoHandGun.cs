@@ -10,7 +10,7 @@ public class WeaponTwoHandGun : WeaponRanged
         base.Attack();
     }
 
-    protected override void CameraEffect()
+    protected override void PlayCameraEffect()
     {
         GameManager.Instance.CameraEffectManager.PlayChromaticAbberation(0.25f, 0.4f);
         GameManager.Instance.CameraEffectManager.PlayScreenShake(0.25f, 0.3f);
