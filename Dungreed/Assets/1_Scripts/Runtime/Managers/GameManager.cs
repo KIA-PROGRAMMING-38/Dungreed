@@ -8,9 +8,9 @@ public class GameManager : Singleton<GameManager>
     [field: SerializeField]
     public FxPooler FxPooler { get; private set; }
     [field: SerializeField]
-    public ProjectilePooler ProjectTilePooler { get; private set; }
+    public ProjectilePooler ProjectilePooler { get; private set; }
     [field: SerializeField]
-    public WeaponManager WeaponDataManager { get; private set; }
+    public WeaponManager WeaponManager { get; private set; }
     [field: SerializeField]
     public CameraEffectManager CameraEffectManager { get; private set; }
 
@@ -22,7 +22,7 @@ public class GameManager : Singleton<GameManager>
     protected void OnDestroy()
     {
         FxPooler = null;
-        WeaponDataManager = null;
+        WeaponManager = null;
     }
 
 }

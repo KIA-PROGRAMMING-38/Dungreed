@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class WeaponHecate : WeaponTwoHandGun
 {
+    [SerializeField] private ParticleSystem _laserHitParticle;
     [SerializeField] private Transform _laserTransform;
     [SerializeField] LayerMask _laserCollisionMask;
     [SerializeField] string _fireAfterFxName;
@@ -43,10 +44,19 @@ public class WeaponHecate : WeaponTwoHandGun
         if (hit.collider != null)
         {
             _laserEndPoint = hit.point;
+            _laserHitParticle.transform.position = hit.point;
+            if (_laserHitParticle.isStopped == true)
+            {
+                _laserHitParticle.Play();
+            }
         }
         else
         {
             _laserEndPoint = _laserStartPoint + (Vector2)transform.right * 100f;
+            if (_laserHitParticle.isPlaying == true)
+            {
+                _laserHitParticle.Stop();
+            }
         }
 
         UpdateLaserPosition();

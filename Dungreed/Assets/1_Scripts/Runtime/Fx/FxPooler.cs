@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 using UnityEngine.Pool;
 
 public class FxPooler : MonoBehaviour
@@ -8,7 +9,7 @@ public class FxPooler : MonoBehaviour
         FxPool = new ObjectPool<FxObject>(CreateFx, ActionOnGet, ActionOnRelease, ActionOnDestroy,
   true, 100, 1000);
 
-        DefaultFxObject = ResourceCache.GetResource<FxObject>("Prefabs/DefaultFxObject");
+        DefaultFxObject = ResourceCache.GetResource<FxObject>(Path.Combine(ResourcePath.DefaultPrefabsPath, "DefaultFxObject"));
     }
 
     public FxObject GetFx(string name, Vector3 position, Quaternion rotate, Vector3 scale)
@@ -21,7 +22,7 @@ public class FxPooler : MonoBehaviour
 
     public FxObject GetFx(string name, Vector3 position, Quaternion rotate)
     {
-        var clip = AnimationClipPath.GetAnimationClipResource(name);
+        var clip = ResourceCache.GetResource<AnimationClip>(Path.Combine(ResourcePath.DefaultFxAnimationClipPath, name));
         var pooledObject = FxPool.Get();
         pooledObject.SetAnimationClip(clip);
         pooledObject.SetTransform(position, rotate);
@@ -41,7 +42,7 @@ public class FxPooler : MonoBehaviour
 
     public FxObject CreateFx()
     {
-        FxObject obj = MonoBehaviour.Instantiate<FxObject>(DefaultFxObject, Vector3.zero, Quaternion.identity, transform);        
+        FxObject obj = Instantiate(DefaultFxObject, Vector3.zero, Quaternion.identity, transform);        
         obj.PoolOwner = this;
         return obj;
     }

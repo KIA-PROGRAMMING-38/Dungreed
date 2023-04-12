@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HecateProjectile
   m_EditorClassIdentifier: 
   Type: 1
-  SpritePath: Sprites/Bullet/Bullet09
+  SpritePath: Bullet/Bullet09
   HitFxPath: HecateFireExplosionFx
   SpriteAngleOffset: -90
   Speed: 50

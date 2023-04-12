@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using EnumTypes;
+
 [CreateAssetMenu(fileName = "WeaponData", menuName = "Data/WeaponData")]
 public class WeaponData : ScriptableObject
 {
-    public GameObject   Prefab;
     public ProjectileData   Projectile;
 
     public string SwingFxName;

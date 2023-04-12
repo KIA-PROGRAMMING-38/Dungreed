@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NormalProjectile
   m_EditorClassIdentifier: 
   Type: 0
-  SpritePath: Sprites/Bullet/Bullet02
+  SpritePath: Bullet/Bullet02
   HitFxPath: BulletFx_01
   SpriteAngleOffset: -90
   Speed: 30

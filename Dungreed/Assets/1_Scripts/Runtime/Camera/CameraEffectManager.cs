@@ -93,14 +93,12 @@ public class CameraEffectManager : MonoBehaviour
 
     public void PlayScreenShake(float duration = 0f, float intensity = 0f)
     {
-        Debug.Log($"PlayScreenShake :{duration} / {intensity}");
         StartCoroutine(ShakeScreenEffectCoroutine(duration, intensity));
     }
 
 
     IEnumerator ShakeScreenEffectCoroutine(float duration, float intensity)
     {
-        Debug.Log($"PlayScreenShake Coroutine Start");
         float t = duration == 0f ? _cameraShakeDuration : duration;
         float shakeIntensity = intensity == 0f ? _cameraShakeIntensity : intensity;
 

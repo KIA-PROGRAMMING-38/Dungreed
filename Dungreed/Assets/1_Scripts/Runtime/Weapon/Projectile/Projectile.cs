@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -7,6 +8,7 @@ public class Projectile : MonoBehaviour
     protected SpriteRenderer _renderer;
     protected BoxCollider2D _collider;
     protected ProjectileData _data;
+    protected float _mouseAngle;
     protected int _damage;
     protected Vector2 _direction;
     protected LayerMask _collisionMask;
@@ -34,12 +36,11 @@ public class Projectile : MonoBehaviour
     {
         transform.position = position;
         _data = data;
-        _renderer.sprite = ResourceCache.GetResource<Sprite>(data.SpritePath);
+        _renderer.sprite = ResourceCache.GetResource<Sprite>(Path.Combine(ResourcePath.DefaultSpritesPath, data.SpritePath));
         _startPosition = position;
         _direction = dir;
-        float angle = Utils.Utility2D.GetAngleFromVector(dir);
-        Debug.Log(angle);
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        _mouseAngle = Utils.Utility2D.GetAngleFromVector(dir);
+        transform.rotation = Quaternion.Euler(0, 0, _mouseAngle);
         _collider.size = _renderer.sprite.bounds.size;
         _damage = damage;
     }

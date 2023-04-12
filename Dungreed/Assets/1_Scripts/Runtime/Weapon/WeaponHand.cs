@@ -36,7 +36,7 @@ public class WeaponHand : MonoBehaviour
     private void Start()
     {
         if (_equippedWeaponData == null)
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(initId));
+            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(initId));
     }
 
     private void Update()
@@ -61,23 +61,23 @@ public class WeaponHand : MonoBehaviour
         // Test Code
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(0));
+            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(0));
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(1));
+            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(1));
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(2));
+            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(2));
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(3));
+            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(3));
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            EquipWeapon(GameManager.Instance.WeaponDataManager.GetWeapon(4));
+            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(4));
         }
 
         HandRotate();
