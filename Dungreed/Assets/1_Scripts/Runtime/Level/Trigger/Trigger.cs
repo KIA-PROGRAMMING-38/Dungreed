@@ -24,19 +24,19 @@ public abstract class Trigger : MonoBehaviour
 
     protected virtual void Start()
     {
-        TriggerOn();
+        OnTrigger();
         _collider.isTrigger = true;
     }
 
     protected abstract void TriggerEnter();
     protected abstract void TriggerExit();
 
-    public void TriggerOn()
+    public void OnTrigger()
     {
         _state = TriggerState.Enable;
     }
 
-    public void TriggerOff()
+    public void OffTrigger()
     {
         _state = TriggerState.Disable;
     }

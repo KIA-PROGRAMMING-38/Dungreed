@@ -2,13 +2,23 @@ using UnityEngine;
 
 public class PlayerData : MonoBehaviour
 {
-    public PlayerStatus _status = new PlayerStatus();
+    private PlayerStatus _status = new PlayerStatus();
+    public PlayerStatus Status { get { return _status; } }
+
 
     public void Awake()
     {
+        Initialize();
+    }
+
+    private void Initialize()
+    {
         JsonDataManager.Instance.LoadFromJson<PlayerStatus>("Data", "PlayerStatus", out _status);
         CurrentDashCount = _status.MaxDashCount;
+        Health health = GetComponent<Health>();
+        health.Initialize(_status.MaxHp);
     }
+
     public void LoadStatus()
     {
     }
@@ -39,5 +49,5 @@ public class PlayerData : MonoBehaviour
     public float JumpForce { get { return DEFAULT_JUMP_FORCE + _status.JumpPower; } }
     public float MoveSpeed { get { return DEFAULT_MOVE_SPEED + _status.MoveSpeed; } }
     public int   MaxDashCount { get { return _status.MaxDashCount; } }
-    public int   CurrentDashCount = 2;
+    public int CurrentDashCount { get; set; }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Health : MonoBehaviour, IDamageable
 {
@@ -10,8 +9,12 @@ public class Health : MonoBehaviour, IDamageable
     private int _maxHp;
     [ShowOnly, SerializeField]
     private int _currentHp;
-    private bool _initialized;
+
     public float InvincibleTime;
+
+    public bool IsInvincible { get; private set; }
+    public int MaxHp { get { return _maxHp; } }
+    public int CurrentHp { get { return _currentHp; } }
 
     [SerializeField] private float _flickingTime;
     [SerializeField] 
@@ -19,33 +22,20 @@ public class Health : MonoBehaviour, IDamageable
     private Material _defaultMaterial;
 
     private Renderer _renderer;
-    public bool IsInvincible { get; private set; }
 
     public event Action OnInvincible;
     public event Action OnHit;
     public event Action OnDie;
 
-    public UnityEvent<float> OnHealthChanged;
+    public event Action<float> OnHealthChanged;
 
     private void Awake()
     {
         _renderer = this.GetComponentAllCheck<SpriteRenderer>();
-        if (_renderer == null)
-            Debug.Log("rendere is null");
         Debug.Assert(_renderer != null, $"Invalid Renderer : {name}/{nameof(Health)}:Component");
 
         _flickingMaterial = _flickingMaterial ?? ResourceCache.GetResource<Material>("Materials/HitMaterial");
         _defaultMaterial = _renderer.material;
-
-    }
-
-    private void Start()
-    {
-        // Start전에 초기화함수를 호출해주지 않았으면 Inspector에서 설정한 MaxHp로 초기화
-        if (_initialized == false)
-        {
-            Initialize(_maxHp);
-        }
     }
 
     private void OnEnable()
@@ -63,13 +53,15 @@ public class Health : MonoBehaviour, IDamageable
 
     public void Initialize(int maxHp)
     {
-        _initialized = true;
         _currentHp = _maxHp = maxHp;
         float ratio = _currentHp / (float)_maxHp;
         OnHealthChanged?.Invoke(ratio);
     }
+
     private void Die()
     {
+        gameObject.SetActive(false);
+        Debug.Log("Die");
         OnDie?.Invoke();
     }
 
@@ -86,9 +78,26 @@ public class Health : MonoBehaviour, IDamageable
         }
 
         _currentHp = calcHp;
-        float hpRatio = _currentHp / (float)_maxHp;
+        float hpRatio = Mathf.Clamp01(_currentHp / (float)_maxHp);
 
+        Debug.Log(hpRatio);
         OnHit?.Invoke();
+        OnHealthChanged?.Invoke(hpRatio);
+    }
+
+    public void Revive()
+    {
+        gameObject.SetActive(true);
+        _currentHp = _maxHp;
+        OnHealthChanged(1f);
+    }
+
+    public void Heal(int heal)
+    {
+        Debug.Assert(heal >= 0);
+        _currentHp    = Mathf.Min(_currentHp + heal, _maxHp);
+        float hpRatio = Mathf.Clamp01(_currentHp / (float)_maxHp);
+
         OnHealthChanged?.Invoke(hpRatio);
     }
 

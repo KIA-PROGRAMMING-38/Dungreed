@@ -49,7 +49,7 @@ public class WeaponRanged : WeaponBase
         _recoveryAimDuration = (1f / Data.AttackSpeedPerSecond);
         _reloadElapsedTime = Time.time;
         _reloadTime = Data.ReloadTime;
-        OnReload += _hand.Owner.GetComponentAllCheck<ReloadBar>().Reload;
+        OnReload += _hand.Owner.GetComponentAllCheck<ReloadBar>().UpdateProgressBar;
     }
 
     public override void WeaponHandle()

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ReloadBar : MonoBehaviour
+public class ReloadBar : MonoBehaviour, IProgressBar
 {
     public Transform Player;
 
@@ -30,9 +30,17 @@ public class ReloadBar : MonoBehaviour
     void LateUpdate()
     {
         transform.position = Player.position + pos;
+        float playerDirection = Mathf.Sign(Player.localScale.x);
+        Vector3 newScale = Vector3.one;
+        if(playerDirection == -1f)
+        {
+            newScale.x *= playerDirection;
+            transform.localScale = newScale;
+        }
+        transform.localScale = newScale;
     }
 
-    public void Reload(float reloadTime)
+    public void UpdateProgressBar(float reloadTime)
     {
         StartCoroutine(ReloadCoroutine(reloadTime));
     }
