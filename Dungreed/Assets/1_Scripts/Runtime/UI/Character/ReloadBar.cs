@@ -1,13 +1,13 @@
 using System.Collections;
 using UnityEngine;
 
-public class ReloadBar : MonoBehaviour, IProgressBar
+public class ReloadBar : ProgressBar
 {
-    public Transform Player;
+    [SerializeField] private RectTransform _base;
+    public Transform Owner;
 
     [SerializeField] private string _reloadFxPath;
-    [SerializeField] private RectTransform _base;
-    [SerializeField] private RectTransform _cursor;
+    private RectTransform _cursor;
 
     private Vector3 pos = Vector3.up * 1.5f;
     private float _startPos;
@@ -18,19 +18,18 @@ public class ReloadBar : MonoBehaviour, IProgressBar
         float sizeX = _base.rect.width / 2f;
         _startPos = -sizeX;
         _endPos = sizeX;
+        _cursor = _progressBarImage.rectTransform;
+
         _base.gameObject.SetActive(false);
         _cursor.gameObject.SetActive(false);
-    }
-
-    void Start()
-    {
         
     }
+    // TODO 
 
     void LateUpdate()
     {
-        transform.position = Player.position + pos;
-        float playerDirection = Mathf.Sign(Player.localScale.x);
+        transform.position = Owner.position + pos;
+        float playerDirection = Mathf.Sign(Owner.localScale.x);
         Vector3 newScale = Vector3.one;
         if(playerDirection == -1f)
         {
@@ -40,7 +39,7 @@ public class ReloadBar : MonoBehaviour, IProgressBar
         transform.localScale = newScale;
     }
 
-    public void UpdateProgressBar(float reloadTime)
+    public override void UpdateProgressBar(float reloadTime)
     {
         StartCoroutine(ReloadCoroutine(reloadTime));
     }
@@ -64,4 +63,5 @@ public class ReloadBar : MonoBehaviour, IProgressBar
         _base.gameObject.SetActive(false);
         _cursor.gameObject.SetActive(false);
     }
+
 }

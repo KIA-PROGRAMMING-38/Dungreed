@@ -6,7 +6,6 @@ public class WeaponRanged : WeaponBase
 {
     [SerializeField] protected Transform _firePosition;
     [SerializeField] protected LayerMask _enemyLayerMask;
-    public event Action<float> OnReload;
 
     protected bool _isReloading = false;
     protected float _reloadElapsedTime = 0f;
@@ -49,7 +48,6 @@ public class WeaponRanged : WeaponBase
         _recoveryAimDuration = (1f / Data.AttackSpeedPerSecond);
         _reloadElapsedTime = Time.time;
         _reloadTime = Data.ReloadTime;
-        OnReload += _hand.Owner.GetComponentAllCheck<ReloadBar>().UpdateProgressBar;
     }
 
     public override void WeaponHandle()
@@ -72,7 +70,7 @@ public class WeaponRanged : WeaponBase
         if (_isReloading == true)
         {
             _reloadElapsedTime += Time.deltaTime;
-            if (_reloadElapsedTime > _reloadTime)
+            if (_reloadElapsedTime - 0.1f > Data.ReloadTime)
             {
                 _reloadElapsedTime = 0;
                 _isReloading = false;
@@ -108,7 +106,7 @@ public class WeaponRanged : WeaponBase
         if (_isReloading == true) return;
 
         _isReloading = true;
-        OnReload?.Invoke(Data.ReloadTime);
+        _hand?.Reload(Data.ReloadTime);
         _currentAmmoCount = Data.MaxAmmoCount;
     }
 

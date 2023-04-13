@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class ProgressBar : MonoBehaviour, IProgressBar
+public class ProgressBar : MonoBehaviour
 {
     [SerializeField] protected Image _progressBarImage;
 
-    public abstract void UpdateProgressBar(float ratio);
+    public virtual void UpdateProgressBar(float ratio) { }
+    public virtual void UpdateProgressBar(int cur, int max) { }
 }

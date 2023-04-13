@@ -9,8 +9,6 @@ namespace Utils.Math
         // https://easings.net/ko
         // https://gist.github.com/cjddmut/d789b9eb78216998e95c
 
-        private const float NATURAL_LOG_OF_2 = 0.693147181f;
-
         public static float Linear(float start, float end, float value)
         {
             value = Mathf.Clamp01(value);

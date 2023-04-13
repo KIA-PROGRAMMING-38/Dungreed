@@ -59,7 +59,11 @@ public class BaseController : MonoBehaviour
     public bool CanDash { get; set; } = true;
     public bool IsJumping { get { return _isJumping; } set { _isJumping = value; } }
     [ShowOnly] public CollisionsInfo CollisionInfo;
-  
+    
+    public void SetBounds(LevelBounds bounds)
+    {
+        _bounds = bounds;
+    }
 
     protected virtual void Awake()
     {

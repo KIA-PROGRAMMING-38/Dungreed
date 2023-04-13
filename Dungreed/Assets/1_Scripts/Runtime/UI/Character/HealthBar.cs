@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,35 +8,35 @@ public class HealthBar : ProgressBar
 {
     [SerializeField] private Image _decreaseProgressBarImage;
     [SerializeField] private float _decreaseHealthTime;
-    [SerializeField] private Health _health;
+    [SerializeField] private TextMeshProUGUI _healhText;
 
+    private StringBuilder _healthTextBuilder;
     private IEnumerator _healthChangeCoroutine;
 
-    private int _maxHealth;
-    private int _currentHealth;
-
     private float _currentHealthRatio = 1f;
-    
-    void Start()
+
+    private void Start()
     {
+        _healthTextBuilder = new StringBuilder();
         _decreaseHealthTime = 1f;
         _progressBarImage.fillAmount = 1f;
         _progressBarImage.fillAmount = _decreaseProgressBarImage.fillAmount;
-        _maxHealth = _health.MaxHp;
-        _currentHealth = _health.CurrentHp;
 
         _healthChangeCoroutine = HealthChangeCoroutine();
-        _health.OnHealthChanged += UpdateProgressBar;
-
-        SetHealthBar(_currentHealth / (float)_maxHealth);
-        StartCoroutine(_healthChangeCoroutine);
     }
 
-    public void SetHealthBar(float ratio)
+    public void UpdateHealthText(int cur, int max)
     {
-        _progressBarImage.fillAmount = ratio;
-        _decreaseProgressBarImage.fillAmount = ratio;
-        _currentHealthRatio = ratio;
+        _healthTextBuilder.Clear();
+        _healthTextBuilder.Append($"{cur} / {max}");
+        _healhText.text = _healthTextBuilder.ToString();
+    }
+  
+    public override void UpdateProgressBar(int cur, int max)
+    {
+        _currentHealthRatio = Mathf.Clamp01(cur/(float)max);
+        StartCoroutine(_healthChangeCoroutine);
+        UpdateHealthText(cur, max);
     }
 
     IEnumerator HealthChangeCoroutine()
@@ -66,12 +68,5 @@ public class HealthBar : ProgressBar
             StopCoroutine(_healthChangeCoroutine);
             yield return null;
         }
-
-    }
-
-    public override void UpdateProgressBar(float ratio)
-    {
-        _currentHealthRatio = ratio;
-        StartCoroutine(_healthChangeCoroutine);
     }
 }

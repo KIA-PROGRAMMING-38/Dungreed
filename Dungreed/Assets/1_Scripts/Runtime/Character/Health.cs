@@ -27,7 +27,7 @@ public class Health : MonoBehaviour, IDamageable
     public event Action OnHit;
     public event Action OnDie;
 
-    public event Action<float> OnHealthChanged;
+    public event Action<int, int> OnHealthChanged;
 
     private void Awake()
     {
@@ -54,8 +54,7 @@ public class Health : MonoBehaviour, IDamageable
     public void Initialize(int maxHp)
     {
         _currentHp = _maxHp = maxHp;
-        float ratio = _currentHp / (float)_maxHp;
-        OnHealthChanged?.Invoke(ratio);
+        OnHealthChanged?.Invoke(_currentHp, _maxHp);
     }
 
     private void Die()
@@ -78,27 +77,23 @@ public class Health : MonoBehaviour, IDamageable
         }
 
         _currentHp = calcHp;
-        float hpRatio = Mathf.Clamp01(_currentHp / (float)_maxHp);
 
-        Debug.Log(hpRatio);
         OnHit?.Invoke();
-        OnHealthChanged?.Invoke(hpRatio);
+        OnHealthChanged?.Invoke(_currentHp, _maxHp);
     }
 
     public void Revive()
     {
         gameObject.SetActive(true);
         _currentHp = _maxHp;
-        OnHealthChanged(1f);
+        OnHealthChanged(_currentHp, _maxHp);
     }
 
     public void Heal(int heal)
     {
         Debug.Assert(heal >= 0);
         _currentHp    = Mathf.Min(_currentHp + heal, _maxHp);
-        float hpRatio = Mathf.Clamp01(_currentHp / (float)_maxHp);
-
-        OnHealthChanged?.Invoke(hpRatio);
+        OnHealthChanged?.Invoke(_currentHp, _maxHp);
     }
 
     private void Invincible()
