@@ -39,6 +39,9 @@ public class PlayerController : BaseController
         _input = GetComponent<PlayerInput>();
         _renderer = GetComponentInChildren<SpriteRenderer>();
         _horizontalMovement = GetComponent<PlayerHorizontalMovement>();
+
+        // TODO: Delete
+        Transform.FindObjectOfType<Cinemachine.CinemachineVirtualCamera>().Follow = transform;
     }
 
     protected override void Start()
