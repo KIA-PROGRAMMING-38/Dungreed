@@ -5,7 +5,7 @@ public class DelayTrigger : Trigger
 {
     [SerializeField] protected float _delayTime;
     protected bool _delayTrigger;
-    protected IEnumerator DelayInvokeCoroutine;
+    protected IEnumerator _delayInvokeCoroutine;
 
     protected override void Awake()
     {
@@ -15,12 +15,12 @@ public class DelayTrigger : Trigger
     protected override void Start()
     {
         base.Start();
-        DelayInvokeCoroutine = DelayInvoke();
+        _delayInvokeCoroutine = DelayInvoke();
     }
 
     protected override void TriggerEnter()
     {
-        StartCoroutine(DelayInvokeCoroutine);
+        StartCoroutine(_delayInvokeCoroutine);
     }
 
     protected override void TriggerExit()
@@ -30,8 +30,14 @@ public class DelayTrigger : Trigger
 
     private IEnumerator DelayInvoke()
     {
-        _state = TriggerState.Disable;
-        yield return YieldCache.WaitForSeconds(_delayTime);
-        _EnterAction?.Invoke();
+        while (true)
+        {
+            _state = TriggerState.Disable;
+            yield return YieldCache.WaitForSeconds(_delayTime);
+            _EnterAction?.Invoke();
+
+            StopCoroutine(_delayInvokeCoroutine);
+            yield return null;
+        }
     }
 }

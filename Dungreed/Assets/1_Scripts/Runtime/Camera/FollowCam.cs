@@ -13,10 +13,17 @@ public class FollowCam : MonoBehaviour
     [SerializeField]
     private Vector3 _offset;
     private Vector3 _velocity = Vector3.zero;
+
+    private void Start()
+    {
+        _target = GameManager.Instance.Player.transform;
+    }
+
     private void LateUpdate()
     {
         Vector3 targetPos = _target.position + _offset;
         Vector3 DampPos = Vector3.SmoothDamp(transform.position, targetPos, ref _velocity, _followSpeed);
+        DampPos.z = transform.position.z;
         transform.position = DampPos;
 
 
@@ -47,8 +54,6 @@ public class FollowCam : MonoBehaviour
         {
             DampPos.y = lb.max.y - (bounds.size.y * 0.5f);
         }
-
-        DampPos.z = transform.position.z;
 
         transform.position = DampPos;
     }

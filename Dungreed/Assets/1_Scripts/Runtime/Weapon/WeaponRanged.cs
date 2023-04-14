@@ -6,7 +6,6 @@ public class WeaponRanged : WeaponBase
 {
     [SerializeField] protected Transform _firePosition;
     [SerializeField] protected LayerMask _enemyLayerMask;
-    public event Action<float> OnReload;
 
     protected bool _isReloading = false;
     protected float _reloadElapsedTime = 0f;
@@ -45,11 +44,10 @@ public class WeaponRanged : WeaponBase
     public override void Initialize()
     {
         base.Initialize();
-        _currentAmmoCount = Data.MaxAmmoCount;
-        _recoveryAimDuration = (1f / Data.AttackSpeedPerSecond);
+        _currentAmmoCount = _data.MaxAmmoCount;
+        _recoveryAimDuration = (1f / _data.AttackSpeedPerSecond);
         _reloadElapsedTime = Time.time;
-        _reloadTime = Data.ReloadTime;
-        OnReload += _hand.Owner.GetComponentAllCheck<ReloadBar>().Reload;
+        _reloadTime = _data.ReloadTime;
     }
 
     public override void WeaponHandle()
@@ -72,7 +70,7 @@ public class WeaponRanged : WeaponBase
         if (_isReloading == true)
         {
             _reloadElapsedTime += Time.deltaTime;
-            if (_reloadElapsedTime > _reloadTime)
+            if (_reloadElapsedTime - 0.1f >= _reloadTime)
             {
                 _reloadElapsedTime = 0;
                 _isReloading = false;
@@ -98,8 +96,8 @@ public class WeaponRanged : WeaponBase
     protected virtual void Fire()
     {
         var projectile = GameManager.Instance.ProjectilePooler.GetProjectile();
-        int damage = UnityEngine.Random.Range(Data.MinDamage, Data.MaxDamage + 1);
-        projectile.InitProjectTile(_firePosition.position, transform.right, Data.Projectile, damage);
+        int damage = UnityEngine.Random.Range(_data.MinDamage, _data.MaxDamage + 1);
+        projectile.InitProjectTile(_firePosition.position, transform.right, _data.Projectile, damage);
         projectile.SetCollisionMask(_enemyLayerMask);
     }
 
@@ -108,8 +106,8 @@ public class WeaponRanged : WeaponBase
         if (_isReloading == true) return;
 
         _isReloading = true;
-        OnReload?.Invoke(Data.ReloadTime);
-        _currentAmmoCount = Data.MaxAmmoCount;
+        _hand?.Reload(_reloadTime);
+        _currentAmmoCount = _data.MaxAmmoCount;
     }
 
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Health : MonoBehaviour, IDamageable
 {
@@ -10,42 +9,42 @@ public class Health : MonoBehaviour, IDamageable
     private int _maxHp;
     [ShowOnly, SerializeField]
     private int _currentHp;
-    private bool _initialized;
+
     public float InvincibleTime;
 
-    [SerializeField] private float _flickingTime;
+    public bool IsInvincible { get; private set; }
+    public int MaxHp { get { return _maxHp; } }
+    public int CurrentHp { get { return _currentHp; } }
+
+    [SerializeField] 
+    private float _flickingTime;
+
     [SerializeField] 
     private Material _flickingMaterial;
     private Material _defaultMaterial;
 
     private Renderer _renderer;
-    public bool IsInvincible { get; private set; }
 
     public event Action OnInvincible;
     public event Action OnHit;
     public event Action OnDie;
 
-    public UnityEvent<float> OnHealthChanged;
+    public event Action<int, int> OnHealthChanged;
+
+    private IEnumerator _flickingCoroutine;
+    private IEnumerator _invincibleCoroutine;
+
 
     private void Awake()
     {
         _renderer = this.GetComponentAllCheck<SpriteRenderer>();
-        if (_renderer == null)
-            Debug.Log("rendere is null");
         Debug.Assert(_renderer != null, $"Invalid Renderer : {name}/{nameof(Health)}:Component");
 
         _flickingMaterial = _flickingMaterial ?? ResourceCache.GetResource<Material>("Materials/HitMaterial");
         _defaultMaterial = _renderer.material;
 
-    }
-
-    private void Start()
-    {
-        // Start전에 초기화함수를 호출해주지 않았으면 Inspector에서 설정한 MaxHp로 초기화
-        if (_initialized == false)
-        {
-            Initialize(_maxHp);
-        }
+        _flickingCoroutine = FlickingCoroutine();
+        _invincibleCoroutine = InvincibleCoroutine();
     }
 
     private void OnEnable()
@@ -63,11 +62,10 @@ public class Health : MonoBehaviour, IDamageable
 
     public void Initialize(int maxHp)
     {
-        _initialized = true;
         _currentHp = _maxHp = maxHp;
-        float ratio = _currentHp / (float)_maxHp;
-        OnHealthChanged?.Invoke(ratio);
+        OnHealthChanged?.Invoke(_currentHp, _maxHp);
     }
+
     private void Die()
     {
         OnDie?.Invoke();
@@ -86,36 +84,62 @@ public class Health : MonoBehaviour, IDamageable
         }
 
         _currentHp = calcHp;
-        float hpRatio = _currentHp / (float)_maxHp;
 
         OnHit?.Invoke();
-        OnHealthChanged?.Invoke(hpRatio);
+        OnHealthChanged?.Invoke(_currentHp, _maxHp);
+    }
+
+    public void Revive()
+    {
+        gameObject.SetActive(true);
+        _currentHp = _maxHp;
+        OnHealthChanged(_currentHp, _maxHp);
+    }
+
+    public void Heal(int heal)
+    {
+        Debug.Assert(heal >= 0);
+        _currentHp    = Mathf.Min(_currentHp + heal, _maxHp);
+        OnHealthChanged?.Invoke(_currentHp, _maxHp);
     }
 
     private void Invincible()
     {
-        StartCoroutine(InvincibleCoroutine());
+        StartCoroutine(_invincibleCoroutine);
     }
     private void Flicking()
     {
-        StartCoroutine(FlickingCoroutine());
+        StartCoroutine(_flickingCoroutine);
     }
 
     IEnumerator FlickingCoroutine()
     {
-        _renderer.material = _flickingMaterial;
-        yield return YieldCache.WaitForSeconds(_flickingTime);
-        _renderer.material = _defaultMaterial;
+        while(true)
+        {
+            _renderer.material = _flickingMaterial;
+
+            yield return YieldCache.WaitForSeconds(_flickingTime);
+
+            _renderer.material = _defaultMaterial;
+            StopCoroutine(_flickingCoroutine);
+
+            yield return null;
+        }
     }
 
     IEnumerator InvincibleCoroutine()
     {
-        IsInvincible = true;
+        while(true)
+        {
+            IsInvincible = true;
+            OnInvincible?.Invoke();
 
-        OnInvincible?.Invoke();
+            yield return YieldCache.WaitForSeconds(InvincibleTime);
 
-        yield return YieldCache.WaitForSeconds(InvincibleTime);
+            IsInvincible = false;
+            StopCoroutine(_invincibleCoroutine);
 
-        IsInvincible = false;
+            yield return null;
+        }
     }
 }

@@ -1,6 +1,6 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Utils;
 
 public class WeaponHand : MonoBehaviour
 {
@@ -24,6 +24,14 @@ public class WeaponHand : MonoBehaviour
     private float _attackTimer;
     private float _attackSpeedPerSecond;
     private bool _canAttack;
+
+    public event Action<float> OnReload;
+
+    public void Reload(float reloadTime)
+    {
+        OnReload?.Invoke(reloadTime);
+    }
+
 
     private void Awake()
     {

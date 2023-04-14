@@ -9,5 +9,5 @@ public class PlayerStatus : Status
     public float CriticalDamage;
     public float Evade;
     public float Exp;
-    public float Level;
+    public int Level;
 }

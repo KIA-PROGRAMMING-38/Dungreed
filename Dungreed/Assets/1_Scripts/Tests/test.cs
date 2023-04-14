@@ -2,19 +2,23 @@ using UnityEngine;
 
 public class test : MonoBehaviour
 {
+    public Health player;
+
     public void Awake()
     {
-        gameObject.SetActive(false);
     }
 
-    public void OnObject()
+    public void Update()
     {
-        Debug.Log($"OnObject");
-        gameObject.SetActive(true);
+        if(Input.GetKeyDown(KeyCode.X)) 
+        {
+            DamageObject();
+        }
     }
-
-    public void OffObject()
+    public void DamageObject()
     {
-        gameObject.SetActive(false);
+        Debug.Log("HealthChanged");
+        int t = Random.Range(5, 30);
+        GameManager.Instance.Player.GetComponentInChildren<Health>().Hit(t);
     }
 }

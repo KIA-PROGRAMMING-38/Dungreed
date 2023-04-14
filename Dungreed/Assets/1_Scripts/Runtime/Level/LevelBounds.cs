@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))] 
+[RequireComponent(typeof(PolygonCollider2D))] 
 public class LevelBounds : MonoBehaviour
 {
     public bool OnDrawGizemos = true;
@@ -14,19 +14,19 @@ public class LevelBounds : MonoBehaviour
     public Vector2  TopLeft      { get { return new Vector2(_boundsInfo.min.x, _boundsInfo.max.y); } }
     public Vector2  TopRight     { get { return new Vector2(_boundsInfo.max.x, _boundsInfo.max.y); } }
 
-    private BoxCollider2D _boxCollider2D;
+    private PolygonCollider2D _polygonCollider2D;
 
 
     private void Awake()
     {
-        _boxCollider2D = GetComponent<BoxCollider2D>();
+        _polygonCollider2D = GetComponent<PolygonCollider2D>();
     }
 
     private void OnDrawGizmos()
     {
-        if (this.OnDrawGizemos == false || Application.isPlaying == false) return;
+        if (OnDrawGizemos == false || Application.isPlaying == false) return;
 
-        _boundsInfo = _boxCollider2D.bounds;
+        _boundsInfo = _polygonCollider2D.bounds;
 
         // $0  $1 
         // $2  $3

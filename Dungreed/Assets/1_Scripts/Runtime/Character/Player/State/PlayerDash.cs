@@ -49,7 +49,7 @@ public class PlayerDash : StateMachineBehaviour
         _controller.Rig2D.velocity = _Force;
 
         if (_controller.CollisionInfo.IsOnewayGrounded)
-            _controller.StartCoroutine(_controller.DisableCollision());
+            _controller.StartCoroutine(_controller.DisableCoroutine);
 
         _hitMaterial = ResourceCache.GetResource<Material>("Materials/HitMaterial");
 

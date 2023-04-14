@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdf6483bf6e9d48489b70e6f6b85047f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 4f9ffb016d8455d4ea5b057639ff0399, type: 2}
+  _data: {fileID: 11400000, guid: 4f9ffb016d8455d4ea5b057639ff0399, type: 2}
   _firePosition: {fileID: 663194187668020933}
   _enemyLayerMask:
     serializedVersion: 2

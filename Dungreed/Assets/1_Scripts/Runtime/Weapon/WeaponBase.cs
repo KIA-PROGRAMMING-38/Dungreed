@@ -4,8 +4,11 @@ using UnityEngine;
 public abstract class WeaponBase : MonoBehaviour, IAttackable
 {
 
-    protected       WeaponHand _hand;
-    public          WeaponData Data;
+    [SerializeField] 
+    protected WeaponData _data;
+    protected WeaponHand _hand;
+
+    public WeaponData Data { get { return _data; }}
 
     public virtual void Initialize() {}
 

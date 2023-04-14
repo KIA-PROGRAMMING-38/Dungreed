@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3b2b686018d04d873a25851849768, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
-  _reloadFxPath: ReloadFx
+  _progressBarImage: {fileID: 3084149622217990610}
   _base: {fileID: 3084149622036333054}
-  _cursor: {fileID: 3084149622217990608}
+  Owner: {fileID: 0}
+  _reloadFxPath: ReloadFx
