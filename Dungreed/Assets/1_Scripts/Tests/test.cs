@@ -8,6 +8,13 @@ public class test : MonoBehaviour
     {
     }
 
+    public void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.X)) 
+        {
+            DamageObject();
+        }
+    }
     public void DamageObject()
     {
         Debug.Log("HealthChanged");

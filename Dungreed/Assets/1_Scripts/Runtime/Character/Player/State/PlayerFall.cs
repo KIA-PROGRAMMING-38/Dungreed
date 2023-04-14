@@ -18,7 +18,7 @@ public class PlayerFall : StateMachineBehaviour
 
         if (true == _controller.CollisionInfo.IsOnewayGrounded)
         {
-            _controller.StartCoroutine(_controller.DisableCollision());
+            _controller.StartCoroutine(_controller.DisableCoroutine);
         }
     }
 
@@ -33,6 +33,7 @@ public class PlayerFall : StateMachineBehaviour
         if (Input.GetMouseButtonDown(1) && _controller.CanDash)
         {
             animator.SetTrigger(_controller.Id_DashAnimationParameter);
+            return;
         }
 
         _controller.HorizontalMovement.HorizontalMove();

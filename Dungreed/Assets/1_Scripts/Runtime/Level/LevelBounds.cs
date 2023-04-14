@@ -24,7 +24,7 @@ public class LevelBounds : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (this.OnDrawGizemos == false || Application.isPlaying == false) return;
+        if (OnDrawGizemos == false || Application.isPlaying == false) return;
 
         _boundsInfo = _polygonCollider2D.bounds;
 

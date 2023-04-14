@@ -4,8 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : ProgressBar
+public class PlayerHealthBar : ProgressBar
 {
+    [SerializeField] PlayerUIPresenter _presenter;
     [SerializeField] private Image _decreaseProgressBarImage;
     [SerializeField] private float _decreaseHealthTime;
     [SerializeField] private TextMeshProUGUI _healhText;
@@ -22,7 +23,15 @@ public class HealthBar : ProgressBar
         _progressBarImage.fillAmount = 1f;
         _progressBarImage.fillAmount = _decreaseProgressBarImage.fillAmount;
 
+        _presenter.OnHealthChanged -= UpdateProgressBar;
+        _presenter.OnHealthChanged += UpdateProgressBar;
+
         _healthChangeCoroutine = HealthChangeCoroutine();
+    }
+
+    private void OnDisable()
+    {
+        _presenter.OnHealthChanged -= UpdateProgressBar;
     }
 
     public void UpdateHealthText(int cur, int max)
@@ -44,8 +53,6 @@ public class HealthBar : ProgressBar
         while (true)
         {
             float t = 0f;
-            Debug.Log("CoroutineStart");
-            // 코루틴 시작 비율 저장
             float startRatio = _currentHealthRatio;
             float progressFillAmount = _decreaseProgressBarImage.fillAmount;
             _progressBarImage.fillAmount = _currentHealthRatio;
@@ -54,7 +61,6 @@ public class HealthBar : ProgressBar
             {
                 if(startRatio != _currentHealthRatio) 
                 {
-                    Debug.Log("Coroutine 초기화");
                     t = 0f; 
                     startRatio = _currentHealthRatio;
                     _progressBarImage.fillAmount = _currentHealthRatio;
@@ -64,7 +70,6 @@ public class HealthBar : ProgressBar
                 _decreaseProgressBarImage.fillAmount = Mathf.Lerp(progressFillAmount, _currentHealthRatio, t/_decreaseHealthTime);
                 yield return null;
             }
-            Debug.Log("HealthChange Coroutine Over");
             StopCoroutine(_healthChangeCoroutine);
             yield return null;
         }

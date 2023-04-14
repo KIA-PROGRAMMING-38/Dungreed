@@ -33,6 +33,7 @@ public class PlayerJump : StateMachineBehaviour
         if (Input.GetMouseButtonDown(1) && _controller.CanDash)
         {
             animator.SetTrigger(_controller.Id_DashAnimationParameter);
+            return;
         }
 
         if (Input.GetKey(KeyCode.Space) && _controller.IsJumping == true)

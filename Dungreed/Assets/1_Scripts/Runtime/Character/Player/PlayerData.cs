@@ -49,5 +49,5 @@ public class PlayerData : MonoBehaviour
     public float JumpForce { get { return DEFAULT_JUMP_FORCE + _status.JumpPower; } }
     public float MoveSpeed { get { return DEFAULT_MOVE_SPEED + _status.MoveSpeed; } }
     public int   MaxDashCount { get { return _status.MaxDashCount; } }
-    public int CurrentDashCount { get; set; }
+    public int   CurrentDashCount { get; set; }
 }

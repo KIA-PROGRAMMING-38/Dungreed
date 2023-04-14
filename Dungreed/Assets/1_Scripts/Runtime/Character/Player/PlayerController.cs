@@ -1,6 +1,8 @@
 
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : BaseController
 {
@@ -17,6 +19,8 @@ public class PlayerController : BaseController
     public PlayerInput Input { get { return _input; } }
     public SpriteRenderer Renderer { get { return _renderer; } }
     public PlayerHorizontalMovement HorizontalMovement { get { return _horizontalMovement; } }
+
+    public event Action<int, int> OnDashAction;
     #endregion
 
 
@@ -26,7 +30,9 @@ public class PlayerController : BaseController
     public readonly int Id_RunAnimationParameter    = Animator.StringToHash(PlayerAnimParmaeterLiteral.RunTrigger);
     public readonly int Id_IdleAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.IdleTrigger);
     public readonly int Id_FallAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.FallTrigger);
+    public readonly int Id_ReviveAnimationParameter = Animator.StringToHash(PlayerAnimParmaeterLiteral.ReviveTrigger);
 
+    public IEnumerator DisableCoroutine;
 
     protected override void Awake()
     {
@@ -41,13 +47,25 @@ public class PlayerController : BaseController
         _horizontalMovement = GetComponent<PlayerHorizontalMovement>();
 
         // TODO: Delete
-        Transform.FindObjectOfType<Cinemachine.CinemachineVirtualCamera>().Follow = transform;
+        FindObjectOfType<Cinemachine.CinemachineVirtualCamera>().Follow = transform;
+        DisableCoroutine = DisableCollision();
     }
 
     protected override void Start()
     {
         base.Start();
         StartCoroutine(IncreaseDashCount());
+    }
+
+    protected void OnEnable()
+    {
+        _health.OnDie -= OnDie;
+        _health.OnDie += OnDie;
+    }
+
+    protected void OnDisable()
+    {
+        _health.OnDie -= OnDie;
     }
 
     protected void Update()
@@ -64,7 +82,8 @@ public class PlayerController : BaseController
 
     protected void LateUpdate()
     {
-        CharacterMovementBoundaryCheck();
+        if(_bounds != null)
+            CharacterMovementBoundaryCheck();
     }
 
     private void DirectionUpdate()
@@ -94,11 +113,17 @@ public class PlayerController : BaseController
 
     public IEnumerator DisableCollision()
     {
-        var platformCol = _onewayPlatformCollider;
-        Physics2D.IgnoreCollision(_collider, platformCol);
-        yield return YieldCache.WaitForSeconds(0.25f);
-        Physics2D.IgnoreCollision(_collider, platformCol, false);
-        _onewayPlatformCollider = null;
+        while(true)
+        {
+            var platformCol = _onewayPlatformCollider;
+            Physics2D.IgnoreCollision(_collider, platformCol);
+            yield return YieldCache.WaitForSeconds(0.25f);
+            Physics2D.IgnoreCollision(_collider, platformCol, false);
+            _onewayPlatformCollider = null;
+
+            StopCoroutine(DisableCoroutine);
+            yield return null;
+        }
     }
     public IEnumerator IncreaseDashCount()
     {
@@ -106,6 +131,7 @@ public class PlayerController : BaseController
         {
             _data.CurrentDashCount = Mathf.Clamp(_data.CurrentDashCount + 1, 0, _data.MaxDashCount);
             CanDash = _data.CurrentDashCount != 0;
+            OnDashAction?.Invoke(_data.CurrentDashCount, _data.MaxDashCount);
             yield return YieldCache.WaitForSeconds(PlayerData.DEFAULT_DASH_COUNT_INTERVAL);
         }
     }
@@ -114,5 +140,12 @@ public class PlayerController : BaseController
     {
         _data.CurrentDashCount = Mathf.Clamp(_data.CurrentDashCount - 1, 0, _data.MaxDashCount);
         CanDash = _data.CurrentDashCount != 0;
+        OnDashAction?.Invoke(_data.CurrentDashCount, _data.MaxDashCount);
+    }
+
+    public void OnDie()
+    {
+        Debug.Log("Á×À½");
+        _animator.SetTrigger(PlayerAnimParmaeterLiteral.DieTrigger);
     }
 }

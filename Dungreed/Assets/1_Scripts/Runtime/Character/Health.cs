@@ -16,7 +16,9 @@ public class Health : MonoBehaviour, IDamageable
     public int MaxHp { get { return _maxHp; } }
     public int CurrentHp { get { return _currentHp; } }
 
-    [SerializeField] private float _flickingTime;
+    [SerializeField] 
+    private float _flickingTime;
+
     [SerializeField] 
     private Material _flickingMaterial;
     private Material _defaultMaterial;
@@ -29,6 +31,10 @@ public class Health : MonoBehaviour, IDamageable
 
     public event Action<int, int> OnHealthChanged;
 
+    private IEnumerator _flickingCoroutine;
+    private IEnumerator _invincibleCoroutine;
+
+
     private void Awake()
     {
         _renderer = this.GetComponentAllCheck<SpriteRenderer>();
@@ -36,6 +42,9 @@ public class Health : MonoBehaviour, IDamageable
 
         _flickingMaterial = _flickingMaterial ?? ResourceCache.GetResource<Material>("Materials/HitMaterial");
         _defaultMaterial = _renderer.material;
+
+        _flickingCoroutine = FlickingCoroutine();
+        _invincibleCoroutine = InvincibleCoroutine();
     }
 
     private void OnEnable()
@@ -59,8 +68,6 @@ public class Health : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        gameObject.SetActive(false);
-        Debug.Log("Die");
         OnDie?.Invoke();
     }
 
@@ -98,28 +105,41 @@ public class Health : MonoBehaviour, IDamageable
 
     private void Invincible()
     {
-        StartCoroutine(InvincibleCoroutine());
+        StartCoroutine(_invincibleCoroutine);
     }
     private void Flicking()
     {
-        StartCoroutine(FlickingCoroutine());
+        StartCoroutine(_flickingCoroutine);
     }
 
     IEnumerator FlickingCoroutine()
     {
-        _renderer.material = _flickingMaterial;
-        yield return YieldCache.WaitForSeconds(_flickingTime);
-        _renderer.material = _defaultMaterial;
+        while(true)
+        {
+            _renderer.material = _flickingMaterial;
+
+            yield return YieldCache.WaitForSeconds(_flickingTime);
+
+            _renderer.material = _defaultMaterial;
+            StopCoroutine(_flickingCoroutine);
+
+            yield return null;
+        }
     }
 
     IEnumerator InvincibleCoroutine()
     {
-        IsInvincible = true;
+        while(true)
+        {
+            IsInvincible = true;
+            OnInvincible?.Invoke();
 
-        OnInvincible?.Invoke();
+            yield return YieldCache.WaitForSeconds(InvincibleTime);
 
-        yield return YieldCache.WaitForSeconds(InvincibleTime);
+            IsInvincible = false;
+            StopCoroutine(_invincibleCoroutine);
 
-        IsInvincible = false;
+            yield return null;
+        }
     }
 }
