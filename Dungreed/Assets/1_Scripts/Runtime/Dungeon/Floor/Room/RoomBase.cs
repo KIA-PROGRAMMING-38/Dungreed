@@ -1,6 +1,11 @@
 using System;
 using UnityEngine;
 
+public struct RoomInfo
+{ 
+    
+}
+
 [RequireComponent(typeof(LevelBounds))]
 public abstract class RoomBase : MonoBehaviour
 {
@@ -9,13 +14,16 @@ public abstract class RoomBase : MonoBehaviour
     // Enemy Count
     // private Enemies ...
 
-    public Floor Floor { get; set; }
+    public FloorBase Floor { get; set; }
     public LevelBounds RoomBounds { get; protected set; }
 
     [SerializeField] 
     protected RoomConnector[] _roomEntrance;
 
-    public Action OnRoomClear;
+    [ShowOnly, SerializeField]
+    protected RoomInfo _roomInfo;
+
+    public event Action OnRoomClear;
 
     protected virtual void Awake()
     {
@@ -23,7 +31,7 @@ public abstract class RoomBase : MonoBehaviour
         Debug.Assert(RoomBounds != null);
     }
 
-    public abstract void RoomEnter();
-    public abstract void RoomUpdate();
-    public abstract void RoomExit();
+    public abstract void OnRoomEnter();
+    public abstract void OnRoomStay();
+    public abstract void OnRoomExit();
 }
