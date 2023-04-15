@@ -3,6 +3,8 @@ public class WeaponTwoHandGun : WeaponRanged
     public override void Initialize()
     {
         base.Initialize();
+        _abberationDuration = 1 / _data.AttackSpeedPerSecond * 0.7f;
+        _cameraShakeDuration = 0.2f;
     }
 
     public override void Attack()
@@ -12,7 +14,7 @@ public class WeaponTwoHandGun : WeaponRanged
 
     protected override void PlayCameraEffect()
     {
-        GameManager.Instance.CameraEffectManager.PlayChromaticAbberation(0.25f, 0.4f);
-        GameManager.Instance.CameraEffectManager.PlayScreenShake(0.25f, 0.3f);
+        GameManager.Instance.CameraManager.Effecter.PlayScreenShake(_cameraShakeDuration, 0.3f);
+        GameManager.Instance.CameraManager.Effecter.PlayChromaticAbberation(_abberationDuration, 0.4f);
     }
 }
