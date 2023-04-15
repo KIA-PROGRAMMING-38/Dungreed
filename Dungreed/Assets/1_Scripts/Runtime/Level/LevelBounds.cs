@@ -16,6 +16,7 @@ public class LevelBounds : MonoBehaviour
 
     private PolygonCollider2D _polygonCollider2D;
 
+    public PolygonCollider2D Collider { get { return _polygonCollider2D;} }
 
     private void Awake()
     {

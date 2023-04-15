@@ -16,6 +16,8 @@ public class WeaponHecate : WeaponTwoHandGun
     {
         base.Initialize();
         _laser = _laserTransform.GetComponent<LineRenderer>();
+        _abberationDuration = 1 / Data.AttackSpeedPerSecond * 0.7f;
+        _cameraShakeDuration = 0.2f;
     }
 
     private void UpdateLaserPosition()
@@ -73,7 +75,7 @@ public class WeaponHecate : WeaponTwoHandGun
 
     protected override void PlayCameraEffect()
     {
-        GameManager.Instance.CameraEffectManager.PlayChromaticAbberation(1f/ Data.AttackSpeedPerSecond, 0.7f);
-        GameManager.Instance.CameraEffectManager.PlayScreenShake(0.15f, 0.3f);
+        GameManager.Instance.CameraManager.Effecter.PlayScreenShake(_cameraShakeDuration, 5f);
+        GameManager.Instance.CameraManager.Effecter.PlayChromaticAbberation(_abberationDuration, 0.7f);
     }
 }

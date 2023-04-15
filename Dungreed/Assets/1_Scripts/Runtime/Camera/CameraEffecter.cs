@@ -1,20 +1,27 @@
+using Cinemachine;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
-public class CameraEffectManager : MonoBehaviour
+public class CameraEffecter : MonoBehaviour
 {
-    [SerializeField] Camera _mainCamera;
-    [SerializeField] VolumeProfile _volumeProfile;
+    [SerializeField, ShowOnly] private Camera _mainCamera;
+    [SerializeField, ShowOnly] private CinemachineVirtualCamera _virtualCamera;
+    [SerializeField, ShowOnly] private VolumeProfile _volumeProfile;
 
 
     #region  CameraShake
     [Header("--- Camera Shake ---")]
-    [SerializeField]
-    private float _cameraShakeDuration = 0.3f;
-    [SerializeField, Range(0, 10)]
+
+    private IEnumerator _cameraShakeCoroutine;
+    private CinemachineBasicMultiChannelPerlin _cinemachineBasicMultiChannelPerlin;
+
+    [SerializeField, ShowOnly]
+    private float _cameraShakeDuration;
+    [SerializeField, ShowOnly]
     private float _cameraShakeIntensity;
     #endregion
 
@@ -40,39 +47,32 @@ public class CameraEffectManager : MonoBehaviour
     private Vignette _vignette;
     #endregion
 
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
+    [SerializeField]
+    private Material _roomTransitionMaterial;
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
-    {
-        CameraInitialize();
-        Debug.Log("Camera Initialize Call");
-    }
+    [SerializeField]
+    private float _transitionTime = 1f;
 
-    private void Awake()
-    {
-        CameraInitialize();
-    }
+    [SerializeField]
+    private string _propertyName = "_Progress";
 
-    void CameraInitialize()
+    private Action _onTransitionDone;
+
+    private IEnumerator _transitionCoroutine;
+
+    public void CameraInitialize(Camera mainCam, CinemachineVirtualCamera virtualCamera)
     {
-        if (_mainCamera == null)
-        {
-            _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        }
+        _mainCamera = mainCam;
+        _virtualCamera = virtualCamera;
 
         _volumeProfile = _mainCamera?.GetComponent<Volume>().profile;
         Debug.Assert(_volumeProfile != null, "VolumeProfile is Null", _volumeProfile);
-
+        _cinemachineBasicMultiChannelPerlin = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         _chromaticAberration = GetVolumeComponent<ChromaticAberration>(_volumeProfile);
         _vignette = GetVolumeComponent<Vignette>(_volumeProfile);
+
+        _transitionCoroutine = TransitionCoroutine();
+        _cameraShakeCoroutine = ShakeScreenEffectCoroutine();
     }
 
     T GetVolumeComponent<T>(VolumeProfile profile) where T : VolumeComponent
@@ -91,25 +91,25 @@ public class CameraEffectManager : MonoBehaviour
 
     #region Screen Shake Method
 
-    public void PlayScreenShake(float duration = 0f, float intensity = 0f)
+    public void PlayScreenShake(float duration, float intensity)
     {
-        StartCoroutine(ShakeScreenEffectCoroutine(duration, intensity));
+        _cameraShakeDuration = duration;
+        _cameraShakeIntensity = intensity;
+        StartCoroutine(_cameraShakeCoroutine);
     }
 
 
-    IEnumerator ShakeScreenEffectCoroutine(float duration, float intensity)
+    IEnumerator ShakeScreenEffectCoroutine()
     {
-        float t = duration == 0f ? _cameraShakeDuration : duration;
-        float shakeIntensity = intensity == 0f ? _cameraShakeIntensity : intensity;
-
-        while (t > 0f)
+        while(true)
         {
-            t -= Time.deltaTime;
-            Vector3 shakePos = Random.insideUnitCircle * shakeIntensity;
-            _mainCamera.transform.position = _mainCamera.transform.position + shakePos;
+            Debug.Log($"Camera Shake / Dur : {_cameraShakeDuration} / Inten : {_cameraShakeIntensity}");
+            _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = _cameraShakeIntensity;
+            yield return YieldCache.WaitForSeconds(_cameraShakeDuration);
+            _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
+            StopCoroutine(_cameraShakeCoroutine);
             yield return null;
         }
-        /// _mainCamera.transform.position = originPos;
     }
     #endregion
 
@@ -176,4 +176,30 @@ public class CameraEffectManager : MonoBehaviour
 
     }
     #endregion
+
+    public void PlayTransitionEffect(Action transitionDone)
+    {
+        _onTransitionDone = transitionDone;
+        StartCoroutine(_transitionCoroutine);
+    }
+
+    private IEnumerator TransitionCoroutine()
+    {
+        while (true)
+        {
+            _onTransitionDone?.Invoke();
+            float elapsedTime = 0f;
+            _roomTransitionMaterial.SetFloat(_propertyName, 0f);
+            yield return YieldCache.WaitForSeconds(0.1f);
+            while (elapsedTime < _transitionTime)
+            {
+                elapsedTime += Time.deltaTime;
+                _roomTransitionMaterial.SetFloat(_propertyName, Mathf.Clamp01(elapsedTime / _transitionTime));
+                yield return null;
+            }
+            _onTransitionDone = null;
+            StopCoroutine(_transitionCoroutine);
+            yield return null;
+        }
+    }
 }

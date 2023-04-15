@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerUIPresenter : MonoBehaviour
 {
     private GameObject _player;
+
     public event Action<int, int> OnHealthChanged;
     public event Action<float> OnReload;
     public event Action<int, int> OnDashCountChanged;
@@ -11,6 +12,7 @@ public class PlayerUIPresenter : MonoBehaviour
     private void Start()
     {
         _player = GameManager.Instance.Player;
+
         _player.GetComponent<PlayerController>().OnDashAction += ChangeDashCount;
         _player.GetComponent<Health>().OnHealthChanged += ChangeHealth;
         _player.GetComponentInChildren<WeaponHand>().OnReload += Reload;
