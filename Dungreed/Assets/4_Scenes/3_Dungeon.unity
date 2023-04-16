@@ -854,8 +854,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowConnectedLine: 0
-  _owner: {fileID: 6207785427226768486}
-  _connectedRoom: {fileID: 6953269831493954826}
+  _owner: {fileID: 0}
+  _connectedRoom: {fileID: 0}
   _initPos: {fileID: 72167496}
   _trigger: {fileID: 184411136148099772}
 --- !u!114 &626023749588915741
@@ -41923,7 +41923,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3607171607743964637}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be6b466a34933af4987ba1297c7134fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ea5aa6e4aa4e7b4ea3b200f34609991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _roomEntrance:
@@ -51929,7 +51929,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6953269831493954822}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59e87298d7c413c45a9e82f288c6a223, type: 3}
+  m_Script: {fileID: 11500000, guid: d7cd1502278bf724ab2e329582955e9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _roomEntrance:
@@ -56564,8 +56564,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowConnectedLine: 1
-  _owner: {fileID: 6953269831493954826}
-  _connectedRoom: {fileID: 6207785427226768486}
+  _owner: {fileID: 0}
+  _connectedRoom: {fileID: 0}
   _initPos: {fileID: 775739809}
   _trigger: {fileID: 6953269831955723520}
 --- !u!114 &6953269831955723520
@@ -57223,7 +57223,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8666487223790660004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef2dc6cd28c40374c934cdba829a9508, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bf6fce6b4c61c446878f15e6d19c9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _rooms:

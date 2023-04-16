@@ -1,8 +1,14 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class test : MonoBehaviour
 {
-    public Health player;
+    public GameObject OBJ;
+    public Transform Start;
+    public Transform End;
+    public AnimationCurve curve;
+
+    [Range(0, 1)] public float t;
 
     public void Awake()
     {
@@ -12,13 +18,9 @@ public class test : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.X)) 
         {
-            DamageObject();
+           
         }
+        OBJ.transform.position = Vector3.Lerp(Start.position, End.position, curve.Evaluate(t));
     }
-    public void DamageObject()
-    {
-        Debug.Log("HealthChanged");
-        int t = Random.Range(5, 30);
-        GameManager.Instance.Player.GetComponentInChildren<Health>().Hit(t);
-    }
+
 }
