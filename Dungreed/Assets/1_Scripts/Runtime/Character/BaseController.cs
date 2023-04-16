@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
@@ -59,7 +60,9 @@ public class BaseController : MonoBehaviour
     public bool CanDash { get; set; } = true;
     public bool IsJumping { get { return _isJumping; } set { _isJumping = value; } }
     [ShowOnly] public CollisionsInfo CollisionInfo;
-    
+
+    public IEnumerator DisableCoroutine;
+
     public void SetBounds(LevelBounds bounds)
     {
         _bounds = bounds;
@@ -69,7 +72,7 @@ public class BaseController : MonoBehaviour
     {
         _collider = GetComponent<BoxCollider2D>();
         _rig2D = GetComponent<Rigidbody2D>();
-
+        DisableCoroutine = DisableCollision();
         CalcRaySpacing();
     }
     protected virtual void Start() { }
@@ -133,7 +136,6 @@ public class BaseController : MonoBehaviour
 
     }
 
-
     public void HorizontalCheck()
     {
         if (_direction == Vector2.zero) return;
@@ -185,6 +187,21 @@ public class BaseController : MonoBehaviour
 
         Rig2D.velocity = vel;
         Rig2D.position = pos;
+    }
+
+    public IEnumerator DisableCollision()
+    {
+        while (true)
+        {
+            var platformCol = _onewayPlatformCollider;
+            Physics2D.IgnoreCollision(_collider, platformCol);
+            yield return YieldCache.WaitForSeconds(0.25f);
+            Physics2D.IgnoreCollision(_collider, platformCol, false);
+            _onewayPlatformCollider = null;
+
+            StopCoroutine(DisableCoroutine);
+            yield return null;
+        }
     }
 
     [Serializable]

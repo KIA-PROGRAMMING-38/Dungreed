@@ -32,8 +32,6 @@ public class PlayerController : BaseController
     public readonly int Id_FallAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.FallTrigger);
     public readonly int Id_ReviveAnimationParameter = Animator.StringToHash(PlayerAnimParmaeterLiteral.ReviveTrigger);
 
-    public IEnumerator DisableCoroutine;
-
     protected override void Awake()
     {
         base.Awake();
@@ -48,7 +46,6 @@ public class PlayerController : BaseController
 
         // TODO: Delete
         FindObjectOfType<Cinemachine.CinemachineVirtualCamera>().Follow = transform;
-        DisableCoroutine = DisableCollision();
     }
 
     protected override void Start()
@@ -125,6 +122,7 @@ public class PlayerController : BaseController
             yield return null;
         }
     }
+
     public IEnumerator IncreaseDashCount()
     {
         while (true)
