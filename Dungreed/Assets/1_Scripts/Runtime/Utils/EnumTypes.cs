@@ -47,4 +47,11 @@ namespace EnumTypes
         Through,
     }
 
+    public enum EnemyType
+    { 
+        Melee,
+        Ranged,
+        Turret,
+    }
+
 }

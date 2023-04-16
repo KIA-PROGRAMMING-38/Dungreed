@@ -57,10 +57,12 @@ public class BaseController : MonoBehaviour
     public float BottomBound { get => _collider.bounds.min.y; }
 
     protected bool _isJumping;
+    protected bool _isDownJumping;
     public bool CanDash { get; set; } = true;
     public bool IsJumping { get { return _isJumping; } set { _isJumping = value; } }
+    public bool IsDownJumping { get { return _isDownJumping; } set { _isDownJumping = value; } }
     [ShowOnly] public CollisionsInfo CollisionInfo;
-
+   
     public IEnumerator DisableCoroutine;
 
     public void SetBounds(LevelBounds bounds)
@@ -75,7 +77,9 @@ public class BaseController : MonoBehaviour
         DisableCoroutine = DisableCollision();
         CalcRaySpacing();
     }
+
     protected virtual void Start() { }
+
     public void CheckRayAll()
     {
         CollisionInfo.Reset();
@@ -193,12 +197,14 @@ public class BaseController : MonoBehaviour
     {
         while (true)
         {
+            _isDownJumping = true;
             var platformCol = _onewayPlatformCollider;
             Physics2D.IgnoreCollision(_collider, platformCol);
-            yield return YieldCache.WaitForSeconds(0.25f);
-            Physics2D.IgnoreCollision(_collider, platformCol, false);
-            _onewayPlatformCollider = null;
 
+            yield return YieldCache.WaitForSeconds(0.25f);
+
+            Physics2D.IgnoreCollision(_collider, platformCol, false);
+            _isDownJumping = false;
             StopCoroutine(DisableCoroutine);
             yield return null;
         }

@@ -108,20 +108,6 @@ public class PlayerController : BaseController
         DirectionUpdate();
     }
 
-    public IEnumerator DisableCollision()
-    {
-        while(true)
-        {
-            var platformCol = _onewayPlatformCollider;
-            Physics2D.IgnoreCollision(_collider, platformCol);
-            yield return YieldCache.WaitForSeconds(0.25f);
-            Physics2D.IgnoreCollision(_collider, platformCol, false);
-            _onewayPlatformCollider = null;
-
-            StopCoroutine(DisableCoroutine);
-            yield return null;
-        }
-    }
 
     public IEnumerator IncreaseDashCount()
     {
