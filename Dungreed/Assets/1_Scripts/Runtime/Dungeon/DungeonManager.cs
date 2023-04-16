@@ -13,7 +13,7 @@ public class DungeonManager : MonoBehaviour
     private void Awake()
     {
         // base.Awake();
-        Debug.Assert(_floors.Count() == 0);
+        Debug.Assert(_floors.Count() != 0);
         foreach(FloorBase floor in _floors)
         {
             floor.Owner = this;

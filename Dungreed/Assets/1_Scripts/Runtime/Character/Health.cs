@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class Health : MonoBehaviour, IDamageable
 {
-
     [SerializeField]
     private int _maxHp;
     [ShowOnly, SerializeField]
     private int _currentHp;
 
-    public float InvincibleTime;
-
-    public bool IsInvincible { get; private set; }
     public int MaxHp { get { return _maxHp; } }
     public int CurrentHp { get { return _currentHp; } }
+
+    public float    InvincibleTime;
+    public bool     IsInvincible { get; private set; }
 
     [SerializeField] 
     private float _flickingTime;
@@ -28,6 +27,9 @@ public class Health : MonoBehaviour, IDamageable
     public event Action OnInvincible;
     public event Action OnHit;
     public event Action OnDie;
+    public event Action<GameObject> OnDieWithSender;
+    public event Action OnHeal;
+    public event Action OnRevive;
 
     public event Action<int, int> OnHealthChanged;
 
@@ -45,6 +47,11 @@ public class Health : MonoBehaviour, IDamageable
 
         _flickingCoroutine = FlickingCoroutine();
         _invincibleCoroutine = InvincibleCoroutine();
+
+        if(_currentHp == 0)
+        {
+            _currentHp = _maxHp;
+        }
     }
 
     private void OnEnable()
@@ -66,12 +73,8 @@ public class Health : MonoBehaviour, IDamageable
         OnHealthChanged?.Invoke(_currentHp, _maxHp);
     }
 
-    private void Die()
-    {
-        OnDie?.Invoke();
-    }
 
-    public void Hit(int damage, GameObject hitter = null)
+    public void Hit(int damage, GameObject sender)
     {
         if (IsInvincible) return;
 
@@ -79,7 +82,9 @@ public class Health : MonoBehaviour, IDamageable
 
         if (calcHp <= 0)
         {
-            Die();
+            OnDie?.Invoke();
+
+            OnDieWithSender?.Invoke(sender);
             calcHp = 0;
         }
 
@@ -93,6 +98,7 @@ public class Health : MonoBehaviour, IDamageable
     {
         gameObject.SetActive(true);
         _currentHp = _maxHp;
+        OnRevive?.Invoke(); 
         OnHealthChanged(_currentHp, _maxHp);
     }
 
@@ -100,6 +106,7 @@ public class Health : MonoBehaviour, IDamageable
     {
         Debug.Assert(heal >= 0);
         _currentHp    = Mathf.Min(_currentHp + heal, _maxHp);
+        OnHeal?.Invoke();
         OnHealthChanged?.Invoke(_currentHp, _maxHp);
     }
 
@@ -107,6 +114,7 @@ public class Health : MonoBehaviour, IDamageable
     {
         StartCoroutine(_invincibleCoroutine);
     }
+
     private void Flicking()
     {
         StartCoroutine(_flickingCoroutine);

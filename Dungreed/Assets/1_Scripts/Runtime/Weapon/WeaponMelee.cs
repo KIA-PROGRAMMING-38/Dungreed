@@ -31,22 +31,13 @@ public abstract class WeaponMelee : WeaponBase
         for (int i = 0; i < hitCount; i++)
         {
             IDamageable obj = _hit[i].GetComponent<IDamageable>();
+            
             int weaponDamage = Random.Range(Data.MinDamage, Data.MaxDamage + 1);
             // 플레이어의 위력을 가져온다
             // int playerState =  _hand.Owner.Status.
             int totalDamage = weaponDamage /* + AddtionalDamage */;
 
-            obj?.Hit(totalDamage);
+            obj?.Hit(totalDamage, _hand.Owner.gameObject);
         }
-    }
-
-    // TODO: 공격범위 표시용 삭제 예정
-    protected virtual void OnDrawGizmos()
-    {
-        if (Application.isPlaying == false) return;
-        Gizmos.color = Color.red;
-        Vector3 dir = _hand.Owner.position.MouseDir();
-        Vector3 center = _hand.transform.position + dir * Data.MeleeAttackRange / 2;
-        Gizmos.DrawWireSphere(center, Data.MeleeAttackRange / 2 + 0.1f);
     }
 }

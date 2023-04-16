@@ -14,8 +14,11 @@ public abstract class Trigger : MonoBehaviour
     [SerializeField] protected UnityEvent _EnterAction;
     [SerializeField] protected UnityEvent _ExitAction;
 
+    protected Collider2D _collision;
     protected BoxCollider2D _collider;
     protected TriggerState _state;
+
+    public Collider2D Collision { get => _collision; }
 
     protected virtual void Awake()
     {
@@ -47,6 +50,7 @@ public abstract class Trigger : MonoBehaviour
 
         if (true == Globals.LayerMask.CompareMask(collision.gameObject.layer, _triggerMask))
         {
+            _collision = collision;
             TriggerEnter();
         }
     }
@@ -55,6 +59,7 @@ public abstract class Trigger : MonoBehaviour
     {
         if (true == Globals.LayerMask.CompareMask(collision.gameObject.layer, _triggerMask))
         {
+            _collision = null;
             TriggerExit();
         }
     }

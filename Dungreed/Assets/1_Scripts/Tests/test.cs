@@ -3,12 +3,8 @@ using UnityEngine;
 
 public class test : MonoBehaviour
 {
-    public GameObject OBJ;
-    public Transform Start;
-    public Transform End;
-    public AnimationCurve curve;
+    public Health player;
 
-    [Range(0, 1)] public float t;
 
     public void Awake()
     {
@@ -16,11 +12,12 @@ public class test : MonoBehaviour
 
     public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.X)) 
+        if (Input.GetKeyDown(KeyCode.X))
         {
-           
+            GameManager.Instance.Player.GetComponent<Health>().Hit(Random.Range(5, 20), gameObject);
         }
-        OBJ.transform.position = Vector3.Lerp(Start.position, End.position, curve.Evaluate(t));
     }
+
+    public void Test() { }
 
 }

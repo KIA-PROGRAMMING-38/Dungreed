@@ -2,5 +2,5 @@
 
 public interface IDamageable
 {
-    public void Hit(int damage, GameObject hitter = null);
+    public void Hit(int damage, GameObject sender);
 }
