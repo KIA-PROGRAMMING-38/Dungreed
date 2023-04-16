@@ -5,17 +5,15 @@ public class StartRoom : RoomBase
     [field: SerializeField] 
     public InitPosition StartPosition { get; protected set; }
 
-    public override void RoomEnter()
-    {
-        Debug.Log("StatRoom");
-        OnRoomClear?.Invoke();
-    }
-
-    public override void RoomExit()
+    public override void OnRoomEnter()
     {
     }
 
-    public override void RoomUpdate()
+    public override void OnRoomExit()
+    {
+    }
+
+    public override void OnRoomStay()
     {
     }
 
