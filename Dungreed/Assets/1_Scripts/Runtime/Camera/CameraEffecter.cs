@@ -4,7 +4,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using Random = UnityEngine.Random;
 
 public class CameraEffecter : MonoBehaviour
 {

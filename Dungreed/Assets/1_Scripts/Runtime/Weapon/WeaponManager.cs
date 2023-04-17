@@ -17,16 +17,17 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    // WeaponData의 ID를 통해 가져옴
     public WeaponBase GetWeapon(int id)
     {
-        bool success = _weapons.TryGetValue(id, out var weaponData);
+        bool success = _weapons.TryGetValue(id, out var weapon);
         Debug.Assert(success == true, "DD");
-        return weaponData;
+        return weapon;
     }
 
 
     public void OnDestroy()
     {
-        _weapons.Clear();  
+        _weapons?.Clear();  
     }
 }
