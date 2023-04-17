@@ -79,11 +79,12 @@ public class Projectile : MonoBehaviour
         if (_isReleased == true) return;
 
 
-        if ((_collisionMask & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
+        if (Globals.LayerMask.CompareMask(collision.gameObject.layer, _collisionMask))
         {
             IDamageable obj = collision.GetComponent<IDamageable>();
             obj?.Hit(_damage, gameObject);
-            Vector2 direction = _startPosition.MouseDir();
+            // ¤µ¢a
+            Vector2 direction = ((Vector2)transform.position - _startPosition).normalized;
             float angle = Utils.Utility2D.DirectionToAngle(direction.x, direction.y);
             angle += _data.SpriteAngleOffset;
             Quaternion rot = Quaternion.Euler(0, 0, angle);

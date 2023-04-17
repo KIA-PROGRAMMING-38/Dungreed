@@ -60,7 +60,7 @@ public class EnemyController : BaseController
     public void HorizontalMove(ref Vector2 vel, float dirX)
     {
         _direction.x = dirX;
-        if ((dirX == -1 && CollisionInfo.left == true) || dirX == -1 && CollisionInfo.right == true)
+        if ((dirX == -1 && CollisionInfo.left == true) || dirX == 1 && CollisionInfo.right == true)
         {
             vel.x = 0f;
             SetFaceDirection(dirX);

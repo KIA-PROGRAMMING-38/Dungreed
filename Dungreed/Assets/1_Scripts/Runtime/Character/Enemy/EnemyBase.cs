@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour
 {
@@ -13,21 +14,22 @@ public abstract class EnemyBase : MonoBehaviour
     protected Rigidbody2D _rig2D;
     protected BoxCollider2D _collider;
     protected Trigger _searchTrigger;
+    public event Action OnDie;
 
     protected static readonly string EnemyDieFxPath = "EnemyDieFx";
     protected static readonly string EnemySpawnFxPath = "EnemySpawnFx";
     protected static readonly int ID_EnemyAttackTrigger = Animator.StringToHash("Attack");
     protected static readonly int ID_EnemyTraceTrigger = Animator.StringToHash("Trace");
+    protected static readonly int ID_EnemyResetTrigger = Animator.StringToHash("Reset");
 
     [ShowOnly, SerializeField] protected GameObject _target;
-    [SerializeField] protected ParticleSystem _dieParticle;
 
     protected virtual void Awake()
     {
-        _health = GetComponent<Health>();
-        _renderer = GetComponent<SpriteRenderer>();
-        _anim = GetComponent<Animator>();
-        _controller = GetComponent<EnemyController>();
+        _health = GetComponentInChildren<Health>();
+        _renderer = GetComponentInChildren<SpriteRenderer>();
+        _anim = GetComponentInChildren<Animator>();
+        _controller = GetComponentInChildren<EnemyController>();
         _searchTrigger = GetComponentInChildren<Trigger>();
 
         // 체력 세팅
@@ -39,11 +41,14 @@ public abstract class EnemyBase : MonoBehaviour
         _health.Initialize(_data.MaxHp);
         _target = null;
         _searchTrigger.OnTrigger();
+
+        _health.OnDie -= Die;
+        _health.OnDie += Die;
     }
 
     protected virtual void OnDisable()
     {
-
+        _health.OnDie -= Die;
     }
 
     protected virtual void Start()
@@ -70,5 +75,10 @@ public abstract class EnemyBase : MonoBehaviour
     {
         Vector2 spawnPos = _collider.bounds.center;
         GameManager.Instance.FxPooler.GetFx(EnemyDieFxPath, spawnPos, Quaternion.identity);
+    }
+
+    protected virtual void Die()
+    {
+        OnDie?.Invoke();
     }
 }
