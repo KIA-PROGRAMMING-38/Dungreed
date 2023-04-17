@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PropAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 0e6e5d510d997e842a735dc2ef347dba, type: 3}
+    - {fileID: 2800000, guid: ff710763fd8b5564dac77173d290a69b, type: 3}
+    - {fileID: 2800000, guid: 56ccf2c0320125445bb7e8ac47f3e289, type: 3}
+    - {fileID: 2800000, guid: 02bab367aa94e0940a6760498e152e26, type: 3}
+    - {fileID: 2800000, guid: 07ef838747d85d4418af88f177c02e35, type: 3}
+    - {fileID: 2800000, guid: 0814249efa713804684a04d53dd113ae, type: 3}
+    - {fileID: 2800000, guid: 60fe61c4366689f439c180e66faf94e9, type: 3}
+    - {fileID: 2800000, guid: 5918bb55d7210464188226100866cba7, type: 3}
+    - {fileID: 2800000, guid: 510287ed6c4289240bdacd7c587ce9b7, type: 3}
+    - {fileID: 2800000, guid: c5b9b2db1be789b4b97e8fc16a8df3cb, type: 3}
+    - {fileID: 2800000, guid: 8d9e7ee43d3e566438321d9ebb0def82, type: 3}
+    - {fileID: 2800000, guid: 64ed1bbf14221ce44bb89c1c89ad1004, type: 3}
+    - {fileID: 2800000, guid: 0a08181d53236254fb948c4e6f547e89, type: 3}
+    - {fileID: 2800000, guid: 8c0c0ac2951a835469d8ddbb5ba7f696, type: 3}
+    - {fileID: 2800000, guid: 3da3fe7f78a923b4c8803b12c00dd277, type: 3}
+    - {fileID: 2800000, guid: 359825e9e4a1d1b419a6eddb09fd8bd0, type: 3}
+    - {fileID: 2800000, guid: 15d67d56dce11924d86e6b0af5cf9773, type: 3}
+    - {fileID: 2800000, guid: 9976bd2c15acc724994000feabac7870, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 56ccf2c0320125445bb7e8ac47f3e289, type: 3}
+  - {fileID: 21300000, guid: 0e6e5d510d997e842a735dc2ef347dba, type: 3}
+  - {fileID: 21300000, guid: 8c0c0ac2951a835469d8ddbb5ba7f696, type: 3}
+  - {fileID: 21300000, guid: ff710763fd8b5564dac77173d290a69b, type: 3}
+  - {fileID: 21300000, guid: 60fe61c4366689f439c180e66faf94e9, type: 3}
+  - {fileID: 21300000, guid: 8d9e7ee43d3e566438321d9ebb0def82, type: 3}
+  - {fileID: 21300000, guid: 5918bb55d7210464188226100866cba7, type: 3}
+  - {fileID: 21300000, guid: 15d67d56dce11924d86e6b0af5cf9773, type: 3}
+  - {fileID: 21300000, guid: 02bab367aa94e0940a6760498e152e26, type: 3}
+  - {fileID: 21300000, guid: 07ef838747d85d4418af88f177c02e35, type: 3}
+  - {fileID: 21300000, guid: 359825e9e4a1d1b419a6eddb09fd8bd0, type: 3}
+  - {fileID: 21300000, guid: c5b9b2db1be789b4b97e8fc16a8df3cb, type: 3}
+  - {fileID: 21300000, guid: 9976bd2c15acc724994000feabac7870, type: 3}
+  - {fileID: 21300000, guid: 0a08181d53236254fb948c4e6f547e89, type: 3}
+  - {fileID: 21300000, guid: 510287ed6c4289240bdacd7c587ce9b7, type: 3}
+  - {fileID: 21300000, guid: 0814249efa713804684a04d53dd113ae, type: 3}
+  - {fileID: 21300000, guid: 3da3fe7f78a923b4c8803b12c00dd277, type: 3}
+  - {fileID: 21300000, guid: 64ed1bbf14221ce44bb89c1c89ad1004, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - BoxParticle0_1
+  - Box0
+  - Torch3
+  - BoxParticle0_0
+  - BoxParticle0_5
+  - Torch0
+  - Table0
+  - Torch6 #215759
+  - BoxParticle0_2
+  - BoxParticle0_3
+  - Torch5
+  - TortureTable1
+  - Torch7
+  - Torch2 #213208
+  - TortureTable0
+  - BoxParticle0_4
+  - Torch4 #216779
+  - Torch1 #213214
+  m_RenderDataMap: {}
+  m_Tag: PropAtlas
+  m_IsVariant: 0

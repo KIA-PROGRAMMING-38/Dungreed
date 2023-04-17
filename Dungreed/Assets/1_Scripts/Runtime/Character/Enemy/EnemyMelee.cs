@@ -12,15 +12,11 @@ public class EnemyMelee : EnemyBase
         _isAttacking = false;
         _isTracing = false;
         _velocity= Vector2.zero;
-
-        _health.OnDie -= Die;
-        _health.OnDie += Die;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        _health.OnDie -= Die;
     }
 
     protected override void Awake()
@@ -31,9 +27,6 @@ public class EnemyMelee : EnemyBase
     protected override void Start()
     {
         base.Start();
-
-        _health.OnDie -= Die;
-        _health.OnDie += Die;
 
         _isAttacking = false;
         _isTracing = false;
@@ -122,9 +115,9 @@ public class EnemyMelee : EnemyBase
         _anim.SetTrigger(ID_EnemyTraceTrigger);
     }
 
-    private void Die()
+    protected override void Die()
     {
-        Debug.Log("EnemyDie");
+        base.Die();
         CreateDieFx();
         gameObject.SetActive(false);
     }

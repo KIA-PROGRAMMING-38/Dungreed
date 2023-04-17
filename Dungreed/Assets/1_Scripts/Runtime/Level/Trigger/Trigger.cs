@@ -16,19 +16,19 @@ public abstract class Trigger : MonoBehaviour
 
     protected Collider2D _collision;
     protected BoxCollider2D _collider;
-    protected TriggerState _state;
+    [ShowOnly, SerializeField] protected TriggerState _state;
 
     public Collider2D Collision { get => _collision; }
 
     protected virtual void Awake()
     {
         _collider = GetComponent<BoxCollider2D>();
+        _collider.isTrigger = true;
+       OnTrigger();
     }
 
     protected virtual void Start()
     {
-        OnTrigger();
-        _collider.isTrigger = true;
     }
 
     protected abstract void TriggerEnter();
@@ -46,7 +46,10 @@ public abstract class Trigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (_state == TriggerState.Disable) return;
+        if (_state == TriggerState.Disable)
+        {
+            return;
+        }
 
         if (true == Globals.LayerMask.CompareMask(collision.gameObject.layer, _triggerMask))
         {

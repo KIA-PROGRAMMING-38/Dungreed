@@ -2,8 +2,8 @@
 {
     protected override void TriggerEnter()
     {
-        _EnterAction?.Invoke();
         _state = TriggerState.Disable;
+        _EnterAction?.Invoke();
     }
 
     protected override void TriggerExit()

@@ -9,7 +9,10 @@ public abstract class FloorBase : MonoBehaviour
 {
     protected DungeonManager _owner;
     public DungeonManager Owner { protected get { return _owner; } set { _owner = value; } }
+
     protected GameObject _player;
+    public GameObject CurrentPlayer { get { return _player; } }
+
     [SerializeField] protected RoomBase[] _rooms;
 
     [SerializeField] protected StartRoom _startRoom;
