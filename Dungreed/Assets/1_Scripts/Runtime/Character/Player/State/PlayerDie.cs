@@ -21,6 +21,8 @@ public class PlayerDie : StateMachineBehaviour
         _controller.IsDie = true;
         _health.IsInvincible = true;
         _controller.Hand.gameObject.SetActive(false);
+        _controller.Renderer.enabled = false;
+        GameManager.Instance.FxPooler.GetFx("ReturnToTownFx", _controller.transform.position, Quaternion.identity);
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -32,5 +34,6 @@ public class PlayerDie : StateMachineBehaviour
         _controller.IsDie = false;
         _health.IsInvincible = false;
         _controller.Hand.gameObject.SetActive(true);
+        _controller.Renderer.enabled = true;
     }
 }

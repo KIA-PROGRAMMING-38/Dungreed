@@ -16,17 +16,20 @@ public class PlayerHealthBar : ProgressBar
 
     private float _currentHealthRatio = 1f;
 
-    private void Start()
+    private void Awake()
     {
         _healthTextBuilder = new StringBuilder();
         _decreaseHealthTime = 1f;
         _progressBarImage.fillAmount = 1f;
         _progressBarImage.fillAmount = _decreaseProgressBarImage.fillAmount;
 
+        _healthChangeCoroutine = HealthChangeCoroutine();
+    }
+
+    private void OnEnable()
+    {
         _presenter.OnHealthChanged -= UpdateProgressBar;
         _presenter.OnHealthChanged += UpdateProgressBar;
-
-        _healthChangeCoroutine = HealthChangeCoroutine();
     }
 
     private void OnDisable()

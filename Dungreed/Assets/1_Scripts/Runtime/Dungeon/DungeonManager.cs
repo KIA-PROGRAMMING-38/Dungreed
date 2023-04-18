@@ -50,7 +50,6 @@ public class DungeonManager : MonoBehaviour
     public void PlayerDieProcess()
     {
         _currentFloor.OnPlayerDie();
-        test.gameObject.SetActive(true);
         adventureTime = (int)Time.timeSinceLevelLoad;
         var data =CurrentPlayer.GetComponent<PlayerData>();
 

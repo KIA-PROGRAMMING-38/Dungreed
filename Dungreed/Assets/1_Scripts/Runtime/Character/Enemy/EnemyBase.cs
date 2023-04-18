@@ -67,6 +67,7 @@ public abstract class EnemyBase : MonoBehaviour
     {
         _target = null;
         _searchTrigger.Collider.enabled = false;
+        _anim.SetTrigger(ID_EnemyResetTrigger);
     }
 
 

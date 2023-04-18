@@ -54,6 +54,11 @@ public class Health : MonoBehaviour, IDamageable
         }
     }
 
+    private void Start()
+    {
+        OnHealthChanged?.Invoke(_currentHp, _maxHp);
+    }
+
     private void OnEnable()
     {
         OnHit -= Invincible;
