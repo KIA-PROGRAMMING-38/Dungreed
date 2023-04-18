@@ -63,7 +63,9 @@ public class EnemyRanger : EnemyBase
             yield return YieldCache.WaitForSeconds(0.2f);
             _anim.SetTrigger(ID_EnemyAttackTrigger);
             var projectile = GameManager.Instance.ProjectilePooler.GetProjectile();
-            projectile.InitProjectTile(_firePosition.position, _hand.transform.right, _data.ProjectileData, 10);
+            DamageInfo damageInfo = new DamageInfo();
+            damageInfo.Damage = _data.AttackDamage;
+            projectile.InitProjectTile(_firePosition.position, _hand.transform.right, _data.ProjectileData, damageInfo);
             projectile.SetCollisionMask(_projectileCollisionLayerMask);
             yield return YieldCache.WaitForSeconds(1f);
             yield return null;

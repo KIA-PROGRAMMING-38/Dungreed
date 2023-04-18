@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour
     protected BoxCollider2D _collider;
     protected ProjectileData _data;
     protected float _mouseAngle;
-    protected int _damage;
+    protected DamageInfo _damageInfo;
     protected Vector2 _direction;
     protected LayerMask _collisionMask;
     protected Vector2 _startPosition;
@@ -32,7 +32,7 @@ public class Projectile : MonoBehaviour
         _collisionMask = collision;
     }
 
-    public void InitProjectTile(Vector3 position, Vector3 dir, ProjectileData data, int damage)
+    public void InitProjectTile(Vector3 position, Vector3 dir, ProjectileData data, DamageInfo damageInfo)
     {
         transform.position = position;
         _data = data;
@@ -42,7 +42,7 @@ public class Projectile : MonoBehaviour
         _mouseAngle = Utils.Utility2D.GetAngleFromVector(dir);
         transform.rotation = Quaternion.Euler(0, 0, _mouseAngle);
         _collider.size = _renderer.sprite.bounds.size;
-        _damage = damage;
+        _damageInfo = damageInfo;
     }
 
     public void Reset()
@@ -82,8 +82,8 @@ public class Projectile : MonoBehaviour
         if (Globals.LayerMask.CompareMask(collision.gameObject.layer, _collisionMask))
         {
             IDamageable obj = collision.GetComponent<IDamageable>();
-            obj?.Hit(_damage, gameObject);
-            // ¤µ¢a
+            obj?.Hit(_damageInfo, gameObject);
+
             Vector2 direction = ((Vector2)transform.position - _startPosition).normalized;
             float angle = Utils.Utility2D.DirectionToAngle(direction.x, direction.y);
             angle += _data.SpriteAngleOffset;

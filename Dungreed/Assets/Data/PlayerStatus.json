@@ -6,7 +6,6 @@
     "MaxHp": 100,
     "DashDamage": 0,
     "MaxDashCount": 2,
-    "CriticalChance": 100,
-    "CriticalDamage": 100,
-    "Evade": 0.0
+    "CriticalChance": 10,
+    "CriticalDamage": 200
 }

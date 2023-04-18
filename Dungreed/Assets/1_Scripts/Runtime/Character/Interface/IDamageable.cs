@@ -1,6 +1,18 @@
 ﻿using UnityEngine;
 
+public enum DamageType
+{
+    Normal,
+    Critical,
+}
+
+public struct DamageInfo
+{
+    public int Damage;
+    public DamageType Type;
+}
+
 public interface IDamageable
 {
-    public void Hit(int damage, GameObject sender);
+    public void Hit(DamageInfo damage, GameObject sender);
 }

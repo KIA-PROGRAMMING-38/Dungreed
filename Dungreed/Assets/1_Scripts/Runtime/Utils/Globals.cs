@@ -61,7 +61,7 @@ namespace Globals
 
     public class TagLiteral
     {
-        public static readonly string InvisibleTile = "InvisibleTile";
+        public static readonly string Player = "Player";
         public static readonly string OnewayPlatform = "OnewayPlatform";
     }
 }

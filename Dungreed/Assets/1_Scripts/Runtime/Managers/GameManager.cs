@@ -23,6 +23,8 @@ public class GameManager : Singleton<GameManager>
 
     public ProjectilePooler ProjectilePooler { get; private set; }
 
+    public TextPooler DamageTextPooler { get; private set; }
+
     public WeaponManager WeaponManager { get; private set; }
 
     public CameraManager CameraManager { get; private set; }
@@ -33,6 +35,8 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         FxPooler = GetComponentInChildren<FxPooler>();
         ProjectilePooler = GetComponentInChildren<ProjectilePooler>();
+        DamageTextPooler = GetComponentInChildren<TextPooler>();
+
         WeaponManager = GetComponentInChildren<WeaponManager>();
         CameraManager = GetComponentInChildren<CameraManager>();
         _player = Instantiate(PlayerPrefab);

@@ -104,7 +104,8 @@ public class EnemyMelee : EnemyBase
         if (hit != null)
         {
             IDamageable obj = hit.GetComponent<IDamageable>();
-            obj?.Hit(_data.AttackDamage, gameObject);
+            DamageInfo damageInfo = new DamageInfo() { Damage = _data.AttackDamage, Type = DamageType.Normal };
+            obj?.Hit(damageInfo, gameObject);
         }
     }
 
