@@ -11,7 +11,6 @@ public abstract class FloorBase : MonoBehaviour
     public DungeonManager Owner { protected get { return _owner; } set { _owner = value; } }
 
     protected GameObject _player;
-    public GameObject CurrentPlayer { get { return _player; } }
 
     [SerializeField] protected RoomBase[] _rooms;
 
@@ -21,15 +20,18 @@ public abstract class FloorBase : MonoBehaviour
     [ShowOnly, SerializeField] protected FloorInformation floorInfo;
     protected bool _initializedPlayerObject = false;
 
-    public virtual void OnPlayerDie()
-    {
-        _owner.PlayerDieProcess();
-    }
+    public void SetPlayer(GameObject player) => _player = player;
 
     public abstract void Initialize();
     public abstract void OnFloorEnter();
     public abstract void OnFloorStay();
     public abstract void OnFloorExit();
+
+
+    public void OnPlayerDie()
+    {
+        _currentRoom.OnPlayerDie();
+    }
 
     public void ChangeRoom(RoomBase nextRoom)
     {

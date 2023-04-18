@@ -312,9 +312,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHp: 200
   _currentHp: 0
-  InvincibleTime: 0.2
-  _flickingTime: 0.2
-  _flickingMaterial: {fileID: 2100000, guid: 35904187d219db947af88592dd44075a, type: 2}
+  InvincibleTime: 0.3
+  _flickingTime: 0.3
+  _flickingMaterial: {fileID: 2100000, guid: 9c4746d7abc849c4daa6b2529a40c7c2, type: 2}
 --- !u!1 &6682856799717447521
 GameObject:
   m_ObjectHideFlags: 0

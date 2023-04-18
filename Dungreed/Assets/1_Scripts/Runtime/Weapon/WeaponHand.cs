@@ -7,6 +7,20 @@ public class WeaponHand : MonoBehaviour
     // test
     public int initId = 0;
     [field: SerializeField] public Transform Owner { get; private set; }
+    private PlayerStatus _ownerStatus;
+
+    public PlayerStatus OwnerStatus 
+    { 
+        get 
+        {
+            if(_ownerStatus == null)
+            {
+                _ownerStatus = Owner.GetComponent<PlayerData>().Status;
+            }
+            return _ownerStatus;
+        } 
+    }
+
 
 
     [SerializeField] private SortingGroup _sortingGroup;

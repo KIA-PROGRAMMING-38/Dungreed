@@ -97,7 +97,26 @@ public class WeaponRanged : WeaponBase
     {
         var projectile = GameManager.Instance.ProjectilePooler.GetProjectile();
         int damage = UnityEngine.Random.Range(_data.MinDamage, _data.MaxDamage + 1);
-        projectile.InitProjectTile(_firePosition.position, transform.right, _data.Projectile, damage);
+
+        // 플레이어의 위력을 가져온다
+        // 위력 수치 1마다 피해량 1% 증가
+        int critChance = _hand.OwnerStatus.CriticalChance;
+        int critDamage = _hand.OwnerStatus.CriticalDamage;
+        int Power = _hand.OwnerStatus.Power;
+        // 기본이 100
+
+        int rand = UnityEngine.Random.Range(0, 101);
+
+        if (rand < critChance)
+        {
+            Debug.Log("Critical");
+            damage = damage + (int)(damage * (critDamage / 100f));
+        }
+
+        // 피해량 증가
+        int totalDamage = damage + (int)(damage * (Power / 100f));
+
+        projectile.InitProjectTile(_firePosition.position, transform.right, _data.Projectile, totalDamage);
         projectile.SetCollisionMask(_enemyLayerMask);
     }
 

@@ -2,22 +2,26 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.XR;
 
 public class PlayerController : BaseController
 {
+    private bool _isDie;
+    public bool IsDie { get { return _isDie; } set { _isDie = value; } }
     #region Components
     private Health _health;
     private PlayerData _data;
     private PlayerInput _input;
     private Animator _animator;
     private SpriteRenderer _renderer;
+    private WeaponHand _weaponHand;
 
     private PlayerHorizontalMovement _horizontalMovement;
 
     public Animator Anim { get { return _animator; } }
     public PlayerInput Input { get { return _input; } }
     public SpriteRenderer Renderer { get { return _renderer; } }
+    public WeaponHand Hand { get { return _weaponHand; } }
     public PlayerHorizontalMovement HorizontalMovement { get { return _horizontalMovement; } }
 
     public event Action<int, int> OnDashAction;
@@ -43,9 +47,10 @@ public class PlayerController : BaseController
         _input = GetComponent<PlayerInput>();
         _renderer = GetComponentInChildren<SpriteRenderer>();
         _horizontalMovement = GetComponent<PlayerHorizontalMovement>();
+        _weaponHand = GetComponentInChildren<WeaponHand>();
 
         // TODO: Delete
-        FindObjectOfType<Cinemachine.CinemachineVirtualCamera>().Follow = transform;
+        GameManager.Instance.CameraManager.VirtualCamera.Follow = transform;
     }
 
     protected override void Start()
@@ -58,15 +63,26 @@ public class PlayerController : BaseController
     {
         _health.OnDie -= OnDie;
         _health.OnDie += OnDie;
+        _health.OnRevive -= OnRevive;
+        _health.OnRevive += OnRevive;
+
+        _health.OnHit -= GameManager.Instance.CameraManager.Effecter.PlayScreenShake;
+        _health.OnHit += GameManager.Instance.CameraManager.Effecter.PlayScreenShake;
     }
 
     protected void OnDisable()
     {
-        _health.OnDie -= OnDie;
+        if(_health != null)
+        {
+            _health.OnDie -= OnDie;
+            _health.OnRevive -= OnRevive;
+        }
     }
 
     protected void Update()
     {
+        if (_isDie == true) return;
+
         CheckRayAll();
         Flip();
 
@@ -129,8 +145,12 @@ public class PlayerController : BaseController
 
     public void OnDie()
     {
-        Debug.Log("Á×À½");
         _animator.SetTrigger(PlayerAnimParmaeterLiteral.DieTrigger);
+    }
+
+    public void OnRevive()
+    {
+        _animator.SetTrigger(PlayerAnimParmaeterLiteral.ReviveTrigger);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

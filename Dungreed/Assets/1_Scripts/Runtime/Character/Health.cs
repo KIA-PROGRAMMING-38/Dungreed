@@ -13,7 +13,7 @@ public class Health : MonoBehaviour, IDamageable
     public int CurrentHp { get { return _currentHp; } }
 
     public float    InvincibleTime;
-    public bool     IsInvincible { get; private set; }
+    public bool     IsInvincible { get;  set; }
 
     [SerializeField] 
     private float _flickingTime;
@@ -42,7 +42,7 @@ public class Health : MonoBehaviour, IDamageable
         _renderer = this.GetComponentAllCheck<SpriteRenderer>();
         Debug.Assert(_renderer != null, $"Invalid Renderer : {name}/{nameof(Health)}:Component");
 
-        _flickingMaterial = _flickingMaterial ?? ResourceCache.GetResource<Material>("Materials/HitMaterial");
+        _flickingMaterial = _flickingMaterial ?? ResourceCache.GetResource<Material>("Materials/DefaultHitMaterial");
         _defaultMaterial = _renderer.material;
 
         _flickingCoroutine = FlickingCoroutine();

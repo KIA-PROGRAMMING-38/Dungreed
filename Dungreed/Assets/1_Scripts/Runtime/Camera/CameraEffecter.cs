@@ -97,6 +97,14 @@ public class CameraEffecter : MonoBehaviour
         StartCoroutine(_cameraShakeCoroutine);
     }
 
+    public void PlayScreenShake()
+    {
+        _cameraShakeDuration = 0.1f;
+        _cameraShakeIntensity = 2f;
+        StartCoroutine(_cameraShakeCoroutine);
+        PlayScreenBlink();
+    }
+
 
     IEnumerator ShakeScreenEffectCoroutine()
     {
@@ -127,7 +135,6 @@ public class CameraEffecter : MonoBehaviour
         while (t -0.1f < effectDuration)
         {
             t += Time.deltaTime;
-            // 0 ~ 파이 까지
             float sinVal = Mathf.Sin(Mathf.Lerp(0, Mathf.PI, t / effectDuration));
             changeIntensity = Mathf.Clamp(sinVal, 0, caIntensity);
             _chromaticAberration.intensity.value = changeIntensity;

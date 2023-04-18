@@ -3,11 +3,9 @@
 [Serializable]
 public class PlayerStatus : Status
 {
-    public float DashDamage;
-    public int MaxDashCount;
-    public float CriticalChance;
-    public float CriticalDamage;
-    public float Evade;
-    public float Exp;
-    public int Level;
+    public int      DashDamage;
+    public int      MaxDashCount;
+    public int      CriticalChance;
+    public int      CriticalDamage;
+    public int      Evade;
 }

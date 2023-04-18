@@ -63,6 +63,12 @@ public abstract class EnemyBase : MonoBehaviour
         _target = _searchTrigger.Collision.gameObject;
     }
 
+    public virtual void ReleaseTarget()
+    {
+        _target = null;
+        _searchTrigger.Collider.enabled = false;
+    }
+
 
     protected abstract void Attack();
 

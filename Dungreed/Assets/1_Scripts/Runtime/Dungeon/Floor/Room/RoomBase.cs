@@ -12,6 +12,7 @@ public struct RoomInfo
 [RequireComponent(typeof(LevelBounds))]
 public abstract class RoomBase : MonoBehaviour
 {
+    protected GameObject _player;
     protected EnemyBase[] _enemies;
 
     public FloorBase Floor { get; set; }
@@ -25,6 +26,13 @@ public abstract class RoomBase : MonoBehaviour
     public RoomInfo Info { get { return _info; } }
 
     public Action OnRoomClear;
+
+    public void SetPlayer(GameObject player) => _player = player;
+
+    public virtual void OnPlayerDie()
+    {
+
+    }
 
     public virtual void Initialize()
     {

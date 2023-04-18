@@ -1,12 +1,11 @@
 using System;
-using UnityEngine;
 
 [Serializable]
 public class Status
 {
-    public float AttackPower;
+    public int Power;
     public float MoveSpeed;
-    public float Defense;
+    public int Defense;
     public float JumpPower;
     public int MaxHp;
 }

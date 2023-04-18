@@ -14,7 +14,7 @@ public class WeaponOneHandGun : WeaponRanged
 
     protected override void PlayCameraEffect()
     {
-        GameManager.Instance.CameraManager.Effecter.PlayScreenShake(_cameraShakeDuration, 1.5f);
+        GameManager.Instance.CameraManager.Effecter.PlayScreenShake(_cameraShakeDuration, 1f);
         GameManager.Instance.CameraManager.Effecter.PlayChromaticAbberation(_abberationDuration, 0.1f);
     }
 }
