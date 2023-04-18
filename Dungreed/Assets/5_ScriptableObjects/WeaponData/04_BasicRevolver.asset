@@ -12,22 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be57c4fa70f840943a1660819964b004, type: 3}
   m_Name: 04_BasicRevolver
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 5339689875842594911, guid: 24478ae78d9da6a4cb800d2f7d49ba2d, type: 3}
+  DefaultSprite: {fileID: 21300000, guid: b42220431a4bcab42a62644b4470b3aa, type: 3}
   Projectile: {fileID: 11400000, guid: 36308bee87c3fdf48b23b6e69f22330a, type: 2}
   SwingFxName: 
   Id: 4
-  Name: d
-  Description: d
+  Name: "\uB9AC\uBCFC\uBC84"
+  Description: "\uD734\uB300\uD558\uAE30 \uC88B\uACE0 \uC21C\uAC04\uC801\uC73C\uB85C
+    \uBE60\uB974\uAC8C \uC3E0 \uC218 \uC788\uB294 \uCD1D"
   RotateAngleOffset: 0
   SpriteDefaultRotateAngle: 0
   OffsetInitPosition: {x: 0.305, y: 0.015}
   AttackType: 1
   EquipType: 0
   Rarity: 1
-  MinDamage: 222
-  MaxDamage: 222
-  AttackSpeedPerSecond: 3
+  MinDamage: 10
+  MaxDamage: 999
+  AttackSpeedPerSecond: 3.57
   MeleeAttackRange: 0
-  MaxAmmoCount: 3
+  MaxAmmoCount: 6
   ReloadTime: 0.5
   ReboundPower: 15

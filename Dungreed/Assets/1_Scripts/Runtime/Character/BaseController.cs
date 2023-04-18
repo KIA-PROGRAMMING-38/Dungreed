@@ -151,11 +151,10 @@ public class BaseController : MonoBehaviour
         for (int i = 0; i < _horizontalRayCount; ++i)
         {
             Vector2 rayOrigin = new Vector2(calcX, bounds.min.y + (i * _horizontalRaySpacing));
-            int hitCount = Physics2D.RaycastNonAlloc(rayOrigin, _direction, _hit, _raycastDistance, _platformMask | _onewayPlatformMask);
+            int hitCount = Physics2D.RaycastNonAlloc(rayOrigin, _direction, _hit, _raycastDistance, _platformMask);
 
             if (hitCount > 0)
             {
-                float angle = Vector3.Angle(_hit[0].normal, Vector2.up);
                 CollisionInfo.left  = (Mathf.Sign(_direction.x) == -1f) ? true : false;
                 CollisionInfo.right = (Mathf.Sign(_direction.x) == 1f) ? true : false;
                 break;

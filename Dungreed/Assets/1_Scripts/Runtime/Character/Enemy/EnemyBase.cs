@@ -14,6 +14,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected Rigidbody2D _rig2D;
     protected BoxCollider2D _collider;
     protected Trigger _searchTrigger;
+
     public event Action OnDie;
 
     protected static readonly string EnemyDieFxPath = "EnemyDieFx";

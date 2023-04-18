@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be57c4fa70f840943a1660819964b004, type: 3}
   m_Name: 02_DemonBlade
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 928672801551940534, guid: 9c45ef5b3b2966743aa24316f69efd15, type: 3}
-  ProjectTile: {fileID: 0}
+  DefaultSprite: {fileID: 21300000, guid: 8000ab3f974071242a7d58e5bc5fc8e2, type: 3}
+  Projectile: {fileID: 0}
   SwingFxName: DemonBladeSwingFx
   Id: 2
   Name: "\uB9C8\uB140\uAC80 \uB9AC\uBE0C\uB098"
@@ -30,5 +30,6 @@ MonoBehaviour:
   MaxDamage: 13
   AttackSpeedPerSecond: 2.17
   MeleeAttackRange: 5
-  ProjectTileMinRange: 0
-  ProjectTileMaxRange: 0
+  MaxAmmoCount: 0
+  ReloadTime: 0
+  ReboundPower: 0
