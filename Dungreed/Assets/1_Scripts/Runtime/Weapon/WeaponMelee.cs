@@ -33,6 +33,7 @@ public abstract class WeaponMelee : WeaponBase
         {
             IDamageable obj = _hit[i].GetComponent<IDamageable>();
             
+            DamageInfo damageInfo = new DamageInfo();
             int damage = Random.Range(Data.MinDamage, Data.MaxDamage + 1);
             
             // 플레이어의 위력을 가져온다
@@ -46,14 +47,15 @@ public abstract class WeaponMelee : WeaponBase
 
             if(rand < critChance)
             {
-                Debug.Log("Critical");
+                damageInfo.Type = DamageType.Critical;
                 damage = damage + (int)(damage * (critDamage / 100f));
             }
 
             // 피해량 증가
             int totalDamage = damage + (int)(damage * (Power / 100f));
+            damageInfo.Damage = totalDamage;
 
-            obj?.Hit(totalDamage, _hand.Owner.gameObject);
+            obj?.Hit(damageInfo, _hand.Owner.gameObject);
         }
     }
 }

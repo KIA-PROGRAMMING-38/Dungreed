@@ -7,5 +7,4 @@ public class PlayerStatus : Status
     public int      MaxDashCount;
     public int      CriticalChance;
     public int      CriticalDamage;
-    public int      Evade;
 }

@@ -1,9 +1,8 @@
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class test : MonoBehaviour
 {
-    public Health player;
+    public TextPooler dtp;
 
 
     public void Awake()
@@ -12,10 +11,11 @@ public class test : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            GameManager.Instance.Player.GetComponent<Health>().Hit(Random.Range(5, 20), gameObject);
-        }
+        //if (Input.GetKeyDown(KeyCode.X))
+        //{
+        //    var v = Utils.Utility2D.GetMousePosition();
+        //    dtp.PopupDamage("Ad", Color.red, v);
+        //}
     }
 
     public void Test() { }

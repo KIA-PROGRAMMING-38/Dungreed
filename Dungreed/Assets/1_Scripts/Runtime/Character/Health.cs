@@ -12,13 +12,13 @@ public class Health : MonoBehaviour, IDamageable
     public int MaxHp { get { return _maxHp; } }
     public int CurrentHp { get { return _currentHp; } }
 
-    public float    InvincibleTime;
-    public bool     IsInvincible { get;  set; }
+    public float InvincibleTime;
+    public bool IsInvincible { get; set; }
 
-    [SerializeField] 
+    [SerializeField]
     private float _flickingTime;
 
-    [SerializeField] 
+    [SerializeField]
     private Material _flickingMaterial;
     private Material _defaultMaterial;
 
@@ -48,7 +48,7 @@ public class Health : MonoBehaviour, IDamageable
         _flickingCoroutine = FlickingCoroutine();
         _invincibleCoroutine = InvincibleCoroutine();
 
-        if(_currentHp == 0)
+        if (_currentHp == 0)
         {
             _currentHp = _maxHp;
         }
@@ -74,11 +74,20 @@ public class Health : MonoBehaviour, IDamageable
     }
 
 
-    public void Hit(int damage, GameObject sender)
+    public void Hit(DamageInfo damageInfo, GameObject sender)
     {
         if (IsInvincible) return;
 
-        int calcHp = _currentHp - damage;
+        Vector2 damageTextPos = transform.position;
+        damageTextPos.y = _renderer.bounds.max.y;
+
+        // Health를 가지고 있는 오브젝트의 레이어가 Enemy이면 데미지 팝업 나타나게
+        if (Globals.LayerMask.CompareMask(gameObject.layer, Globals.LayerMask.Enemy))
+        {
+            GameManager.Instance.DamageTextPooler.PopupDamage(damageInfo, damageTextPos);
+        }
+
+        int calcHp = _currentHp - damageInfo.Damage;
 
         if (calcHp <= 0)
         {
@@ -98,14 +107,14 @@ public class Health : MonoBehaviour, IDamageable
     {
         gameObject.SetActive(true);
         _currentHp = _maxHp;
-        OnRevive?.Invoke(); 
+        OnRevive?.Invoke();
         OnHealthChanged(_currentHp, _maxHp);
     }
 
     public void Heal(int heal)
     {
         Debug.Assert(heal >= 0);
-        _currentHp    = Mathf.Min(_currentHp + heal, _maxHp);
+        _currentHp = Mathf.Min(_currentHp + heal, _maxHp);
         OnHeal?.Invoke();
         OnHealthChanged?.Invoke(_currentHp, _maxHp);
     }
@@ -122,7 +131,7 @@ public class Health : MonoBehaviour, IDamageable
 
     IEnumerator FlickingCoroutine()
     {
-        while(true)
+        while (true)
         {
             _renderer.material = _flickingMaterial;
 
@@ -137,7 +146,7 @@ public class Health : MonoBehaviour, IDamageable
 
     IEnumerator InvincibleCoroutine()
     {
-        while(true)
+        while (true)
         {
             IsInvincible = true;
             OnInvincible?.Invoke();
