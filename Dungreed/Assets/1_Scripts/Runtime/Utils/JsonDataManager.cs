@@ -20,8 +20,8 @@ public class JsonDataManager : Singleton<JsonDataManager>
     public bool LoadFromJson<T>(string path, string fileName, out T val)
     {
         string json = File.ReadAllText(Path.Combine(Application.dataPath, path, fileName + ExtensionName), Encoding.UTF8);
-        val = JsonUtility.FromJson<T>(json);
 
+        val = JsonUtility.FromJson<T>(json);
         if (val is T) return true;
 
         return false;

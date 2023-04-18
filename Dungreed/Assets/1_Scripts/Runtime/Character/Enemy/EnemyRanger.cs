@@ -16,6 +16,7 @@ public class EnemyRanger : EnemyBase
         base.Start();
         _shootCoroutine = Shoot();
     }
+
     protected override void Attack()
     {
     }
@@ -31,6 +32,11 @@ public class EnemyRanger : EnemyBase
     {
         while(true)
         {
+            if(_target == null)
+            {
+                yield break;
+            }
+
             _anim.SetTrigger(ID_EnemyTraceTrigger);
             float readyTime = 2f;
 

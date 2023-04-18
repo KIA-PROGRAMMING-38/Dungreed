@@ -16,7 +16,7 @@ public class WeaponHecate : WeaponTwoHandGun
     {
         base.Initialize();
         _laser = _laserTransform.GetComponent<LineRenderer>();
-        _abberationDuration = 1 / Data.AttackSpeedPerSecond * 0.7f;
+        _abberationDuration = 1 / Data.AttackSpeedPerSecond * 0.5f;
         _cameraShakeDuration = 0.2f;
     }
 

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 
 public abstract class WeaponMelee : WeaponBase
 {
@@ -32,10 +33,25 @@ public abstract class WeaponMelee : WeaponBase
         {
             IDamageable obj = _hit[i].GetComponent<IDamageable>();
             
-            int weaponDamage = Random.Range(Data.MinDamage, Data.MaxDamage + 1);
+            int damage = Random.Range(Data.MinDamage, Data.MaxDamage + 1);
+            
             // 플레이어의 위력을 가져온다
-            // int playerState =  _hand.Owner.Status.
-            int totalDamage = weaponDamage /* + AddtionalDamage */;
+            // 위력 수치 1마다 피해량 1% 증가
+            int critChance = _hand.OwnerStatus.CriticalChance;
+            int critDamage = _hand.OwnerStatus.CriticalDamage;
+            int Power = _hand.OwnerStatus.Power;
+            // 기본이 100
+
+            int rand = Random.Range(0, 101);
+
+            if(rand < critChance)
+            {
+                Debug.Log("Critical");
+                damage = damage + (int)(damage * (critDamage / 100f));
+            }
+
+            // 피해량 증가
+            int totalDamage = damage + (int)(damage * (Power / 100f));
 
             obj?.Hit(totalDamage, _hand.Owner.gameObject);
         }

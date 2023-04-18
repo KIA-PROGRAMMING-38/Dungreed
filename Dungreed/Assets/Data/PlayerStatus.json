@@ -1,14 +1,12 @@
 {
-    "AttackPower": 1.0,
+    "Power": 1,
     "MoveSpeed": 0.0,
-    "Defense": 0.0,
+    "Defense": 0,
     "JumpPower": 0.0,
-    "MaxHp": 80,
-    "DashDamage": 0.0,
+    "MaxHp": 100,
+    "DashDamage": 0,
     "MaxDashCount": 2,
-    "CriticalChance": 0.0,
-    "CriticalDamage": 0.0,
-    "Evade": 0.0,
-    "Exp": 0.0,
-    "Level": 1
+    "CriticalChance": 100,
+    "CriticalDamage": 100,
+    "Evade": 0.0
 }
