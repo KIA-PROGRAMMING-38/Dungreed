@@ -9695,8 +9695,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8906452631852617202}
   - component: {fileID: 8906452631852617201}
-  - component: {fileID: 8906452631852616718}
   - component: {fileID: 8906452631852617200}
+  - component: {fileID: 433534334362249755}
   m_Layer: 0
   m_Name: TopEntrance
   m_TagString: Untagged
@@ -9738,53 +9738,7 @@ MonoBehaviour:
   _owner: {fileID: 0}
   _connectedRoom: {fileID: 0}
   _initPos: {fileID: 2009987969376510127}
-  _trigger: {fileID: 8906452631852616718}
---- !u!114 &8906452631852616718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8906452631852617205}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 830e292bbcb4b74419af36dcb9c516a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _triggerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  _EnterAction:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8906452631852617201}
-        m_TargetAssemblyTypeName: RoomConnector, Assembly-CSharp
-        m_MethodName: ChangeRoomProcess
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 8906452631852616718}
-        m_TargetAssemblyTypeName: Trigger, Assembly-CSharp
-        m_MethodName: OnTrigger
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _ExitAction:
-    m_PersistentCalls:
-      m_Calls: []
-  _state: 0
+  _trigger: {fileID: 0}
 --- !u!61 &8906452631852617200
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9811,3 +9765,49 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.061924, y: 3.9842215}
   m_EdgeRadius: 0
+--- !u!114 &433534334362249755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8906452631852617205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 830e292bbcb4b74419af36dcb9c516a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _triggerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  _EnterAction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: RoomConnector, Assembly-CSharp
+        m_MethodName: ChangeRoomProcess
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 433534334362249755}
+        m_TargetAssemblyTypeName: Trigger, Assembly-CSharp
+        m_MethodName: OnTrigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _ExitAction:
+    m_PersistentCalls:
+      m_Calls: []
+  _state: 0

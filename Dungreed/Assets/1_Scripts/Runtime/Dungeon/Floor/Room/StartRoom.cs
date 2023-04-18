@@ -7,6 +7,7 @@ public class StartRoom : RoomBase
 
     public override void OnRoomEnter()
     {
+        OnRoomClear?.Invoke();
     }
 
     public override void OnRoomExit()

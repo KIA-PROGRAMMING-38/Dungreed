@@ -16,4 +16,5 @@ MonoBehaviour:
   MaxHp: 30
   MoveSpeed: 4
   AttackDamage: 7
+  ProjectileData: {fileID: 0}
   Type: 0

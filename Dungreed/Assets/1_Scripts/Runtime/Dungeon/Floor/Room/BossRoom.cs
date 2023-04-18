@@ -4,6 +4,11 @@ public class BossRoom : RoomBase
 {
     [SerializeField] private InitPosition _startPosition;
 
+    public override void Initialize()
+    {
+        base.Initialize();
+    }
+
     public override void OnRoomEnter()
     {
         Floor.CurrentPlayer.transform.position = _startPosition.Position;

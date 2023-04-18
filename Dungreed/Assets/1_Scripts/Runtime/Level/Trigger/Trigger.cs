@@ -13,18 +13,28 @@ public abstract class Trigger : MonoBehaviour
     [SerializeField] protected LayerMask _triggerMask;
     [SerializeField] protected UnityEvent _EnterAction;
     [SerializeField] protected UnityEvent _ExitAction;
-
+    [SerializeField] protected bool _isOnAwake;
     protected Collider2D _collision;
     protected BoxCollider2D _collider;
     [ShowOnly, SerializeField] protected TriggerState _state;
 
     public Collider2D Collision { get => _collision; }
+    public BoxCollider2D Collider { get => _collider; }
 
     protected virtual void Awake()
     {
         _collider = GetComponent<BoxCollider2D>();
         _collider.isTrigger = true;
-       OnTrigger();
+
+        if(_isOnAwake == true)
+        {
+            OnTrigger();
+        }
+        else
+        {
+            OffTrigger();
+        }
+
     }
 
     protected virtual void Start()
