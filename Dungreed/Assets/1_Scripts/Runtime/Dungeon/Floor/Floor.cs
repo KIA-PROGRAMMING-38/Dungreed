@@ -1,10 +1,11 @@
 ﻿public class Floor : FloorBase
 {
-    private void Awake()
+    public override void Initialize()
     {
         foreach (RoomBase room in _rooms)
         {
             room.Floor = this;
+            room.Initialize();
         }
     }
 
@@ -14,6 +15,13 @@
         {
             room.Floor = this;
         }
+        _player = GameManager.Instance.Player;
+        ChangeRoom(_startRoom);
+        GameManager.Instance.CameraManager.SetConfiner(_startRoom.RoomBounds);
+
+        _player.transform.position = _startRoom.StartPosition.Position;
+        _player.GetComponent<Health>().OnDie -= OnPlayerDie;
+        _player.GetComponent<Health>().OnDie += OnPlayerDie;
     }
 
     public override void OnFloorStay()
@@ -23,6 +31,7 @@
 
     public override void OnFloorExit()
     {
+        _player.GetComponent<Health>().OnDie -= OnPlayerDie;
     }
 
 }

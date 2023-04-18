@@ -13,33 +13,27 @@ public class RoomConnector : MonoBehaviour
     [SerializeField] private Trigger _trigger;
     private ParticleSystem[] _connectorParticle;
 
+    private static readonly int ID_OpenTrigger = Animator.StringToHash("Open");
+    private Animator _anim;
     private BoxCollider2D _collider;
     private PlayerController _playerController;
 
-    private void Awake()
+    public void Initialize()
     {
+        _anim = GetComponent<Animator>();
         _collider = GetComponent<BoxCollider2D>();
         _connectorParticle = GetComponentsInChildren<ParticleSystem>();
+
         foreach (var particles in _connectorParticle)
         {
             particles.Stop();
         }
-    }
 
-    private void Start()
-    {
-    }
-
-    private void OnEnable()
-    {
-        _collider.isTrigger = true;
+        _trigger = GetComponentInChildren<Trigger>();
+        _trigger.Collider.isTrigger = true;
         _trigger.OffTrigger();
         _owner.OnRoomClear -= OnRoomClear;
         _owner.OnRoomClear += OnRoomClear;
-        foreach (var particles in _connectorParticle)
-        {
-            particles.Stop();
-        }
     }
 
     private void OnDisable()
@@ -54,6 +48,12 @@ public class RoomConnector : MonoBehaviour
             particles.Play();
         }
         _trigger.OnTrigger();
+        if(_anim!= null)
+        {
+            _anim.SetTrigger(ID_OpenTrigger);
+            _collider.enabled = false;
+        }
+           
     }
 
     public void ChangeRoomProcess()
