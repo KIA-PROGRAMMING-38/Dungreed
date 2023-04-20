@@ -86,20 +86,30 @@ public class BossBelial : BossBase
 
     private void Update()
     {
-        if (_ownerRoom.IsBattleStart == false) return;
-        if(_isActPattern == false)
-        {
-            SelectPattern();
+        if(Input.GetKeyDown(KeyCode.T)) {
+            StartCoroutine(_patternCoroutines[(int)PatternType.Laser]);
         }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            StartCoroutine(_patternCoroutines[(int)PatternType.BulletSpawn]);
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            StartCoroutine(_patternCoroutines[(int)PatternType.SwordSpawn]);
+        }
+        //if (_ownerRoom.IsBattleStart == false) return;
+        //if(_isActPattern == false)
+        //{
+        //    SelectPattern();
+        //}
     }
 
     private void SelectPattern()
     {
-        StartCoroutine(_patternCoroutines[(int)PatternType.BulletSpawn]);
-        //int pattern = (int)PatternType.Max;
-        //pattern = Random.Range(0, pattern);
-        //_currentPattern = (PatternType)pattern;
-        //StartCoroutine(_patternCoroutines[pattern]);
+        int pattern = (int)PatternType.Max;
+        pattern = Random.Range(0, pattern);
+        _currentPattern = (PatternType)pattern;
+        StartCoroutine(_patternCoroutines[pattern]);
     }
 
     public void OnBulletAttack()

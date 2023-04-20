@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngineInternal;
 
 public class BelialSword : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class BelialSword : MonoBehaviour
 
     private SpriteRenderer _renderer;
     private Animator _anim;
+    private BoxCollider2D _collider;
 
     private static readonly int ID_AttackTrigger = Animator.StringToHash("Attack");
     private static readonly int ID_ResetTrigger = Animator.StringToHash("Reset");
@@ -19,12 +21,18 @@ public class BelialSword : MonoBehaviour
     private bool _chargeTrigger;
     private bool _isCollided;
     private float _collidedElapsedTime;
-    private const float SWORD_SPEED = 30f;
+    // private const float SWORD_SPEED = 30f;
+    private const float SWORD_SPEED = 10f;
 
     private Vector2 _direction;
     private DamageInfo _damageInfo;
     private Vector2 _startPosition;
     private Vector3 _spawnFxScale;
+
+
+    private RaycastHit2D[] _hit = new RaycastHit2D[1];
+    private Vector3 _groundCollidedHitPoint;
+    private Vector3 _groundCollidedNormalVec;
 
     private Color _color;
 
@@ -34,6 +42,7 @@ public class BelialSword : MonoBehaviour
     {
         _renderer = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
+        _collider = GetComponent<BoxCollider2D>();
         _damageInfo = new DamageInfo() { Damage = 8 };
         _spawnFxScale = new Vector3(1.5f, 1.5f, 1f);
     }
@@ -52,10 +61,9 @@ public class BelialSword : MonoBehaviour
     private void OnDisable()
     {
         if (_body != null)
-        { 
+        {
             _body.OnDieAction -= OnDie;
         }
-        ResetSword();
     }
 
     public void SetOwner(BossBelial body)
@@ -78,6 +86,8 @@ public class BelialSword : MonoBehaviour
     public void ResetSword()
     {
         transform.position = _startPosition;
+        _groundCollidedHitPoint = Vector2.zero;
+        _groundCollidedNormalVec = Vector2.zero;
         _isCollided = false;
         _chargeTrigger = false;
         _attackTrigger = false;
@@ -86,11 +96,13 @@ public class BelialSword : MonoBehaviour
         _collidedElapsedTime = 0f;
         transform.rotation = Quaternion.Euler(0, 0, 0);
         ChargeEffectObject.SetActive(false);
+        _collider.enabled = false;
     }
 
     public void Spawn()
     {
         gameObject.SetActive(true);
+        ResetSword();
         GameManager.Instance.FxPooler.GetFx(_spawnFxPath, transform.position, Quaternion.identity, _spawnFxScale);
         ChargeSword();
     }
@@ -99,6 +111,7 @@ public class BelialSword : MonoBehaviour
     {
         _chargeTrigger = false;
         _attackTrigger = true;
+        _collider.enabled = true;
         _anim.SetTrigger(ID_AttackTrigger);
     }
 
@@ -120,6 +133,13 @@ public class BelialSword : MonoBehaviour
 
         if (_attackTrigger == true && _isCollided == false)
         {
+            int hitCount = Physics2D.RaycastNonAlloc(transform.position, _direction, _hit, 2f, Globals.LayerMask.Platform);
+            if (hitCount > 0)
+            {
+                _groundCollidedHitPoint = _hit[0].point;
+                _groundCollidedNormalVec = _hit[0].normal;
+            }
+
             transform.position += (Vector3)(_direction * SWORD_SPEED * Time.deltaTime);
         }
 
@@ -131,9 +151,7 @@ public class BelialSword : MonoBehaviour
             if (_collidedElapsedTime > _disappearTime)
             {
                 _collidedElapsedTime = 0f;
-                ResetSword();
                 gameObject.SetActive(false);
-                
             }
         }
     }
@@ -152,13 +170,12 @@ public class BelialSword : MonoBehaviour
             IDamageable obj = collision.GetComponent<IDamageable>();
             obj?.Hit(_damageInfo, gameObject);
         }
-        else if (Globals.LayerMask.CompareMask(collision.gameObject.layer, Globals.LayerMask.Platform))
+        if (Globals.LayerMask.CompareMask(collision.gameObject.layer, Globals.LayerMask.Platform))
         {
-            Vector2 direction = ((Vector2)_target.position - _startPosition).normalized;
-            float angle = Utils.Utility2D.DirectionToAngle(direction.x, direction.y);
-            angle += 90;
-            Quaternion rot = Quaternion.Euler(0, 0, angle);
-            GameManager.Instance.FxPooler.GetFx(_hitFxPath, collision.ClosestPoint(transform.position), rot, Vector3.one);
+            var fx = GameManager.Instance.FxPooler.GetFx(_hitFxPath, _groundCollidedHitPoint, Quaternion.identity, Vector3.one);
+            Bounds bound = fx.GetComponent<SpriteRenderer>().bounds;
+            fx.transform.up = _groundCollidedNormalVec;
+
             _attackTrigger = false;
             _isCollided = true;
             _anim.SetTrigger(ID_ResetTrigger);
