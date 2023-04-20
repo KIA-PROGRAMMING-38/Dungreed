@@ -4,6 +4,7 @@ public class BossRoom : RoomBase
 {
     [SerializeField] private InitPosition _startPosition;
     private BossBase    _boss;
+    private BossHealthBar _bossHealthBar;
 
     private bool        _isBossCleared = false;
     private bool        _isBattleStart = false;
@@ -32,7 +33,11 @@ public class BossRoom : RoomBase
         if(_boss == null)
         {
             _boss = this.GetComponentAllCheck<BossBase>();
+            _bossHealthBar = this.GetComponentAllCheck<BossHealthBar>();
         }
+
+        _bossHealthBar.SetOwnerHealth(_boss.GetComponentAllCheck<Health>());
+        _bossHealthBar.gameObject.SetActive(false);
         _boss?.Initialize(this);
     }
 
@@ -41,6 +46,7 @@ public class BossRoom : RoomBase
         _player.transform.position = _startPosition.Position;
         GameManager.Instance.CameraManager.SettingCamera(RoomBounds, _startPosition);
         _player.transform.position = _startPosition.Position;
+        _bossHealthBar.gameObject.SetActive(true);
         _isBattleStart = true;
     }
 
