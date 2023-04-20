@@ -39,7 +39,9 @@ public class GameManager : Singleton<GameManager>
 
         WeaponManager = GetComponentInChildren<WeaponManager>();
         CameraManager = GetComponentInChildren<CameraManager>();
-        _player = Instantiate(PlayerPrefab);
+        
+        if(_player == null)
+            _player = Instantiate(PlayerPrefab);
     }
 
 }

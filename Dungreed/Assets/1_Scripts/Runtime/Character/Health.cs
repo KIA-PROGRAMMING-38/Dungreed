@@ -82,6 +82,7 @@ public class Health : MonoBehaviour, IDamageable
     public void Hit(DamageInfo damageInfo, GameObject sender)
     {
         if (IsInvincible) return;
+        if (_currentHp <= 0) return;
 
         Vector2 damageTextPos = transform.position;
         damageTextPos.y = _renderer.bounds.max.y;
