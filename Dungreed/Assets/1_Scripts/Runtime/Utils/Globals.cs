@@ -10,7 +10,6 @@ namespace Globals
         public static readonly string Default = "Default";
         public static readonly string Platform = "Platform";
         public static readonly string OnewayPlatform = "OnewayPlatform";
-        public static readonly string Slope = "Slope";
         public static readonly string Player = "Player";
         public static readonly string Enemy = "Enemy";
         public static readonly string Prop = "Prop";
@@ -25,7 +24,6 @@ namespace Globals
         public static readonly int Default          = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Default);
         public static readonly int Platform         = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Platform);
         public static readonly int OnewayPlatform   = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.OnewayPlatform);
-        public static readonly int Slope            = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Slope);
         public static readonly int Player           = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Player);
         public static readonly int Enemy            = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Enemy);
         public static readonly int Prop             = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Prop);

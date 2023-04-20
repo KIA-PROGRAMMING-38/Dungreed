@@ -11,15 +11,14 @@ public class PlayerUIPresenter : MonoBehaviour
 
     private void Awake()
     {
-        _player = GameManager.Instance.Player;
+        if(GameManager.Instance || GameManager.Instance.Player)
+        {
+            _player = GameManager.Instance.Player;
+        }
     }
 
     private void OnEnable()
     {
-        if (_player == null)
-        {
-            _player = GameManager.Instance.Player;
-        }
 
         _player.GetComponent<PlayerController>().OnDashAction -= ChangeDashCount;
         _player.GetComponent<PlayerController>().OnDashAction += ChangeDashCount;

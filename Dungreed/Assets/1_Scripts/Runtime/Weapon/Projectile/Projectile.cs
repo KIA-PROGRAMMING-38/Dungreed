@@ -32,7 +32,7 @@ public class Projectile : MonoBehaviour
         _collisionMask = collision;
     }
 
-    public void InitProjectTile(Vector3 position, Vector3 dir, ProjectileData data, DamageInfo damageInfo)
+    public virtual void InitProjectTile(Vector3 position, Vector3 dir, ProjectileData data, DamageInfo damageInfo)
     {
         transform.position = position;
         _data = data;
@@ -45,7 +45,7 @@ public class Projectile : MonoBehaviour
         _damageInfo = damageInfo;
     }
 
-    public void Reset()
+    public void ResetProjectile()
     {
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
@@ -57,25 +57,28 @@ public class Projectile : MonoBehaviour
         _isReleased = false;
     }
 
-    protected virtual void FixedUpdate()
+    protected virtual void Update()
     {
-        if (_data == null || _isReleased == true) return;
 
         float startToCurrentDist = Vector2.Distance(_startPosition, transform.position);
 
         if (startToCurrentDist > _data.Range)
         {
-            _isReleased = true;
-            _owner.Release(this);
-            return;
+            if (_isReleased == false)
+            {
+                _isReleased = true;
+                _owner.Release(this);
+            }
         }
+    }
 
+    protected virtual void FixedUpdate()
+    {
         transform.position += (Vector3)(_direction * (_data.Speed * Time.fixedDeltaTime));
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (_data == null) return;
         if (_isReleased == true) return;
 
 

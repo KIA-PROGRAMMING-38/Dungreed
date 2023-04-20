@@ -89,7 +89,9 @@ public class PlayerDash : StateMachineBehaviour
         for (int i = 0; i < hitCount; i++)
         {
             IDamageable obj = _hit[i].GetComponent<IDamageable>();
-
+            DamageInfo damageInfo = new DamageInfo();
+            damageInfo.Damage = _data.Status.DashDamage;
+            obj?.Hit(damageInfo, _controller.gameObject);
             // TODO : obj?.Hit(캐릭터 대쉬 공격력, gameObject);
         }
     }

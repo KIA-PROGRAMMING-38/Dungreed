@@ -34,7 +34,7 @@ public class ProjectilePooler : MonoBehaviour
 
     public void ActionOnRelease(Projectile projectTile) 
     {
-        projectTile.Reset();
+        projectTile.ResetProjectile();
         projectTile.gameObject.SetActive(false);
     }
     public void ActionOnDestroy(Projectile projectTile) 

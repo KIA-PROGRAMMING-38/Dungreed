@@ -3,10 +3,37 @@ using UnityEngine;
 public class BossRoom : RoomBase
 {
     [SerializeField] private InitPosition _startPosition;
+    private BossBase    _boss;
+
+    private bool        _isBossCleared = false;
+    private bool        _isBattleStart = false;
+
+    public bool IsBattleStart { get { return _isBattleStart; } }
+
+    public bool IsBossCleared 
+    {
+        get 
+        { 
+            return _isBossCleared;  
+        } 
+        set
+        {
+            _isBossCleared = value;
+            if(IsBossCleared)
+            {
+                OnRoomClear?.Invoke();
+            }
+        } 
+    }
 
     public override void Initialize()
     {
         base.Initialize();
+        if(_boss == null)
+        {
+            _boss = this.GetComponentAllCheck<BossBase>();
+        }
+        _boss?.Initialize(this);
     }
 
     public override void OnRoomEnter()
@@ -14,6 +41,7 @@ public class BossRoom : RoomBase
         _player.transform.position = _startPosition.Position;
         GameManager.Instance.CameraManager.SettingCamera(RoomBounds, _startPosition);
         _player.transform.position = _startPosition.Position;
+        _isBattleStart = true;
     }
 
     public override void OnRoomExit()
@@ -23,6 +51,9 @@ public class BossRoom : RoomBase
 
     public override void OnRoomStay()
     {
-
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            _isBattleStart = true;
+        }
     }
 }
