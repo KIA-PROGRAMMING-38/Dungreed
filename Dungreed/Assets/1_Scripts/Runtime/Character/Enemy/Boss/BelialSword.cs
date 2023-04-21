@@ -21,8 +21,7 @@ public class BelialSword : MonoBehaviour
     private bool _chargeTrigger;
     private bool _isCollided;
     private float _collidedElapsedTime;
-    // private const float SWORD_SPEED = 30f;
-    private const float SWORD_SPEED = 10f;
+    private const float SWORD_SPEED = 30f;
 
     private Vector2 _direction;
     private DamageInfo _damageInfo;

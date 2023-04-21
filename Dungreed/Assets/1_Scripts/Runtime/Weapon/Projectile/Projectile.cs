@@ -79,6 +79,7 @@ public class Projectile : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
+        if (_data is null) return;
         if (_isReleased == true) return;
 
 

@@ -14,10 +14,10 @@ public class BossBelial : BossBase
         Laser,
         Max
     }
-
+    
     [SerializeField] private BossBelialHand _leftHand;
     [SerializeField] private BossBelialHand _rightHand;
-    [SerializeField] private BelialBullet _bossBullet;
+    [SerializeField] private Bullet _bossBullet;
     [SerializeField] private Transform _firePosition;
     [SerializeField] private Transform _bulletPoolTransform;
     [SerializeField] private float _actPatternInterval;
@@ -25,7 +25,7 @@ public class BossBelial : BossBase
     private bool _bulletAttackStart;
     private Vector2 _bulletSpawnPosition;
     private DamageInfo _bulletDamage;
-    ObjectPool<BelialBullet> _projectilePool;
+    ObjectPool<Bullet> _projectilePool;
 
     List<IEnumerator> _patternCoroutines = new List<IEnumerator>();
     public event Action OnDieAction;
@@ -40,24 +40,17 @@ public class BossBelial : BossBase
     private BelialSword[] _swords = new BelialSword[6];
     private Vector3[] _swordSpawnPositions = new Vector3[6];
 
-    // TODO: DELETE
-    //private void Awake()
-    //{
-    //    Initialize(null);
-    //    _projectilePool = new ObjectPool<BelialBullet>(CreateFunc, GetAction, ReleaseAction, null, true, 20, 300);
-    //    _bulletDamage = new DamageInfo() { Damage = 6 };
-    //    _collider = GetComponent<BoxCollider2D>();
-    //}
-
     public override void Initialize(BossRoom _room)
     {
         _ownerRoom = _room;
-        _projectilePool = new ObjectPool<BelialBullet>(CreateFunc, GetAction, ReleaseAction, DestroyAction, false, 20, 300);
+        _projectilePool = new ObjectPool<Bullet>(CreateFunc, GetAction, ReleaseAction, DestroyAction, false, 20, 300);
         _bulletDamage = new DamageInfo() { Damage = 6 };
         _collider = GetComponent<BoxCollider2D>();
 
         _anim = GetComponent<Animator>();
         _health = GetComponent<Health>();
+
+        _health.Initialize(_enemyData.MaxHp);
 
         _health.OnDie -= OnDie;
         _health.OnDie += OnDie;
@@ -86,22 +79,11 @@ public class BossBelial : BossBase
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T)) {
-            StartCoroutine(_patternCoroutines[(int)PatternType.Laser]);
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (_ownerRoom.IsBattleStart == false) return;
+        if (_isActPattern == false)
         {
-            StartCoroutine(_patternCoroutines[(int)PatternType.BulletSpawn]);
+            SelectPattern();
         }
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            StartCoroutine(_patternCoroutines[(int)PatternType.SwordSpawn]);
-        }
-        //if (_ownerRoom.IsBattleStart == false) return;
-        //if(_isActPattern == false)
-        //{
-        //    SelectPattern();
-        //}
     }
 
     private void SelectPattern()
@@ -274,26 +256,26 @@ public class BossBelial : BossBase
 
     #region Pool Functinon
 
-    private BelialBullet CreateFunc()
+    private Bullet CreateFunc()
     {
-        BelialBullet v = Instantiate(_bossBullet, _bulletPoolTransform);
+        Bullet v = Instantiate(_bossBullet, _bulletPoolTransform);
         v.SetOwner(_projectilePool);
         v.gameObject.SetActive(false);
         return v;
     }
 
-    private void GetAction(BelialBullet projectile)
+    private void GetAction(Bullet projectile)
     {
         projectile.gameObject.SetActive(true);
     }
 
-    private void ReleaseAction(BelialBullet projectile)
+    private void ReleaseAction(Bullet projectile)
     {
         projectile.ResetBullet();
         projectile.gameObject.SetActive(false);
     }
 
-    private void DestroyAction(BelialBullet projectile)
+    private void DestroyAction(Bullet projectile)
     {
         projectile.ResetBullet();
         projectile.gameObject.SetActive(false);

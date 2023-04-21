@@ -52,6 +52,7 @@ namespace EnumTypes
         Melee,
         Ranged,
         Turret,
+        Boss,
     }
 
 }

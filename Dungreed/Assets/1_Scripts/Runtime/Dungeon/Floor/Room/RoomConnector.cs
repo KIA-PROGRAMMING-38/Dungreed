@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class RoomConnector : MonoBehaviour
@@ -17,6 +19,7 @@ public class RoomConnector : MonoBehaviour
     private Animator _anim;
     private BoxCollider2D _collider;
     private PlayerController _playerController;
+    private UnityEvent<int> _customAction;
 
     public void Initialize()
     {
@@ -85,7 +88,6 @@ public class RoomConnector : MonoBehaviour
     {
         if(ShowConnectedLine)
         {
-            
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, _initPos.Position);
         }

@@ -57,9 +57,18 @@ public class DungeonManager : MonoBehaviour
         data.SaveData(adventureTime, 0);
         data.SavePlayerData();
         data.LoadSaveData();
-
-        Debug.Log(adventureTime);
     }
+
+    public void DungeonToTown()
+    {
+
+    }
+
+    public void TownToDungeon()
+    {
+
+    }
+
 
     public void ChangeFloor(FloorBase floor)
     {

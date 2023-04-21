@@ -79,10 +79,10 @@ public class Health : MonoBehaviour, IDamageable
     }
 
 
-    public void Hit(DamageInfo damageInfo, GameObject sender)
+    public bool Hit(DamageInfo damageInfo, GameObject sender)
     {
-        if (IsInvincible) return;
-        if (_currentHp <= 0) return;
+        if (IsInvincible) return false;
+        if (_currentHp <= 0) return false;
 
         Vector2 damageTextPos = transform.position;
         damageTextPos.y = _renderer.bounds.max.y;
@@ -107,6 +107,8 @@ public class Health : MonoBehaviour, IDamageable
 
         OnHit?.Invoke();
         OnHealthChanged?.Invoke(_currentHp, _maxHp);
+
+        return true;
     }
 
     public void Revive()
