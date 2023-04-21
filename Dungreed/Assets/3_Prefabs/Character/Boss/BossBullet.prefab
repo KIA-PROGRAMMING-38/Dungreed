@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2984776604894198839}
   - component: {fileID: 2984776604894198838}
   - component: {fileID: 2984776604894198841}
-  - component: {fileID: 2984776604894198840}
   - component: {fileID: 7871098794923795395}
+  - component: {fileID: 454555726508558683}
   m_Layer: 0
   m_Name: BossBullet
   m_TagString: Untagged
@@ -108,21 +108,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2984776604894198840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2984776604894198843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 083db8c7b0c797b49b80058a26f83431, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _lifeTime: 4
-  _hitFxPath: BossBulletFx
-  _speed: 5
 --- !u!58 &7871098794923795395
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -139,3 +124,21 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.2
+--- !u!114 &454555726508558683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2984776604894198843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc8b97891409fc5418898297ab575c59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lifeTime: 4
+  _hitFxPath: BossBulletFx
+  _collisionMask:
+    serializedVersion: 2
+    m_Bits: 8
+  _speed: 5

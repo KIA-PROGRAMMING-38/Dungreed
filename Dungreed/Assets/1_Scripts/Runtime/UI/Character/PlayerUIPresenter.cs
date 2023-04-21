@@ -11,15 +11,18 @@ public class PlayerUIPresenter : MonoBehaviour
 
     private void Awake()
     {
-        if(GameManager.Instance || GameManager.Instance.Player)
+        if (GameManager.Instance && GameManager.Instance.Player)
         {
             _player = GameManager.Instance.Player;
         }
     }
 
-    private void OnEnable()
+    private void Start()
     {
-
+        if (_player == null)
+        {
+            _player = GameManager.Instance.Player;
+        }
         _player.GetComponent<PlayerController>().OnDashAction -= ChangeDashCount;
         _player.GetComponent<PlayerController>().OnDashAction += ChangeDashCount;
         _player.GetComponent<Health>().OnHealthChanged -= ChangeHealth;
@@ -37,7 +40,7 @@ public class PlayerUIPresenter : MonoBehaviour
 
         _player.GetComponent<PlayerController>().OnDashAction -= ChangeDashCount;
         _player.GetComponent<Health>().OnHealthChanged -= ChangeHealth;
-        _player.GetComponentInChildren<WeaponHand>().OnReload -= Reload;
+        _player.GetComponentInChildren<WeaponHand>(true).OnReload -= Reload;
     }
 
     public void ChangeHealth(int cur, int max)

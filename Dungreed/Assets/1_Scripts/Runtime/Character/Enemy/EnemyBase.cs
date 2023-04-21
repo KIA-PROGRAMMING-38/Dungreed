@@ -33,7 +33,6 @@ public abstract class EnemyBase : MonoBehaviour
         _controller = GetComponentInChildren<EnemyController>();
         _searchTrigger = GetComponentInChildren<Trigger>();
 
-        // 체력 세팅
         _health.Initialize(_data.MaxHp);
     }
 

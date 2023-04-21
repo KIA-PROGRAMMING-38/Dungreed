@@ -80,19 +80,19 @@ public class PlayerDash : StateMachineBehaviour
         Vector3 kickFxPosition = _controller.BoundCenter;
         kickFxPosition.y = _controller.BottomBound;
         _kickFx.transform.position = kickFxPosition;
+
+        DashAttack();
     }
 
-    // TODO: 캐릭터 능력치 대쉬 공격력 적용해야함
     private void DashAttack()
     {
-        int hitCount = Physics2D.OverlapCircleNonAlloc(_controller.transform.position, _colliderRadius, _hit);
+        int hitCount = Physics2D.OverlapCircleNonAlloc(_controller.transform.position, _colliderRadius, _hit, _controller.EnemyMask);
         for (int i = 0; i < hitCount; i++)
         {
             IDamageable obj = _hit[i].GetComponent<IDamageable>();
             DamageInfo damageInfo = new DamageInfo();
             damageInfo.Damage = _data.Status.DashDamage;
             obj?.Hit(damageInfo, _controller.gameObject);
-            // TODO : obj?.Hit(캐릭터 대쉬 공격력, gameObject);
         }
     }
 
@@ -120,6 +120,7 @@ public class PlayerDash : StateMachineBehaviour
     //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        DashAttack();
         Vector2 vel = _controller.Rig2D.velocity;
         vel.x = 0f;
         _controller.Rig2D.velocity = vel;

@@ -2,12 +2,14 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.XR;
 
 public class PlayerController : BaseController
 {
     private bool _isDie;
     public bool IsDie { get { return _isDie; } set { _isDie = value; } }
+    public bool IsDashing { get; set; }
     #region Components
     private Health _health;
     private PlayerData _data;
@@ -28,18 +30,18 @@ public class PlayerController : BaseController
     #endregion
 
 
-    public readonly int Id_DieAnimationParameter    = Animator.StringToHash(PlayerAnimParmaeterLiteral.DieTrigger);
-    public readonly int Id_DashAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.DashTrigger);
-    public readonly int Id_JumpAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.JumpTrigger);
-    public readonly int Id_RunAnimationParameter    = Animator.StringToHash(PlayerAnimParmaeterLiteral.RunTrigger);
-    public readonly int Id_IdleAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.IdleTrigger);
-    public readonly int Id_FallAnimationParameter   = Animator.StringToHash(PlayerAnimParmaeterLiteral.FallTrigger);
+    public readonly int Id_DieAnimationParameter = Animator.StringToHash(PlayerAnimParmaeterLiteral.DieTrigger);
+    public readonly int Id_DashAnimationParameter = Animator.StringToHash(PlayerAnimParmaeterLiteral.DashTrigger);
+    public readonly int Id_JumpAnimationParameter = Animator.StringToHash(PlayerAnimParmaeterLiteral.JumpTrigger);
+    public readonly int Id_RunAnimationParameter = Animator.StringToHash(PlayerAnimParmaeterLiteral.RunTrigger);
+    public readonly int Id_IdleAnimationParameter = Animator.StringToHash(PlayerAnimParmaeterLiteral.IdleTrigger);
+    public readonly int Id_FallAnimationParameter = Animator.StringToHash(PlayerAnimParmaeterLiteral.FallTrigger);
     public readonly int Id_ReviveAnimationParameter = Animator.StringToHash(PlayerAnimParmaeterLiteral.ReviveTrigger);
 
     protected override void Awake()
     {
         base.Awake();
-     
+
         _data = GetComponent<PlayerData>();
         _health = GetComponent<Health>();
         _animator = GetComponentInChildren<Animator>();
@@ -50,17 +52,17 @@ public class PlayerController : BaseController
         _weaponHand = GetComponentInChildren<WeaponHand>();
 
         // TODO: Delete
-        GameManager.Instance.CameraManager.VirtualCamera.Follow = transform;
+        if (GameManager.Instance != null && GameManager.Instance.CameraManager!=null)
+        {
+            GameManager.Instance.CameraManager.VirtualCamera.Follow = transform;
+        }
     }
 
     protected override void Start()
     {
         base.Start();
         StartCoroutine(IncreaseDashCount());
-    }
-
-    protected void OnEnable()
-    {
+        GameManager.Instance.CameraManager.VirtualCamera.Follow = transform;
         _health.OnDie -= OnDie;
         _health.OnDie += OnDie;
         _health.OnRevive -= OnRevive;
@@ -70,9 +72,10 @@ public class PlayerController : BaseController
         _health.OnHit += GameManager.Instance.CameraManager.Effecter.PlayScreenShake;
     }
 
+
     protected void OnDisable()
     {
-        if(_health != null)
+        if (_health != null)
         {
             _health.OnDie -= OnDie;
             _health.OnRevive -= OnRevive;
@@ -95,7 +98,7 @@ public class PlayerController : BaseController
 
     protected void LateUpdate()
     {
-        if(_bounds != null)
+        if (_bounds != null)
             CharacterMovementBoundaryCheck();
     }
 
@@ -151,15 +154,5 @@ public class PlayerController : BaseController
     public void OnRevive()
     {
         _animator.SetTrigger(PlayerAnimParmaeterLiteral.ReviveTrigger);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log(collision.gameObject.name);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log(collision.gameObject.name);
     }
 }

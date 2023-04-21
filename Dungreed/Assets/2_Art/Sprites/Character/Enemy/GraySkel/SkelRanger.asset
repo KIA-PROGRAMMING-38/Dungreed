@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: SkelRanger
   m_EditorClassIdentifier: 
   Name: "\uAD81\uC218 \uC2A4\uCF08\uB808\uD1A4"
-  MaxHp: 50
+  MaxHp: 40
   MoveSpeed: 0
-  AttackDamage: 13
+  AttackDamage: 10
   ProjectileData: {fileID: 11400000, guid: 457dc86e2f1747540ac2cf753eec3cac, type: 2}
   Type: 1

@@ -2,6 +2,8 @@
 
 public class BossBase : MonoBehaviour
 {
+    [SerializeField]
+    protected EnemyData _enemyData;
     protected BossRoom _ownerRoom;
     protected Health _health;
     protected Animator _anim;

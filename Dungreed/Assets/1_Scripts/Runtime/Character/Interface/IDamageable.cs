@@ -14,5 +14,5 @@ public struct DamageInfo
 
 public interface IDamageable
 {
-    public void Hit(DamageInfo damage, GameObject sender);
+    public bool Hit(DamageInfo damage, GameObject sender);
 }
