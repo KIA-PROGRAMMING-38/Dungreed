@@ -7,6 +7,7 @@ public class WeaponHand : MonoBehaviour
     // test
     public int initId = 0;
     [field: SerializeField] public Transform Owner { get; private set; }
+    private PlayerController _ownerController;
     private PlayerStatus _ownerStatus;
 
     public PlayerStatus OwnerStatus 
@@ -50,6 +51,7 @@ public class WeaponHand : MonoBehaviour
     private void Awake()
     {
         _ownerRenderer = Owner.GetComponentAllCheck<SpriteRenderer>();
+        _ownerController = Owner.GetComponent<PlayerController>();
         _sortingGroup = GetComponent<SortingGroup>();
         _canAttack = true;
         _attackTimer = 0f;
@@ -63,6 +65,8 @@ public class WeaponHand : MonoBehaviour
 
     private void Update()
     {
+        if (_ownerController.StopControll) return;
+
         if (_canAttack == false)
         {
             _attackTimer -= Time.deltaTime;

@@ -10,6 +10,7 @@ public class PlayerController : BaseController
     private bool _isDie;
     public bool IsDie { get { return _isDie; } set { _isDie = value; } }
     public bool IsDashing { get; set; }
+    public bool StopControll { get; private set; }
     #region Components
     private Health _health;
     private PlayerData _data;
@@ -58,32 +59,40 @@ public class PlayerController : BaseController
         }
     }
 
+    // 컨트롤러 멈춤
+    public void StopController()
+    {
+        StopControll = true;
+    }
+    
+    // 컨트롤러 실행
+    public void PlayController()
+    {
+        StopControll = false;
+    }
+
     protected override void Start()
     {
         base.Start();
         StartCoroutine(IncreaseDashCount());
         GameManager.Instance.CameraManager.VirtualCamera.Follow = transform;
+
         _health.OnDie -= OnDie;
         _health.OnDie += OnDie;
         _health.OnRevive -= OnRevive;
         _health.OnRevive += OnRevive;
 
+
         _health.OnHit -= GameManager.Instance.CameraManager.Effecter.PlayScreenShake;
         _health.OnHit += GameManager.Instance.CameraManager.Effecter.PlayScreenShake;
     }
 
-
-    protected void OnDisable()
-    {
-        if (_health != null)
-        {
-            _health.OnDie -= OnDie;
-            _health.OnRevive -= OnRevive;
-        }
-    }
-
     protected void Update()
     {
+        if (StopControll == true)
+        {
+            _animator.SetTrigger(Id_IdleAnimationParameter);
+        }
         if (_isDie == true) return;
 
         CheckRayAll();

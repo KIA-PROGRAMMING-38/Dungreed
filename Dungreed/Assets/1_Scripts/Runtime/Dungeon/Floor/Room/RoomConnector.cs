@@ -19,7 +19,7 @@ public class RoomConnector : MonoBehaviour
     private Animator _anim;
     private BoxCollider2D _collider;
     private PlayerController _playerController;
-    private UnityEvent<int> _customAction;
+    [SerializeField] private UnityEvent _customAction;
 
     public void Initialize()
     {
@@ -57,6 +57,11 @@ public class RoomConnector : MonoBehaviour
             _collider.enabled = false;
         }
            
+    }
+
+    public void CustomProcess()
+    {
+        _customAction?.Invoke();
     }
 
     public void ChangeRoomProcess()

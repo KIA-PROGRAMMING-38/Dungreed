@@ -189,6 +189,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2766593851897901636, guid: 44d526e2b30f117458876a0eddf8bfce, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.798603
+      objectReference: {fileID: 0}
+    - target: {fileID: 2766593851897901636, guid: 44d526e2b30f117458876a0eddf8bfce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 39.48449
+      objectReference: {fileID: 0}
+    - target: {fileID: 5974906844616425135, guid: 44d526e2b30f117458876a0eddf8bfce, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -553830047
+      objectReference: {fileID: 0}
     - target: {fileID: 8745707945860693009, guid: 44d526e2b30f117458876a0eddf8bfce, type: 3}
       propertyPath: m_BoundingShape2D
       value: 
@@ -421,10 +433,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5109314094806185258, guid: 1d017b1faf2dd2a4197b6d73f45ee632, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 2846162057460927269}
     - target: {fileID: 5109314094806185261, guid: 1d017b1faf2dd2a4197b6d73f45ee632, type: 3}
       propertyPath: m_Name
       value: Canvas

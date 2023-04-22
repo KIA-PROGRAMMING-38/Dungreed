@@ -23,6 +23,8 @@ public class PlayerIdle : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (_controller.StopControll == true) return;
+
         if (Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.Space) && _controller.CollisionInfo.IsOnewayGrounded)
         {
             animator.SetTrigger(_controller.Id_FallAnimationParameter);

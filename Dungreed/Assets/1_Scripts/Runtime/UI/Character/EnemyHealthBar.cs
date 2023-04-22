@@ -3,10 +3,22 @@ using UnityEngine.UI;
 
 public class EnemyHealthBar : ProgressBar
 {
+    public enum PositionPivot
+    {
+        ColliderBound,
+        SpriteBound,
+        Transform,
+    }
+
+    [SerializeField] private PositionPivot pivot;
     [SerializeField] private Image _baseImage;
     [SerializeField] private Image _backgroundImage;
     [SerializeField] private Transform _owner;
+
     private Health _health;
+    private Collider2D _collider;
+    private SpriteRenderer _spriteRenderer;
+
     private float _currentHealthRatio;
 
     private Vector3 _uiPos;
@@ -14,6 +26,9 @@ public class EnemyHealthBar : ProgressBar
     private void Awake()
     {
         _health = _owner.GetComponent<Health>();
+        _collider = _owner.GetComponent<Collider2D>(); 
+        _spriteRenderer = _owner.GetComponent<SpriteRenderer>(); 
+
     }
 
     private void Start()
@@ -31,8 +46,16 @@ public class EnemyHealthBar : ProgressBar
 
     private void Update()
     {
+        transform.position = pivot switch
+        {
+            PositionPivot.ColliderBound 
+            => new Vector2(_collider.bounds.center.x, _collider.bounds.min.y) + (Vector2)_uiPos,
+            PositionPivot.SpriteBound
+            => new Vector2(_spriteRenderer.bounds.center.x, _spriteRenderer.bounds.min.y) + (Vector2)_uiPos,
+            PositionPivot.Transform=> (_owner.transform.position + _uiPos),
+            _ => Vector2.zero
+        };
 
-        transform.position = _owner.transform.position + _uiPos;
         Vector3 newScale = _owner.localScale;
         if (newScale.x == -1) newScale.x = -1f;
         else newScale.x = 1f;
