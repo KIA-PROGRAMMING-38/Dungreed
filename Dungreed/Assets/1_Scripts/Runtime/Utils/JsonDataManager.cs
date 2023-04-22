@@ -6,7 +6,7 @@ public class JsonDataManager : Singleton<JsonDataManager>
 {
     private static readonly string ExtensionName = ".json";
 
-    protected override void Awake()
+    new protected void Awake()
     {
         base.Awake();
     }

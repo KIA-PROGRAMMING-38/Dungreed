@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -11,10 +12,6 @@ public class GameManager : Singleton<GameManager>
     { 
         get 
         { 
-            if(_player == null)
-            {
-                _player = Instantiate(PlayerPrefab);
-            }
             return _player;
         } 
     }
@@ -30,7 +27,7 @@ public class GameManager : Singleton<GameManager>
     public CameraManager CameraManager { get; private set; }
 
 
-    protected override void Awake()
+    new protected void Awake()
     {
         base.Awake();
         FxPooler = GetComponentInChildren<FxPooler>();
@@ -39,9 +36,21 @@ public class GameManager : Singleton<GameManager>
 
         WeaponManager = GetComponentInChildren<WeaponManager>();
         CameraManager = GetComponentInChildren<CameraManager>();
-        
-        if(_player == null)
-            _player = Instantiate(PlayerPrefab);
+    }
+
+    protected virtual void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    protected virtual void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        _player = Instantiate(PlayerPrefab);
+        _player.SetActive(true);
     }
 
 }
