@@ -164,4 +164,11 @@ public class PlayerController : BaseController
     {
         _animator.SetTrigger(PlayerAnimParmaeterLiteral.ReviveTrigger);
     }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        // 아이템 먹었을 때 처리
+        IPickupable pickup = collision.gameObject.GetComponent<IPickupable>();
+        pickup?.Pickup(_data);
+    }
 }

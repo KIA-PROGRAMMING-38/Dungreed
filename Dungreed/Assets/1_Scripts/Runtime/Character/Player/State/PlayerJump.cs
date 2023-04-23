@@ -25,9 +25,10 @@ public class PlayerJump : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (_controller.Rig2D.velocity.y < 0)
+        if (_controller.Rig2D.velocity.y < 0 && _controller.IsJumping == false)
         {
             animator.SetTrigger(_controller.Id_FallAnimationParameter);
+            return;
         }
 
         if (Input.GetMouseButtonDown(1) && _controller.CanDash)

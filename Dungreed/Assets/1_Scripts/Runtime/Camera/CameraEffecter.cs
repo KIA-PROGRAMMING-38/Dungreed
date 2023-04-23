@@ -56,6 +56,7 @@ public class CameraEffecter : MonoBehaviour
     private string _propertyName = "_Progress";
 
     private Action _onTransitionDone;
+    private bool _reverseTransition;
 
     private IEnumerator _transitionCoroutine;
 
@@ -183,9 +184,23 @@ public class CameraEffecter : MonoBehaviour
     }
     #endregion
 
-    public void PlayTransitionEffect(Action transitionDone)
+    /// <summary>
+    /// 씬 전환 효과입니다.
+    /// </summary>
+    /// <param name="transitionDone">트랜지션이 끝나면 실행할 콜백 함수</param>
+    /// <param name="reverse">기본은 0 -> 1 입니다.(검은화면 = 1)
+    /// 1 -> 0으로 만들지 </param>
+    public void PlayTransitionEffect(Action transitionDone = null, bool reverse = false)
     {
         _onTransitionDone = transitionDone;
+        _reverseTransition = reverse;
+        StartCoroutine(_transitionCoroutine);
+    }
+
+    public void PlayTransitionEffect(bool reverse = false)
+    {
+        _onTransitionDone = null;
+        _reverseTransition = reverse;
         StartCoroutine(_transitionCoroutine);
     }
 
@@ -193,16 +208,17 @@ public class CameraEffecter : MonoBehaviour
     {
         while (true)
         {
-            _onTransitionDone?.Invoke();
             float elapsedTime = 0f;
             _roomTransitionMaterial.SetFloat(_propertyName, 0f);
-            yield return YieldCache.WaitForSeconds(0.1f);
+            yield return YieldCache.WaitForSecondsRealtime(0.1f);
             while (elapsedTime < _transitionTime)
             {
-                elapsedTime += Time.deltaTime;
-                _roomTransitionMaterial.SetFloat(_propertyName, Mathf.Clamp01(elapsedTime / _transitionTime));
+                elapsedTime += Time.unscaledDeltaTime;
+                float transitionRatio = _reverseTransition == false ? elapsedTime / _transitionTime : 1 - (elapsedTime / _transitionTime);
+                _roomTransitionMaterial.SetFloat(_propertyName, Mathf.Clamp01(transitionRatio));
                 yield return null;
             }
+            _onTransitionDone?.Invoke();
             _onTransitionDone = null;
             StopCoroutine(_transitionCoroutine);
             yield return null;

@@ -1,18 +1,23 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryObject : MonoBehaviour
+[CreateAssetMenu(fileName ="New Inventory", menuName = "Inventory System/Inventory")]
+public class InventoryObject : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
+    public List<InventorySlot> Container = new List<InventorySlot>();
+    public void AddWeapon(WeaponData weapon)
     {
-        
+        Container.Add(new InventorySlot(weapon));
     }
+}
 
-    // Update is called once per frame
-    void Update()
+[Serializable]
+public class InventorySlot
+{
+    public WeaponData item;
+    public InventorySlot(WeaponData weapon)
     {
-        
+        item = weapon;
     }
 }

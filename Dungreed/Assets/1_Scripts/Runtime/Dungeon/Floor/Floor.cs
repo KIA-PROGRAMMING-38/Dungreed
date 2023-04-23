@@ -13,6 +13,7 @@
     public override void OnFloorEnter()
     {
         ChangeRoom(_startRoom);
+        GameManager.Instance.CameraManager.Effecter.PlayTransitionEffect(null, false);
         GameManager.Instance.CameraManager.SetConfiner(_startRoom.RoomBounds);
 
         _player.transform.position = _startRoom.StartPosition.Position;

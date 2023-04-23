@@ -25,7 +25,8 @@ public class DungeonGate : MonoBehaviour
     public void EnterDungeon()
     {
         GameManager.Instance.Player.GetComponent<PlayerController>().PlayController();
-        SceneManager.LoadScene(1);
+        GameManager.Instance.CameraManager.Effecter.PlayTransitionEffect(()=>{ SceneManager.LoadScene(1); },
+        true);
         Debug.Log("던전 입장");
     }
 }

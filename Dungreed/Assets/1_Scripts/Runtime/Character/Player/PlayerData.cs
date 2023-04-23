@@ -7,8 +7,11 @@ public class PlayerData : MonoBehaviour
     private static readonly string PlayerSaveDataFileName = "PlayerSaveData";
     private PlayerStatus _status = new PlayerStatus();
     private PlayerSaveData _saveData = new PlayerSaveData();
+    [SerializeField] private InventoryObject _inventory;
+    public InventoryObject Inventory { get { return _inventory; } }
 
     public PlayerStatus Status { get { return _status; } }
+    public int Gold { get { return _saveData?.Gold ?? 0; } set { _saveData.Gold += value; } }
 
     public void SaveData(int adventureTime, int gold)
     {
