@@ -4,8 +4,6 @@ using UnityEngine.Rendering;
 
 public class WeaponHand : MonoBehaviour
 {
-    // test
-    public int initId = 0;
     [field: SerializeField] public Transform Owner { get; private set; }
     private PlayerController _ownerController;
     private PlayerStatus _ownerStatus;
@@ -21,8 +19,6 @@ public class WeaponHand : MonoBehaviour
             return _ownerStatus;
         } 
     }
-
-
 
     [SerializeField] private SortingGroup _sortingGroup;
 
@@ -41,6 +37,7 @@ public class WeaponHand : MonoBehaviour
     private bool _canAttack;
 
     public event Action<float> OnReload;
+    public event Action OnWeaponChanged;
 
     public void Reload(float reloadTime)
     {
@@ -59,8 +56,7 @@ public class WeaponHand : MonoBehaviour
 
     private void Start()
     {
-        if (_equippedWeaponData == null)
-            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(initId));
+      
     }
 
     private void Update()
@@ -79,47 +75,40 @@ public class WeaponHand : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && _canAttack == true)
         {
-            _equippedWeapon.Attack();
+            _equippedWeapon?.Attack();
             FlipTriggerOn();
             _canAttack = false;
         }
 
-        // Test Code
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(0));
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(1));
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(2));
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(3));
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            EquipWeapon(GameManager.Instance.WeaponManager.GetWeapon(4));
-        }
+
 
         HandRotate();
         _equippedWeapon?.WeaponHandle();
     }
 
-    public void EquipWeapon(WeaponBase weaponData)
+    public void EquipWeapon(WeaponBase weapon)
     {
         if (_equippedWeapon != null)
         {
-            Destroy(_equippedWeapon.gameObject);
+            UnEquipWeapon();
         }
 
-        SetWeaponData(weaponData);
-        InitWeapon(weaponData);
+        SetWeaponData(weapon);
+        InitWeapon(weapon);
     }
+
+    public void UnEquipWeapon()
+    {
+        if (_equippedWeapon != null)
+        {
+            OnWeaponChanged?.Invoke();
+            WeaponManager.Instance.ReleaseWeapon(_equippedWeapon);
+        }
+
+        _equippedWeaponData = null;
+        _equippedWeapon = null;
+    }
+
 
     public void SetWeaponData(WeaponBase weapon)
     {
@@ -128,7 +117,7 @@ public class WeaponHand : MonoBehaviour
 
     public void InitWeapon(WeaponBase weapon)
     {
-        _equippedWeapon = Instantiate(weapon, transform).GetComponent<WeaponBase>();
+        _equippedWeapon = weapon;
         _equippedWeapon.transform.localPosition = _equippedWeaponData.OffsetInitPosition;
         _equippedWeapon.SetHand(this);
         _equippedWeapon.Initialize();

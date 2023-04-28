@@ -16,8 +16,6 @@ public class GameManager : Singleton<GameManager>
 
     public TextPooler DamageTextPooler { get; private set; }
 
-    public WeaponManager WeaponManager { get; private set; }
-
     public CameraManager CameraManager { get; private set; }
 
 
@@ -28,7 +26,6 @@ public class GameManager : Singleton<GameManager>
         ProjectilePooler = GetComponentInChildren<ProjectilePooler>();
         DamageTextPooler = GetComponentInChildren<TextPooler>();
 
-        WeaponManager = GetComponentInChildren<WeaponManager>();
         CameraManager = GetComponentInChildren<CameraManager>();
     }
 }

@@ -69,6 +69,9 @@ public class PlayerController : BaseController
         _weaponHand = GetComponentInChildren<WeaponHand>();
         _data.Initialize();
         _health.Initialize(_data.Status.MaxHp);
+
+        // Äü½½·Ô ¿¬µ¿
+        UIBinder.Instance.BindQuickSlot(_weaponHand);
         SubscribeEvents();
     }
 
@@ -96,7 +99,7 @@ public class PlayerController : BaseController
         base.Start();
         StartCoroutine(IncreaseDashCount());
 
-        Initialize();
+        //Initialize();
     }
 
     protected void Update()
