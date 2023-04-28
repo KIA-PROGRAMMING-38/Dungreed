@@ -1,8 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossHealthBar : ProgressBar
 {
     [SerializeField] private Health _health;
+    private Image[] _images;
+    public Image[] Images { get { return _images; } }
     private float _currentHealthRatio;
 
     public void SetOwnerHealth(Health health)
@@ -10,6 +13,33 @@ public class BossHealthBar : ProgressBar
         _health = health;
         _health.OnHealthChanged -= UpdateProgressBar;
         _health.OnHealthChanged += UpdateProgressBar;
+    }
+
+    public void Awake()
+    {
+        _images = GetComponentsInChildren<Image>();
+    }
+
+    public void FadeOutImages()
+    {
+        if(_images != null )
+        {
+            foreach(Image image in _images)
+            {
+                image.enabled = false;
+            }
+        }
+    }
+
+    public void FadeInImages()
+    {
+        if (_images != null)
+        {
+            foreach (Image image in _images)
+            {
+                image.enabled = true;
+            }
+        }
     }
 
     public void OnEnable()

@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerDash : StateMachineBehaviour
@@ -14,6 +12,7 @@ public class PlayerDash : StateMachineBehaviour
     private float _dashTime = 0f;
     private Vector2 _dir;
     private Vector2 _Force;
+    private static readonly string DashSoundName = "DashSound";
     private FxObject _kickFx;
     private Material _hitMaterial;
 
@@ -53,6 +52,7 @@ public class PlayerDash : StateMachineBehaviour
 
         _hitMaterial = ResourceCache.GetResource<Material>("Materials/HitMaterial");
 
+        SoundManager.Instance.EffectPlay(DashSoundName, _controller.transform.position);
         CreateDashFx();
         _kickFx = CreateKickFx();
     }
@@ -80,8 +80,6 @@ public class PlayerDash : StateMachineBehaviour
         Vector3 kickFxPosition = _controller.BoundCenter;
         kickFxPosition.y = _controller.BottomBound;
         _kickFx.transform.position = kickFxPosition;
-
-        DashAttack();
     }
 
     private void DashAttack()

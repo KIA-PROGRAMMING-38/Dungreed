@@ -1,10 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DungeonManager : MonoBehaviour
 {
-    public Image test;
     public GameObject CurrentPlayer { get; private set; }
     [SerializeField] private FloorBase[] _floors;
     [SerializeField] private FloorBase _startFloor;
@@ -16,13 +16,11 @@ public class DungeonManager : MonoBehaviour
     private void Awake()
     {
         Debug.Assert(_floors.Count() != 0);
-        CurrentPlayer = GameManager.Instance.Player;
     }
 
     public void Start()
     {
-        if (CurrentPlayer == null)
-            CurrentPlayer = GameManager.Instance.Player;
+        SetPlayer();
 
         foreach (FloorBase floor in _floors)
         {
@@ -31,9 +29,6 @@ public class DungeonManager : MonoBehaviour
             floor.Initialize();
         }
 
-        Health playerHealth = CurrentPlayer.GetComponent<Health>();
-        playerHealth.OnDie -= PlayerDieProcess;
-        playerHealth.OnDie += PlayerDieProcess;
         ChangeFloor(_startFloor);
     }
 
@@ -42,31 +37,49 @@ public class DungeonManager : MonoBehaviour
         if (CurrentPlayer != null)
         {
             Health playerHealth = CurrentPlayer?.GetComponent<Health>();
-            playerHealth.OnDie -= PlayerDieProcess;
+            playerHealth.OnDieWithSender -= PlayerDieProcess;
         }
     }
 
+    public void SetPlayer()
+    {
+        CurrentPlayer = Instantiate(GameManager.Instance.PlayerPrefab);
+        GameManager.Instance.Player = CurrentPlayer;
+
+        UIBinder.Instance.BindPlayerUIPresenter(CurrentPlayer);
+
+        Health playerHealth = CurrentPlayer.GetComponent<Health>();
+        playerHealth.OnDieWithSender -= PlayerDieProcess;
+        playerHealth.OnDieWithSender += PlayerDieProcess;
+    }
+
     // 플레이어가 죽었을 때 처리 해주는 메서드
-    public void PlayerDieProcess()
+    public void PlayerDieProcess(GameObject sender)
     {
         _currentFloor.OnPlayerDie();
         adventureTime = (int)Time.timeSinceLevelLoad;
-        var data =CurrentPlayer.GetComponent<PlayerData>();
+        var data = CurrentPlayer.GetComponent<PlayerData>();
+
+        EnemyBase enemy = sender.GetComponent<EnemyBase>();
+
+        if (enemy)
+        {
+            Debug.Log(enemy.Data.name);
+        }
+
+
 
         // 플레이어 데이터 갱신
         data.SaveData(adventureTime, 0);
         data.SavePlayerData();
         data.LoadSaveData();
+
+        DungeonToTown();
     }
 
     public void DungeonToTown()
     {
-
-    }
-
-    public void TownToDungeon()
-    {
-
+        SceneManager.LoadScene(1);
     }
 
 

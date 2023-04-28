@@ -11,6 +11,7 @@ public class PlayerController : BaseController
     public bool IsDie { get { return _isDie; } set { _isDie = value; } }
     public bool IsDashing { get; set; }
     public bool StopControll { get; private set; }
+    public bool IsRevive { get; set; }
     #region Components
     private Health _health;
     private PlayerData _data;
@@ -42,21 +43,6 @@ public class PlayerController : BaseController
     protected override void Awake()
     {
         base.Awake();
-
-        _data = GetComponent<PlayerData>();
-        _health = GetComponent<Health>();
-        _animator = GetComponentInChildren<Animator>();
-        _rig2D = GetComponent<Rigidbody2D>();
-        _input = GetComponent<PlayerInput>();
-        _renderer = GetComponentInChildren<SpriteRenderer>();
-        _horizontalMovement = GetComponent<PlayerHorizontalMovement>();
-        _weaponHand = GetComponentInChildren<WeaponHand>();
-
-        // TODO: Delete
-        if (GameManager.Instance != null && GameManager.Instance.CameraManager!=null)
-        {
-            GameManager.Instance.CameraManager.VirtualCamera.Follow = transform;
-        }
     }
 
     // ƒ¡∆Æ∑—∑Ø ∏ÿ√„
@@ -71,20 +57,46 @@ public class PlayerController : BaseController
         StopControll = false;
     }
 
-    protected override void Start()
+    public void Initialize()
     {
-        base.Start();
-        StartCoroutine(IncreaseDashCount());
-        GameManager.Instance.CameraManager.VirtualCamera.Follow = transform;
+        _data = GetComponent<PlayerData>();
+        _health = GetComponent<Health>();
+        _animator = GetComponentInChildren<Animator>();
+        _rig2D = GetComponent<Rigidbody2D>();
+        _input = GetComponent<PlayerInput>();
+        _renderer = GetComponentInChildren<SpriteRenderer>();
+        _horizontalMovement = GetComponent<PlayerHorizontalMovement>();
+        _weaponHand = GetComponentInChildren<WeaponHand>();
+        _data.Initialize();
+        _health.Initialize(_data.Status.MaxHp);
+        SubscribeEvents();
+    }
 
+    public void SubscribeEvents()
+    {
         _health.OnDie -= OnDie;
         _health.OnDie += OnDie;
         _health.OnRevive -= OnRevive;
         _health.OnRevive += OnRevive;
+        _health.OnHit -= OnHit;
+        _health.OnHit += OnHit;
 
 
         _health.OnHit -= GameManager.Instance.CameraManager.Effecter.PlayScreenShake;
         _health.OnHit += GameManager.Instance.CameraManager.Effecter.PlayScreenShake;
+    }
+
+    private void OnHit()
+    {
+        SoundManager.Instance.EffectPlay("Hit_Player", transform.position);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        StartCoroutine(IncreaseDashCount());
+
+        Initialize();
     }
 
     protected void Update()
@@ -162,6 +174,13 @@ public class PlayerController : BaseController
 
     public void OnRevive()
     {
-        _animator.SetTrigger(PlayerAnimParmaeterLiteral.ReviveTrigger);
+        IsRevive = true;
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        // æ∆¿Ã≈€ ∏‘æ˙¿ª ∂ß √≥∏Æ
+        IPickupable pickup = collision.gameObject.GetComponent<IPickupable>();
+        pickup?.Pickup(_data);
     }
 }

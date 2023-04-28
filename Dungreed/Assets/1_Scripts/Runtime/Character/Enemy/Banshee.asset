@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Banshee
   m_EditorClassIdentifier: 
   Name: "\uBC34\uC2DC"
+  Desription: 
+  AttackSoundName: BansheeAttack
+  DieSoundName: EnemyDie
   MaxHp: 50
   MoveSpeed: 0
   AttackDamage: 13

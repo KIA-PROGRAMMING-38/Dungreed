@@ -1,4 +1,6 @@
-﻿public class Floor : FloorBase
+﻿using UnityEngine;
+
+public class Floor : FloorBase
 {
     public override void Initialize()
     {
@@ -13,9 +15,13 @@
     public override void OnFloorEnter()
     {
         ChangeRoom(_startRoom);
+        SoundManager.Instance.BGMPlay(_backgroundMusic);
+        GameManager.Instance.CameraManager.Effecter.PlayTransitionEffect(null, false);
         GameManager.Instance.CameraManager.SetConfiner(_startRoom.RoomBounds);
-
         _player.transform.position = _startRoom.StartPosition.Position;
+        _player.GetComponent<PlayerController>().SetBounds(_startRoom.RoomBounds);
+        GameManager.Instance.CameraManager.VirtualCamera.ForceCameraPosition(_player.transform.position, Quaternion.identity);
+        GameManager.Instance.CameraManager.VirtualCamera.m_Follow = _player.transform;
     }
 
     public override void OnFloorStay()

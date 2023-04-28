@@ -66,7 +66,8 @@ public class RoomConnector : MonoBehaviour
 
     public void ChangeRoomProcess()
     {
-        GameManager.Instance.CameraManager.Effecter.PlayTransitionEffect(MoveToConnectedRoom);
+        GameManager.Instance.CameraManager.Effecter.PlayTransitionEffect(null);
+        MoveToConnectedRoom();
     }
 
     private void MoveToConnectedRoom()

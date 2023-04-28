@@ -8,7 +8,6 @@ public class Health : MonoBehaviour, IDamageable
     private int _maxHp;
     [ShowOnly, SerializeField]
     private int _currentHp;
-
     public int MaxHp { get { return _maxHp; } }
     public int CurrentHp { get { return _currentHp; } }
 
@@ -66,6 +65,7 @@ public class Health : MonoBehaviour, IDamageable
         OnHit += Invincible;
         OnHit += Flicking;
     }
+
     private void OnDisable()
     {
         OnHit -= Invincible;

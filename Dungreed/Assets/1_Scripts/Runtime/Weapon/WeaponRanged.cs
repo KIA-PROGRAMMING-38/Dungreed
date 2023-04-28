@@ -31,6 +31,7 @@ public class WeaponRanged : WeaponBase
         _currentAmmoCount = Mathf.Max(0, _currentAmmoCount - 1);
 
         Fire();
+        SoundManager.Instance.EffectPlay(Data.FireSoundName, transform.position);
 
         _recoveryAim = true;
         float x = Mathf.Sign(_hand.transform.localScale.x);
@@ -124,7 +125,7 @@ public class WeaponRanged : WeaponBase
     private void Reload() 
     {
         if (_isReloading == true) return;
-
+        SoundManager.Instance.EffectPlay(Data.ReloadSoundName, _hand.Owner.transform.position);
         _isReloading = true;
         _hand?.Reload(_reloadTime);
         _currentAmmoCount = _data.MaxAmmoCount;

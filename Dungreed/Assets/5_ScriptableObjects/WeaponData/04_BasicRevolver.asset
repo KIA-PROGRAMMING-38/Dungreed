@@ -15,6 +15,9 @@ MonoBehaviour:
   DefaultSprite: {fileID: 21300000, guid: b42220431a4bcab42a62644b4470b3aa, type: 3}
   Projectile: {fileID: 11400000, guid: 36308bee87c3fdf48b23b6e69f22330a, type: 2}
   SwingFxName: 
+  SwingSoundName: 
+  FireSoundName: Pistol
+  ReloadSoundName: Reload_01
   Id: 4
   Name: "\uB9AC\uBCFC\uBC84"
   Description: "\uD734\uB300\uD558\uAE30 \uC88B\uACE0 \uC21C\uAC04\uC801\uC73C\uB85C

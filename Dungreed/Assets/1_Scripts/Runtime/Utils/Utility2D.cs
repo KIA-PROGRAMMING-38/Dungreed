@@ -8,7 +8,7 @@ namespace Utils
     {
         public static Vector2 GetMousePosition()
         {
-            return Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            return GameManager.Instance.CameraManager.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         }
         public static float GetAngle(Vector2 lhs, Vector2 rhs){
             float angle = Vector2.Angle(lhs - rhs, Vector2.up);

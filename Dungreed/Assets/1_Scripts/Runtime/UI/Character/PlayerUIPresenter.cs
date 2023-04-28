@@ -5,42 +5,40 @@ public class PlayerUIPresenter : MonoBehaviour
 {
     private GameObject _player;
 
+    private PlayerController _playerController;
+    private Health _health;
+    private WeaponHand _weaponHand;
+
     public event Action<int, int> OnHealthChanged;
     public event Action<float> OnReload;
     public event Action<int, int> OnDashCountChanged;
 
-    private void Awake()
+    public void Bind(GameObject player)
     {
-        if (GameManager.Instance && GameManager.Instance.Player)
-        {
-            _player = GameManager.Instance.Player;
-        }
-    }
+        _player = player;
 
-    private void Start()
-    {
-        if (_player == null)
-        {
-            _player = GameManager.Instance.Player;
-        }
-        _player.GetComponent<PlayerController>().OnDashAction -= ChangeDashCount;
-        _player.GetComponent<PlayerController>().OnDashAction += ChangeDashCount;
-        _player.GetComponent<Health>().OnHealthChanged -= ChangeHealth;
-        _player.GetComponent<Health>().OnHealthChanged += ChangeHealth;
-        _player.GetComponentInChildren<WeaponHand>().OnReload -= Reload;
-        _player.GetComponentInChildren<WeaponHand>().OnReload += Reload;
+        _playerController = _player.GetComponent<PlayerController>();
+        _health = _player.GetComponent<Health>();
+        _weaponHand = _player.GetComponentInChildren<WeaponHand>();
+
+        _playerController.OnDashAction -= ChangeDashCount;
+        _playerController.OnDashAction += ChangeDashCount;
+
+        _health.OnHealthChanged -= ChangeHealth;
+        _health.OnHealthChanged += ChangeHealth;
+
+        _weaponHand.OnReload -= Reload;
+        _weaponHand.OnReload += Reload;
     }
 
     private void OnDisable()
     {
-        if (_player == null)
+        if (_player != null)
         {
-            return;
+            _playerController.OnDashAction -= ChangeDashCount;
+            _health.OnHealthChanged -= ChangeHealth;
+            _weaponHand.OnReload -= Reload;
         }
-
-        _player.GetComponent<PlayerController>().OnDashAction -= ChangeDashCount;
-        _player.GetComponent<Health>().OnHealthChanged -= ChangeHealth;
-        _player.GetComponentInChildren<WeaponHand>(true).OnReload -= Reload;
     }
 
     public void ChangeHealth(int cur, int max)

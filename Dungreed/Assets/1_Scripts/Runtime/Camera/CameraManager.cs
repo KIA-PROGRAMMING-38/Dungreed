@@ -6,6 +6,7 @@ public class CameraManager : MonoBehaviour
     public Camera                       MainCamera { get; private set; }
     public CinemachineVirtualCamera     VirtualCamera { get; private set; }
     public CinemachineConfiner2D Confiner2D { get; private set; }
+    public CinemachineBasicMultiChannelPerlin CinemachineBasicMultiChannelPerlin { get; private set; }
 
     public CameraEffecter Effecter { get; private set; }
 
@@ -14,6 +15,7 @@ public class CameraManager : MonoBehaviour
         MainCamera = GetComponentInChildren<Camera>();
         VirtualCamera= GetComponentInChildren<CinemachineVirtualCamera>();
         Confiner2D = VirtualCamera.GetComponent<CinemachineConfiner2D>();
+        CinemachineBasicMultiChannelPerlin = VirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         Effecter = GetComponent<CameraEffecter>();
         Effecter.CameraInitialize(MainCamera, VirtualCamera);
     }

@@ -11,6 +11,8 @@ public class ParallaxLayer : MonoBehaviour
     public float parallexEffect;
     void Start()
     {
+        cam = GameManager.Instance.CameraManager.MainCamera;
+        virtualCamera = GameManager.Instance.CameraManager.VirtualCamera;
         _startPos = transform.position;
     }
 

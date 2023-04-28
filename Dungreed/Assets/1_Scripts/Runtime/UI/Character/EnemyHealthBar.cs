@@ -6,7 +6,6 @@ public class EnemyHealthBar : ProgressBar
     public enum PositionPivot
     {
         ColliderBound,
-        SpriteBound,
         Transform,
     }
 
@@ -50,9 +49,7 @@ public class EnemyHealthBar : ProgressBar
         {
             PositionPivot.ColliderBound 
             => new Vector2(_collider.bounds.center.x, _collider.bounds.min.y) + (Vector2)_uiPos,
-            PositionPivot.SpriteBound
-            => new Vector2(_spriteRenderer.bounds.center.x, _spriteRenderer.bounds.min.y) + (Vector2)_uiPos,
-            PositionPivot.Transform=> (_owner.transform.position + _uiPos),
+            PositionPivot.Transform => (_owner.transform.position + _uiPos),
             _ => Vector2.zero
         };
 

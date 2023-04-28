@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 public class PlayerInput : MonoBehaviour
 {
     [SerializeField]
@@ -7,6 +6,8 @@ public class PlayerInput : MonoBehaviour
     public Vector2 InputVec { get; private set; }
     public float X { get=> InputVec.x;} 
     public float Y { get=> InputVec.y; }
+    private static readonly string HorizontalKey = "Horizontal";
+    private static readonly string VerticalKey = "Vertical";
     public bool IsInputXY
     {
         get
@@ -15,9 +16,11 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    void OnMove(InputValue val)
+    private void Update()
     {
-        Vector2 input = val.Get<Vector2>();
+        float x = Input.GetAxisRaw(HorizontalKey);
+        float y = Input.GetAxisRaw(VerticalKey);
+        Vector2 input = new Vector2(x, y);
         input.y = PermitVerticalMovement == false ? 0 : input.y;
         InputVec = input;
     }

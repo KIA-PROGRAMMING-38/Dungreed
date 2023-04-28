@@ -15,6 +15,9 @@ MonoBehaviour:
   DefaultSprite: {fileID: 21300000, guid: 8000ab3f974071242a7d58e5bc5fc8e2, type: 3}
   Projectile: {fileID: 0}
   SwingFxName: DemonBladeSwingFx
+  SwingSoundName: Swing_01
+  FireSoundName: 
+  ReloadSoundName: 
   Id: 2
   Name: "\uB9C8\uB140\uAC80 \uB9AC\uBE0C\uB098"
   Description: "\uB0B4\uAC00 \uC5B4\uB5BB\uAC8C \uAC80\uC774 \uB410\uB0D0\uAD6C?

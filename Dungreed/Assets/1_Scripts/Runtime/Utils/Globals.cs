@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Globals
 {
     public class LayerName
@@ -14,21 +10,22 @@ namespace Globals
         public static readonly string Enemy = "Enemy";
         public static readonly string Prop = "Prop";
         public static readonly string UI = "UI";
-
+        public static readonly string Item = "Item";
         public static readonly string NonCollision = "NonCollision";
     }
 
     public class LayerMask
     {
         // LayerMask Bit
-        public static readonly int Default          = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Default);
-        public static readonly int Platform         = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Platform);
-        public static readonly int OnewayPlatform   = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.OnewayPlatform);
-        public static readonly int Player           = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Player);
-        public static readonly int Enemy            = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Enemy);
-        public static readonly int Prop             = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.Prop);
-        public static readonly int UI               = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.UI);
-        public static readonly int NonCollision     = 1 << UnityEngine.LayerMask.NameToLayer(LayerName.NonCollision);
+        public static readonly int Default          = UnityEngine.LayerMask.GetMask(LayerName.Default);
+        public static readonly int Platform         = UnityEngine.LayerMask.GetMask(LayerName.Platform);
+        public static readonly int OnewayPlatform   = UnityEngine.LayerMask.GetMask(LayerName.OnewayPlatform);
+        public static readonly int Player           = UnityEngine.LayerMask.GetMask(LayerName.Player);
+        public static readonly int Enemy            = UnityEngine.LayerMask.GetMask(LayerName.Enemy);
+        public static readonly int Prop             = UnityEngine.LayerMask.GetMask(LayerName.Prop);
+        public static readonly int Item             = UnityEngine.LayerMask.GetMask(LayerName.Item);
+        public static readonly int UI               = UnityEngine.LayerMask.GetMask(LayerName.UI);
+        public static readonly int NonCollision     = UnityEngine.LayerMask.GetMask(LayerName.NonCollision);
 
 
         /// <summary>
@@ -54,6 +51,15 @@ namespace Globals
         public static bool CompareMask(UnityEngine.LayerMask lhs, UnityEngine.LayerMask rhs)
         {
             return (lhs & rhs) != 0;
+        }
+
+        public static bool CompareLayerIsPlayer(int index)
+        {
+            return CompareMask(index, LayerMask.Player);
+        }
+        public static bool CompareLayerIsPlayer(UnityEngine.LayerMask comp)
+        {
+            return CompareMask(comp, LayerMask.Player);
         }
     }
 

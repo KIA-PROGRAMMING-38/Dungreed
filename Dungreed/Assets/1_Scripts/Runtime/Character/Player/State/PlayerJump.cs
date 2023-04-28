@@ -4,6 +4,7 @@ public class PlayerJump : StateMachineBehaviour
 {
     private PlayerController _controller;
     private PlayerData _data;
+    private static readonly string _jumpSoundName = "Jump";
     private float _jumpTimeCounter;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -25,9 +26,10 @@ public class PlayerJump : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (_controller.Rig2D.velocity.y < 0)
+        if (_controller.Rig2D.velocity.y < 0 && _controller.IsJumping == false)
         {
             animator.SetTrigger(_controller.Id_FallAnimationParameter);
+            return;
         }
 
         if (Input.GetMouseButtonDown(1) && _controller.CanDash)
@@ -65,13 +67,14 @@ public class PlayerJump : StateMachineBehaviour
     {
         Vector2 pos = _controller.BoundCenter;
         pos.y = _controller.BottomBound;
+        SoundManager.Instance.EffectPlay(_jumpSoundName, pos);
         GameManager.Instance.FxPooler.GetFx("JumpFx", pos, Quaternion.identity);
     }
 
     //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        _jumpTimeCounter = PlayerData.DEFAULT_JUMP_TIME;
     }
 
 

@@ -4,6 +4,7 @@ public class PlayerFall : StateMachineBehaviour
 {
     private PlayerController _controller;
     private PlayerData _data;
+    private static readonly string _jumpSoundName = "Jump";
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -19,6 +20,7 @@ public class PlayerFall : StateMachineBehaviour
         if (true == _controller.CollisionInfo.IsOnewayGrounded)
         {
             _controller.StartCoroutine(_controller.DisableCoroutine);
+            SoundManager.Instance.EffectPlay(_jumpSoundName, animator.transform.position);
         }
     }
 

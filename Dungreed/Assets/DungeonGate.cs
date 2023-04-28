@@ -15,17 +15,19 @@ public class DungeonGate : MonoBehaviour
     {
         GameManager.Instance.Player.GetComponent<PlayerController>().StopController();
         gameObject.SetActive(true);
+        SoundManager.Instance.EffectPlay("DungeonEatOn", transform.position);
     }
 
     public void FadeOutPlayer()
     {
         GameManager.Instance.Player.SetActive(false);
+        SoundManager.Instance.EffectPlay("DungeonEatOff", transform.position);
     }
 
     public void EnterDungeon()
     {
         GameManager.Instance.Player.GetComponent<PlayerController>().PlayController();
-        SceneManager.LoadScene(1);
-        Debug.Log("던전 입장");
+        GameManager.Instance.CameraManager.Effecter.PlayTransitionEffect(()=>{ SceneManager.LoadScene(2); },
+        true);
     }
 }

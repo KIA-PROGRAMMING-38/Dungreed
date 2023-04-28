@@ -9,7 +9,8 @@ public abstract class FloorBase : MonoBehaviour
 {
     protected DungeonManager _owner;
     public DungeonManager Owner { protected get { return _owner; } set { _owner = value; } }
-
+    [SerializeField] protected string _backgroundMusic;
+    public string BackGroudMusic { get { return _backgroundMusic; } }
     protected GameObject _player;
 
     [SerializeField] protected RoomBase[] _rooms;

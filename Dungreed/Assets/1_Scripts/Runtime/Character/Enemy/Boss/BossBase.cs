@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class BossBase : MonoBehaviour
 {
@@ -11,9 +12,10 @@ public class BossBase : MonoBehaviour
     protected bool _isDie;
     protected bool _isBattleStart;
     protected bool _isActPattern;
+    protected static readonly string EnemyHitSoundName = "Hit_Enemy";
 
     public bool IsActPattern { get => _isActPattern; }
-
+    public EnemyData EnemyData { get => _enemyData; }
     protected GameObject _player;
 
     public virtual void Initialize(BossRoom _room)
@@ -25,6 +27,11 @@ public class BossBase : MonoBehaviour
 
         _health.OnDie -= OnDie;
         _health.OnDie += OnDie;
+        _health.OnHit -= OnHit;
+        _health.OnHit += OnHit;
+
+        // 배틀 시작 이벤트 구독
+        _ownerRoom.OnBossBattleStart += OnBattleStart;
     }
 
 
@@ -44,6 +51,16 @@ public class BossBase : MonoBehaviour
     /// </summary>
     protected virtual void OnDie()
     {
-        // _ownerRoom.IsBossCleared = true;
+
+    }
+
+    protected virtual void OnHit()
+    {
+        SoundManager.Instance.EffectPlay(EnemyHitSoundName, transform.position);
+    }
+
+    protected virtual void OnBattleStart()
+    {
+        _isBattleStart = true;
     }
 }

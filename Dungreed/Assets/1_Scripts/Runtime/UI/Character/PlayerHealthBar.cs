@@ -22,16 +22,10 @@ public class PlayerHealthBar : ProgressBar
         _decreaseHealthTime = 1f;
         _progressBarImage.fillAmount = 1f;
         _progressBarImage.fillAmount = _decreaseProgressBarImage.fillAmount;
-
-        _healthChangeCoroutine = HealthChangeCoroutine();
-    }
-
-    private void OnEnable()
-    {
         _presenter.OnHealthChanged -= UpdateProgressBar;
         _presenter.OnHealthChanged += UpdateProgressBar;
+        _healthChangeCoroutine = HealthChangeCoroutine();
     }
-
     private void OnDisable()
     {
         _presenter.OnHealthChanged -= UpdateProgressBar;
