@@ -19,15 +19,6 @@ public class NormalRoom : RoomBase
         }
     }
 
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-
-        foreach (EnemyBase enemy in _enemies)
-        {
-            enemy.OnDie -= AddEnemyDieCount;
-        }
-    }
 
     public override void OnRoomEnter()
     {
@@ -36,7 +27,6 @@ public class NormalRoom : RoomBase
 
     public override void OnRoomStay()
     {
-
     }
 
     public override void OnRoomExit()
@@ -58,7 +48,6 @@ public class NormalRoom : RoomBase
     private void AddEnemyDieCount()
     {
         _info.EnemyDieCount++;
-        Debug.Log(_info.EnemyDieCount);
         if (_info.Clear == true)
         {
             OnRoomClear?.Invoke();

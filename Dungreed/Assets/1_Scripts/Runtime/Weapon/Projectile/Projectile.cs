@@ -5,6 +5,8 @@ using UnityEngine.Pool;
 public class Projectile : MonoBehaviour
 {
     protected ObjectPool<Projectile> _owner;
+    public GameObject OwnerObject { get; set; }
+    
     protected SpriteRenderer _renderer;
     protected BoxCollider2D _collider;
     protected ProjectileData _data;
@@ -33,7 +35,7 @@ public class Projectile : MonoBehaviour
     }
 
     public virtual void InitProjectTile(Vector3 position, Vector3 dir, ProjectileData data, DamageInfo damageInfo)
-    {
+    {  
         transform.position = position;
         _data = data;
         _renderer.sprite = ResourceCache.GetResource<Sprite>(Path.Combine(ResourcePath.DefaultSpritesPath, data.SpritePath));
@@ -47,6 +49,7 @@ public class Projectile : MonoBehaviour
 
     public void ResetProjectile()
     {
+        OwnerObject = null;
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
         _data = null;
@@ -86,7 +89,7 @@ public class Projectile : MonoBehaviour
         if (Globals.LayerMask.CompareMask(collision.gameObject.layer, _collisionMask))
         {
             IDamageable obj = collision.GetComponent<IDamageable>();
-            obj?.Hit(_damageInfo, gameObject);
+            obj?.Hit(_damageInfo, OwnerObject);
 
             Vector2 direction = ((Vector2)transform.position - _startPosition).normalized;
             float angle = Utils.Utility2D.DirectionToAngle(direction.x, direction.y);

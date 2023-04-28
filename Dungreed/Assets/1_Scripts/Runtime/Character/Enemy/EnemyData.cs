@@ -5,6 +5,9 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     public string       Name;
+    public string       Desription;
+    public string       AttackSoundName;
+    public string       DieSoundName;
     public int          MaxHp;
     public int          MoveSpeed;   
     public int          AttackDamage;

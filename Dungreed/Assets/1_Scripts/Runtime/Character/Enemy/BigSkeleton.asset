@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: BigSkeleton
   m_EditorClassIdentifier: 
   Name: "\uBE45 \uC2A4\uCF08\uB808\uD1A4"
+  Desription: 
+  AttackSoundName: Swing_02
+  DieSoundName: EnemyDie
   MaxHp: 80
   MoveSpeed: 4
   AttackDamage: 15

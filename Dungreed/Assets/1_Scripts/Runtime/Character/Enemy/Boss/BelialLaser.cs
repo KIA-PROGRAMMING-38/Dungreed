@@ -28,6 +28,7 @@ public class BelialLaser : MonoBehaviour
 
     public void AttackStart()
     {
+        SoundManager.Instance.EffectPlay(BossBelial.BelialLaserSoundName, transform.position);
         _collider.enabled = true;
     }   
 

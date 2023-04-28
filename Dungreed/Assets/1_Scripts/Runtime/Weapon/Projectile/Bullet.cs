@@ -3,6 +3,7 @@ using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour
 {
+    private GameObject _ownerObject;
     private ObjectPool<Bullet> _owner;
     [SerializeField] private float _lifeTime;
     [SerializeField] private string _hitFxPath;
@@ -15,6 +16,7 @@ public class Bullet : MonoBehaviour
     protected bool _isReleased;
 
     public void SetOwner(ObjectPool<Bullet> owner) => _owner = owner;
+    public void SetOwnerObject(GameObject ownerObj) => _ownerObject = ownerObj;
 
     protected virtual void Update()
     {
@@ -41,6 +43,7 @@ public class Bullet : MonoBehaviour
         _isReleased = false;
         _direction = Vector3.zero;
     }
+
     public void InitBullet(Vector3 position, Vector3 dir, DamageInfo damageInfo)
     {
         transform.position = position;
@@ -58,7 +61,7 @@ public class Bullet : MonoBehaviour
         {
             IDamageable obj = collision.GetComponent<IDamageable>();
 
-            if(obj?.Hit(_damageInfo, gameObject) == true)
+            if(obj?.Hit(_damageInfo, _ownerObject) == true)
             {
                 GameManager.Instance.FxPooler.GetFx(_hitFxPath, transform.position, Quaternion.identity, Vector3.one);
 

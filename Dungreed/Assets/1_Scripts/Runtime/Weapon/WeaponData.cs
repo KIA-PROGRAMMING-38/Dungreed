@@ -8,6 +8,9 @@ public class WeaponData : ScriptableObject
     public ProjectileData   Projectile;
 
     public string SwingFxName;
+    public string SwingSoundName;
+    public string FireSoundName;
+    public string ReloadSoundName;
 
     public int Id;
     public string Name;

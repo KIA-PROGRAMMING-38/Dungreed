@@ -44,7 +44,7 @@ public class BossBelialHand : MonoBehaviour
 
     private void OnDie()
     {
-        gameObject.SetActive(false);
+        _laser.gameObject.SetActive(false);
     }
 
     public void Attack()

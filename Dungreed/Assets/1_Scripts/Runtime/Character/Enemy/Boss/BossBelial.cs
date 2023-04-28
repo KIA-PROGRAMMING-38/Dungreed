@@ -21,14 +21,22 @@ public class BossBelial : BossBase
     [SerializeField] private Transform _firePosition;
     [SerializeField] private Transform _bulletPoolTransform;
     [SerializeField] private float _actPatternInterval;
+
+    public bool isDie { get { return _isDie; } }
+    public Action OnDieAction;
     private BoxCollider2D _collider;
+    private Rigidbody2D _rig2D;
     private bool _bulletAttackStart;
     private Vector2 _bulletSpawnPosition;
     private DamageInfo _bulletDamage;
-    ObjectPool<Bullet> _projectilePool;
+    ObjectPool<Bullet> _bulletPool;
 
     List<IEnumerator> _patternCoroutines = new List<IEnumerator>();
-    public event Action OnDieAction;
+
+    public static readonly string BelialLaserSoundName = "BelialLaser";
+    public static readonly string BelialBulletSoundName = "BelialBullet";
+    public static readonly string BelialSwordSoundName = "BelialSword";
+    public static readonly string BelialLaughSoundName = "BelialLaugh";
 
     private static readonly int ID_AttackTrigger = Animator.StringToHash("Attack");
     private static readonly int ID_ResetTrigger = Animator.StringToHash("Reset");
@@ -40,46 +48,62 @@ public class BossBelial : BossBase
     private BelialSword[] _swords = new BelialSword[6];
     private Vector3[] _swordSpawnPositions = new Vector3[6];
 
-    public override void Initialize(BossRoom _room)
+    public override void Initialize(BossRoom room)
     {
-        _ownerRoom = _room;
-        _projectilePool = new ObjectPool<Bullet>(CreateFunc, GetAction, ReleaseAction, DestroyAction, false, 20, 300);
+        base.Initialize(room);
+        _bulletPool = new ObjectPool<Bullet>(CreateFunc, GetAction, ReleaseAction, DestroyAction, false, 20, 300);
         _bulletDamage = new DamageInfo() { Damage = 6 };
         _collider = GetComponent<BoxCollider2D>();
 
-        _anim = GetComponent<Animator>();
-        _health = GetComponent<Health>();
+        _rig2D = GetComponent<Rigidbody2D>();
 
         _health.Initialize(_enemyData.MaxHp);
-
-        _health.OnDie -= OnDie;
-        _health.OnDie += OnDie;
 
         _patternCoroutines.Add(BulletSpawnPattern());
         _patternCoroutines.Add(SwordSpawnPattern());
         _patternCoroutines.Add(LaserFirePattern());
 
+
+        _ownerRoom.OnBossBattleEnd -= SetDie;
+        _ownerRoom.OnBossBattleEnd += SetDie;
+        _isBattleStart = false;
+
         FindPlayer();
+    }
+
+    public void SetDie()
+    {
+        _anim.SetTrigger(ID_DieTrigger);
     }
 
     protected override void OnDie()
     {
-        base.OnDie();
         StopCoroutine(_patternCoroutines[(int)_currentPattern]);
-        _anim.SetTrigger(ID_DieTrigger);
-        Debug.Log("쥬금");
-
-        // 더 좋은 방법이 있다면 바꿀 예정
-        // 죽었을 때 총알 처리
-        _projectilePool.Clear();
+        _rig2D.gravityScale = 6f;
+        _collider.enabled = false;
+        _bulletPool.Clear();
+        _isDie = true;
         Destroy(_bulletPoolTransform.gameObject);
+        _ownerRoom.IsBossCleared = true;
         OnDieAction?.Invoke();
-        gameObject.SetActive(false);
+    }
+
+    private void BossDieAction()
+    {
+        _leftHand.gameObject.SetActive(false);
+        _rightHand.gameObject.SetActive(false);
+    }
+
+    protected override void OnBattleStart()
+    {
+        base.OnBattleStart();
+        SoundManager.Instance.EffectPlay(BelialLaughSoundName, transform.position);
     }
 
     private void Update()
     {
         if (_ownerRoom.IsBattleStart == false) return;
+
         if (_isActPattern == false)
         {
             SelectPattern();
@@ -98,7 +122,6 @@ public class BossBelial : BossBase
     {
         _bulletAttackStart = true;
         _bulletSpawnPosition = _firePosition.position;
-        Debug.Log($"애니메이션 이벤트 불렛 스폰 포지션 세팅 : {_bulletSpawnPosition}");
     }
 
     private IEnumerator BulletSpawnPattern()
@@ -122,7 +145,6 @@ public class BossBelial : BossBase
             Vector2 dirVec = transform.position - _player.transform.position;
             float dot = Vector2.Dot(dirVec, transform.right);
             float addAngleValue = dot > 0 ? -5f : 5f;
-            Debug.Log(dot);
             _firePosition.transform.rotation = Quaternion.Euler(0, 0, angle);
 
             while (patternElapsedTime < patternTime)
@@ -131,16 +153,17 @@ public class BossBelial : BossBase
                 spawnElapsedTime += Time.deltaTime;
                 if (spawnElapsedTime > spawnInterval)
                 {
+                    SoundManager.Instance.EffectPlay(BelialBulletSoundName,transform.position);
                     Vector3 left = _firePosition.right * -1f;
                     Vector3 right = _firePosition.right;
                     Vector3 up = _firePosition.up;
                     Vector3 down = _firePosition.up * -1f;
                     angle += addAngleValue;
                     _firePosition.transform.rotation = Quaternion.Euler(0, 0, angle);
-                    var leftBullet = _projectilePool.Get();
-                    var rightBullet = _projectilePool.Get();
-                    var upBullet = _projectilePool.Get();
-                    var downBullet = _projectilePool.Get();
+                    var leftBullet = _bulletPool.Get();
+                    var rightBullet = _bulletPool.Get();
+                    var upBullet = _bulletPool.Get();
+                    var downBullet = _bulletPool.Get();
                     leftBullet.InitBullet(_bulletSpawnPosition, left, _bulletDamage);
                     rightBullet.InitBullet(_bulletSpawnPosition, right, _bulletDamage);
                     upBullet.InitBullet(_bulletSpawnPosition, up, _bulletDamage);
@@ -184,14 +207,15 @@ public class BossBelial : BossBase
 
             for (int i = 0; i < _swords.Length; ++i)
             {
+                SoundManager.Instance.EffectPlay(BelialSwordSoundName, transform.position);
                 _swords[i].Spawn();
-                yield return YieldCache.WaitForSeconds(0.5f);
+                yield return YieldCache.WaitForSeconds(0.2f);
             }
             // 스폰
             for (int i = 0;i < _swords.Length; ++i)
             {
                 _swords[i].FireSword();
-                yield return YieldCache.WaitForSeconds(0.3f);
+                yield return YieldCache.WaitForSeconds(0.2f);
             }
 
             yield return YieldCache.WaitForSeconds(_actPatternInterval);
@@ -259,7 +283,8 @@ public class BossBelial : BossBase
     private Bullet CreateFunc()
     {
         Bullet v = Instantiate(_bossBullet, _bulletPoolTransform);
-        v.SetOwner(_projectilePool);
+        v.SetOwner(_bulletPool);
+        v.SetOwnerObject(gameObject);
         v.gameObject.SetActive(false);
         return v;
     }

@@ -200,7 +200,7 @@ public class BaseController : MonoBehaviour
             var platformCol = _onewayPlatformCollider;
             Physics2D.IgnoreCollision(_collider, platformCol);
 
-            yield return YieldCache.WaitForSeconds(0.25f);
+            yield return YieldCache.WaitForSeconds(0.2f);
 
             Physics2D.IgnoreCollision(_collider, platformCol, false);
             _isDownJumping = false;

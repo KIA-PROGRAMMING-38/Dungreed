@@ -5,8 +5,10 @@ public class PlayerData : MonoBehaviour
     private static readonly string DataFolderName = "Data";
     private static readonly string PlayerStatusFileName = "PlayerStatus";
     private static readonly string PlayerSaveDataFileName = "PlayerSaveData";
+
     private PlayerStatus _status = new PlayerStatus();
     private PlayerSaveData _saveData = new PlayerSaveData();
+
     [SerializeField] private InventoryObject _inventory;
     public InventoryObject Inventory { get { return _inventory; } }
 
@@ -19,12 +21,7 @@ public class PlayerData : MonoBehaviour
         _saveData.Gold = gold;
     }
 
-    public void Awake()
-    {
-        Initialize();
-    }
-
-    private void Initialize()
+    public void Initialize()
     {
         LoadStatus();
         LoadSaveData();
@@ -34,8 +31,6 @@ public class PlayerData : MonoBehaviour
     {
         JsonDataManager.Instance.LoadFromJson<PlayerStatus>(DataFolderName, PlayerStatusFileName, out _status);
         CurrentDashCount = _status.MaxDashCount;
-        Health health = GetComponent<Health>();
-        health.Initialize(_status.MaxHp);
     }
 
     public void LoadSaveData()

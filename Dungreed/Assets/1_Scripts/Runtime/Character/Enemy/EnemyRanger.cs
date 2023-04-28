@@ -38,6 +38,7 @@ public class EnemyRanger : EnemyBase
             }
 
             _anim.SetTrigger(ID_EnemyTraceTrigger);
+            SoundManager.Instance.EffectPlay("ArrowDraw", transform.position);
             float readyTime = 2f;
 
             while(readyTime > 0f)
@@ -62,10 +63,12 @@ public class EnemyRanger : EnemyBase
             }
             yield return YieldCache.WaitForSeconds(0.2f);
             _anim.SetTrigger(ID_EnemyAttackTrigger);
+            SoundManager.Instance.EffectPlay(Data.AttackSoundName, transform.position);
             var projectile = GameManager.Instance.ProjectilePooler.GetProjectile();
             DamageInfo damageInfo = new DamageInfo();
             damageInfo.Damage = _data.AttackDamage;
             projectile.InitProjectTile(_firePosition.position, _hand.transform.right, _data.ProjectileData, damageInfo);
+            projectile.OwnerObject = gameObject;
             projectile.SetCollisionMask(_projectileCollisionLayerMask);
             yield return YieldCache.WaitForSeconds(1f);
             yield return null;

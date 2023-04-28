@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using TMPro;
+using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -8,13 +8,7 @@ public class GameManager : Singleton<GameManager>
 
     private GameObject _player;
 
-    public GameObject Player 
-    { 
-        get 
-        { 
-            return _player;
-        } 
-    }
+    public GameObject Player { get { return _player; } set { _player = value; } }
     
     public FxPooler FxPooler { get; private set; }
 
@@ -37,20 +31,4 @@ public class GameManager : Singleton<GameManager>
         WeaponManager = GetComponentInChildren<WeaponManager>();
         CameraManager = GetComponentInChildren<CameraManager>();
     }
-
-    protected virtual void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-    protected virtual void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        _player = Instantiate(PlayerPrefab);
-        _player.SetActive(true);
-    }
-
 }

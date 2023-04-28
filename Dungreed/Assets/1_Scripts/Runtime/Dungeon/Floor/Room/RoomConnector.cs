@@ -66,8 +66,8 @@ public class RoomConnector : MonoBehaviour
 
     public void ChangeRoomProcess()
     {
-        Time.timeScale = 0f;
-        GameManager.Instance.CameraManager.Effecter.PlayTransitionEffect(MoveToConnectedRoom);
+        GameManager.Instance.CameraManager.Effecter.PlayTransitionEffect(null);
+        MoveToConnectedRoom();
     }
 
     private void MoveToConnectedRoom()
@@ -88,7 +88,6 @@ public class RoomConnector : MonoBehaviour
 
         _playerController.Anim.SetTrigger(_playerController.Id_IdleAnimationParameter);
         _playerController.Rig2D.velocity = Vector2.zero;
-        Time.timeScale = 1f;
     }
 
     private void OnDrawGizmos()

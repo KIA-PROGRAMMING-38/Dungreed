@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: SkelRanger
   m_EditorClassIdentifier: 
   Name: "\uAD81\uC218 \uC2A4\uCF08\uB808\uD1A4"
+  Desription: 
+  AttackSoundName: ArrowShoot
+  DieSoundName: EnemyDie
   MaxHp: 40
   MoveSpeed: 0
   AttackDamage: 10

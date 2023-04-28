@@ -97,7 +97,7 @@ public class EnemyMelee : EnemyBase
     // 애니메이션 이벤트 함수
     public void HitCheck()
     {
-        Debug.Log("Hit Check Enemy");
+        SoundManager.Instance.EffectPlay(Data.AttackSoundName, transform.position);
         Bounds bound = _renderer.bounds;
         var hit = Physics2D.OverlapBox(bound.center, bound.size, 0f, _controller.EnemyMask);
 

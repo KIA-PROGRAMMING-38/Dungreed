@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using Utils.Math;
 
 public class CameraEffecter : MonoBehaviour
 {
@@ -111,7 +112,6 @@ public class CameraEffecter : MonoBehaviour
     {
         while(true)
         {
-            Debug.Log($"Camera Shake / Dur : {_cameraShakeDuration} / Inten : {_cameraShakeIntensity}");
             _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = _cameraShakeIntensity;
             yield return YieldCache.WaitForSeconds(_cameraShakeDuration);
             _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
@@ -204,6 +204,7 @@ public class CameraEffecter : MonoBehaviour
         StartCoroutine(_transitionCoroutine);
     }
 
+
     private IEnumerator TransitionCoroutine()
     {
         while (true)
@@ -215,7 +216,8 @@ public class CameraEffecter : MonoBehaviour
             {
                 elapsedTime += Time.unscaledDeltaTime;
                 float transitionRatio = _reverseTransition == false ? elapsedTime / _transitionTime : 1 - (elapsedTime / _transitionTime);
-                _roomTransitionMaterial.SetFloat(_propertyName, Mathf.Clamp01(transitionRatio));
+                float val = Utility2D.EaseOutCubic(0, 1, transitionRatio);
+                _roomTransitionMaterial.SetFloat(_propertyName, val);
                 yield return null;
             }
             _onTransitionDone?.Invoke();

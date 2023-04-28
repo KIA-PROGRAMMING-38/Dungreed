@@ -147,10 +147,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _progressBarImage: {fileID: 3463666165809558499}
-  pivot: 1
+  pivot: 0
   _baseImage: {fileID: 7227594832185665847}
   _backgroundImage: {fileID: 1850693717448915376}
-  _owner: {fileID: 0}
+  _owner: {fileID: 2054408593385746786}
 --- !u!1 &1769360641740889350
 GameObject:
   m_ObjectHideFlags: 0

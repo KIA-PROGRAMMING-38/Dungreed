@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _progressBarImage: {fileID: 4612699057346279723}
-  pivot: 1
+  pivot: 0
   _baseImage: {fileID: 7169408190104650547}
   _backgroundImage: {fileID: 8049471047788529188}
   _owner: {fileID: 8501486418086833544}

@@ -19,6 +19,8 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected static readonly string EnemyDieFxPath = "EnemyDieFx";
     protected static readonly string EnemySpawnFxPath = "EnemySpawnFx";
+    protected static readonly string EnemyHitSoundName = "Hit_Enemy";
+
     protected static readonly int ID_EnemyAttackTrigger = Animator.StringToHash("Attack");
     protected static readonly int ID_EnemyTraceTrigger = Animator.StringToHash("Trace");
     protected static readonly int ID_EnemyResetTrigger = Animator.StringToHash("Reset");
@@ -44,11 +46,14 @@ public abstract class EnemyBase : MonoBehaviour
 
         _health.OnDie -= Die;
         _health.OnDie += Die;
+        _health.OnHit -= OnHit;
+        _health.OnHit += OnHit;
     }
 
     protected virtual void OnDisable()
     {
         _health.OnDie -= Die;
+        _health.OnHit -= OnHit;
     }
 
     protected virtual void Start()
@@ -84,8 +89,14 @@ public abstract class EnemyBase : MonoBehaviour
         GameManager.Instance.FxPooler.GetFx(EnemyDieFxPath, spawnPos, Quaternion.identity);
     }
 
+    protected virtual void OnHit()
+    {
+        SoundManager.Instance.EffectPlay(EnemyHitSoundName, transform.position);
+    }
+
     protected virtual void Die()
     {
+        SoundManager.Instance.EffectPlay(Data.DieSoundName, transform.position);
         OnDie?.Invoke();
     }
 }

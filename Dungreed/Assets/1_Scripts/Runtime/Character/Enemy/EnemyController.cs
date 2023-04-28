@@ -36,7 +36,6 @@ public class EnemyController : BaseController
         if (_isJumping)
         {
             _jumpElapsedTime += Time.deltaTime;
-            Debug.Log(_jumpElapsedTime);
             if (_jumpElapsedTime > _jumpTime)
             {
                 _isJumping = false;

@@ -18,7 +18,7 @@ public abstract class WeaponMelee : WeaponBase
         angle += offsetAngle;
         Vector2 fxPos = _hand.transform.position + (mouseDir * Data.MeleeAttackRange);
         GameManager.Instance.FxPooler.GetFx(Data.SwingFxName, fxPos, Quaternion.Euler(0, 0, angle));
-
+        SoundManager.Instance.EffectPlay(Data.SwingSoundName, fxPos);
         EnemyHitCheck(ref mouseDir);
         PlayCameraEffect();
     }

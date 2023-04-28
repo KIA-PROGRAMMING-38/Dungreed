@@ -43,6 +43,7 @@ public class EnemyTurret : EnemyBase
     {
         _firePosition.transform.rotation = Quaternion.Euler(0, 0, 0);
         if (_projectileSpawnAngleInterval == 0f) _projectileSpawnAngleInterval = 1f;
+        SoundManager.Instance.EffectPlay(Data.AttackSoundName, transform.position);
         for (float i = 0f; i < 360f; i += _projectileSpawnAngleInterval)
         {
             var projectile = _bulletPool.Get();
@@ -66,6 +67,7 @@ public class EnemyTurret : EnemyBase
     {
         Bullet v = Instantiate(_bulletPrefab, transform);
         v.SetOwner(_bulletPool);
+        v.SetOwnerObject(gameObject);
         v.gameObject.SetActive(false);
         return v;
     }
