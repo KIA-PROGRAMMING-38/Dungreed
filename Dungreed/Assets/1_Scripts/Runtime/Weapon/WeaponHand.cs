@@ -161,4 +161,9 @@ public class WeaponHand : MonoBehaviour
             _sortingGroup.sortingOrder = _isFlip ? _ownerRenderer.sortingOrder + 1 : _ownerRenderer.sortingOrder - 1;
         }
     }
+
+    private void OnDestroy()
+    {
+        WeaponManager.Instance.ReleaseWeapon(_equippedWeapon);
+    }
 }

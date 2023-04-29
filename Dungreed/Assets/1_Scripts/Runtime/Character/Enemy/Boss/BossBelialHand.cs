@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class BossBelialHand : MonoBehaviour
@@ -11,9 +12,12 @@ public class BossBelialHand : MonoBehaviour
     private Animator _anim;
     public BossBelial MainBody { get { return _body; } }
     public bool IsUseHand { get; private set; }
+
+    public event Action OnDieAction;
     IEnumerator _attackCoroutine;
 
     private static readonly int ID_AttackTrigger = Animator.StringToHash("Attack");
+    private static readonly int ID_ResetTrigger = Animator.StringToHash("Reset");
 
     private void Awake()
     {
@@ -44,7 +48,8 @@ public class BossBelialHand : MonoBehaviour
 
     private void OnDie()
     {
-        _laser.gameObject.SetActive(false);
+        OnDieAction?.Invoke();
+        _anim.SetTrigger(ID_ResetTrigger);
     }
 
     public void Attack()
@@ -57,7 +62,10 @@ public class BossBelialHand : MonoBehaviour
 
     public void LaserFire()
     {
-        _laser.Fire();
+        if(_body.isDie == false)
+        {
+            _laser.Fire();
+        }
     }
 
     public IEnumerator AttackCoroutine()

@@ -5,10 +5,17 @@ public class SoundManager : Singleton<SoundManager>
 { 
     private AudioSource _audioSourcePrefab;
     private AudioSource _bgmSource;
+    private float _bgmVolume = 1f;
     [SerializeField] private List<AudioSource> _effectSources = new List<AudioSource>();
     [SerializeField] private int _defaultSourceCount;
     private Dictionary<string, AudioClip> _audios = new Dictionary<string, AudioClip>();
 
+    public float BGMVolume { private get { return _bgmVolume; } set 
+        {
+            _bgmSource.volume = value;
+            _bgmVolume = value; 
+        } 
+    }
     new protected void Awake()
     {
         base.Awake();
@@ -49,8 +56,14 @@ public class SoundManager : Singleton<SoundManager>
         }
         _bgmSource.loop = true;
         _bgmSource.clip = GetClip(name);
-        _bgmSource.volume = 1f;
+        _bgmSource.volume = _bgmVolume;
         _bgmSource.Play();
+    }
+
+    public void BGMStop()
+    {
+        if (_bgmSource.isPlaying == false) return;
+        _bgmSource.Stop();
     }
 
     public void EffectPlay(string name, Vector3 position)

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,7 +21,6 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Click");
         OnClick?.Invoke();
     }
 

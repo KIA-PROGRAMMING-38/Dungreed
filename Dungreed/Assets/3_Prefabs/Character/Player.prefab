@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1172184439
   m_SortingLayer: 1
-  m_SortingOrder: 1
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: b05eb1b64c194bd45b2eef059c5fbfb4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -330,7 +330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3e00f7df1b410b428e50f377a7ba140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initId: 3
   <Owner>k__BackingField: {fileID: 6682856799415283527}
   _sortingGroup: {fileID: 0}
   _equippedWeapon: {fileID: 0}
@@ -345,7 +344,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -1172184439
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 2
 --- !u!1 &6849178449225908207
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,7 +419,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
+  m_ReferencePixelsPerUnit: 16
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0

@@ -1,4 +1,3 @@
-using Cinemachine;
 using System;
 using System.Collections;
 using TMPro;
@@ -40,16 +39,9 @@ public class BossCutScene : MonoBehaviour, ICutScene
 
     private IEnumerator ProcessCutSceneCoroutine()
     {
-        // 페이드 인 -> 판넬
-        // 텍스트 페이드 인 ->
-        // 다같이 페이드 아웃
-        // 준비 끝
-        var transposer = GameManager.Instance.CameraManager.VirtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
-        GameManager.Instance.CameraManager.VirtualCamera.ForceCameraPosition(GameManager.Instance.Player.transform.position, Quaternion.identity);
-        transposer.m_XDamping = 20f;
-        transposer.m_YDamping = 20f;
         GameManager.Instance.CameraManager.VirtualCamera.Follow = _boss.transform;
-
+        GameManager.Instance.CameraManager.VirtualCamera.ForceCameraPosition(GameManager.Instance.Player.transform.position, Quaternion.identity);
+        yield return YieldCache.WaitForSeconds(1f);
 
         _nameText.gameObject.SetActive(true);
         _panel.gameObject.SetActive(true);
@@ -59,47 +51,52 @@ public class BossCutScene : MonoBehaviour, ICutScene
         defaultPanelColor.a = defaultTextColor.a = 0;
         _panel.color = defaultPanelColor;
         _nameText.color = defaultTextColor;
-        float t = 0;
+
+        float elapsedTime = 0;
         Color col = Color.black;
 
-        while (t - 0.1f < _panelFadeInTime)
+        while (elapsedTime - 0.1f < _panelFadeInTime)
         {
-            t += Time.deltaTime;
-            col.a = Mathf.Lerp(0, 1, t / _panelFadeInTime);
+            elapsedTime += Time.deltaTime;
+            col.a = Mathf.Lerp(0, 1, elapsedTime / _panelFadeInTime);
             _panel.color = col;
             yield return null;
         }
 
-        t = 0;
+        elapsedTime = 0;
         col = Color.white;
 
-        while (t - 0.1f < _textFadeInTime)
+        while (elapsedTime - 0.1f < _textFadeInTime)
         {
-            t += Time.deltaTime;
-            col.a = Utils.Math.Utility2D.EaseOutCubic(0, 1, t / _textFadeInTime);
+            elapsedTime += Time.deltaTime;
+            col.a = Utils.Math.Utility2D.EaseOutCubic(0, 1, elapsedTime / _textFadeInTime);
             _nameText.color = col;
             _descriptionText.color = col;
             yield return null;
         }
 
         // Desription Typing Effect
-        int index = 0;
+        int length = 1;
         while (true)
         {
-            if (index > _description.Length) break;
-            _descriptionText.text = _description.Substring(0, index);
-            index++;
+            if (length > _description.Length) break;
+            _descriptionText.text = _description.Substring(0, length);
+            if (_description[length - 1] != ' ')
+            {
+                SoundManager.Instance.EffectPlay("Beep", Vector3.zero);
+            }
+            length++;
             yield return YieldCache.WaitForSeconds(0.3f);
         }
 
-        t = 0;
+        elapsedTime = 0;
         Color panelCol = Color.black;
         Color textCol = Color.white;
             
-        while (t - 0.1f < _fadeOutTime)
+        while (elapsedTime - 0.1f < _fadeOutTime)
         {
-            t += Time.deltaTime;
-            float a = Utils.Math.Utility2D.EaseOutCubic(1, 0, t / _fadeOutTime);
+            elapsedTime += Time.deltaTime;
+            float a = Utils.Math.Utility2D.EaseOutCubic(1, 0, elapsedTime / _fadeOutTime);
             panelCol.a = a;
             textCol.a = a;
 
@@ -111,8 +108,6 @@ public class BossCutScene : MonoBehaviour, ICutScene
         _nameText.gameObject.SetActive(false);
         _panel.gameObject.SetActive(false);
         _descriptionText.gameObject.SetActive(false);
-        transposer.m_XDamping = 1f;
-        transposer.m_YDamping = 1f;
         GameManager.Instance.CameraManager.VirtualCamera.Follow = GameManager.Instance.Player.transform;
         _cutSceneAfterAction?.Invoke();
     }

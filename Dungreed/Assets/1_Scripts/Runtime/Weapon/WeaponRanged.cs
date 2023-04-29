@@ -7,16 +7,18 @@ public class WeaponRanged : WeaponBase
     [SerializeField] protected Transform _firePosition;
     [SerializeField] protected LayerMask _enemyLayerMask;
 
+    protected int _currentAmmoCount;
+    public int CurrentAmmoCount { get { return _currentAmmoCount; } }
     protected bool _isReloading = false;
     protected float _reloadElapsedTime = 0f;
     protected float _reloadTime = 0f;
-
-    protected int _currentAmmoCount;
 
     protected Vector2 _reboundAimDirection;
     protected bool _recoveryAim = false;
     protected float _recoveryAimDuration;
     protected float _recoveryAimElapsedTime;
+
+
 
     public override void Attack()
     {
@@ -47,8 +49,28 @@ public class WeaponRanged : WeaponBase
         base.Initialize();
         _currentAmmoCount = _data.MaxAmmoCount;
         _recoveryAimDuration = (1f / _data.AttackSpeedPerSecond);
-        _reloadElapsedTime = Time.time;
+        _reloadElapsedTime = 0;
         _reloadTime = _data.ReloadTime;
+
+        _hand.OnWeaponChanged -= OnWeaponChanged;
+        _hand.OnWeaponChanged += OnWeaponChanged;
+    }
+
+    protected virtual void OnDisable()
+    {
+        if (_hand != null)
+        {
+            _hand.OnWeaponChanged -= OnWeaponChanged;
+        }
+    }
+
+    public void OnWeaponChanged()
+    {
+        _isReloading = false;
+        _reloadElapsedTime = 0f;
+        _currentAmmoCount = _data.MaxAmmoCount;
+        _recoveryAim = false;
+        _recoveryAimElapsedTime = 0f;
     }
 
     public override void WeaponHandle()
@@ -56,7 +78,7 @@ public class WeaponRanged : WeaponBase
         ReloadProcess();
         ReboundProcess();
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && _currentAmmoCount != _data.MaxAmmoCount)
         {
             Reload();
         }
@@ -66,16 +88,20 @@ public class WeaponRanged : WeaponBase
             Reload();
         }
     }
+
     private void ReloadProcess()
     {
         if (_isReloading == true)
         {
             _reloadElapsedTime += Time.deltaTime;
-            if (_reloadElapsedTime - 0.1f >= _reloadTime)
+            float ratio = Mathf.Clamp01(_reloadElapsedTime / _reloadTime);
+            if (_reloadElapsedTime >= _reloadTime)
             {
-                _reloadElapsedTime = 0;
+                _currentAmmoCount = _data.MaxAmmoCount;
+                _reloadElapsedTime = 0f;
                 _isReloading = false;
             }
+            _hand?.Reload(ratio);
         }
     }
     private void ReboundProcess()
@@ -127,8 +153,6 @@ public class WeaponRanged : WeaponBase
         if (_isReloading == true) return;
         SoundManager.Instance.EffectPlay(Data.ReloadSoundName, _hand.Owner.transform.position);
         _isReloading = true;
-        _hand?.Reload(_reloadTime);
-        _currentAmmoCount = _data.MaxAmmoCount;
     }
 
 }

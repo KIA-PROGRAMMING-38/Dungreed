@@ -11,12 +11,12 @@ public class WeaponSlot : MonoBehaviour
     private Image _slotImage;
     private Sprite _defaultImage;
     [field: SerializeField] public TextMeshProUGUI IndexText { get; private set; }
+    [field: SerializeField] public TextMeshProUGUI AmmoText { get; private set; }
     [field: SerializeField] public Sprite SelectedImage { get; private set; }
 
     private void Awake()
     {
         _weaponIcon = transform.GetChild(0).GetComponent<Image>();
-        IndexText = _weaponIcon.GetComponentInChildren<TextMeshProUGUI>();
         _weaponIcon.preserveAspect = true;
 
         _slotImage = GetComponent<Image>();

@@ -18,6 +18,7 @@ public class BelialLaser : MonoBehaviour
         _collider.isTrigger = true;
         _damagae = damage;
         gameObject.SetActive(false);
+        _ownerHand.OnDieAction += OnDie;
     }
 
     public void Fire()
@@ -42,6 +43,11 @@ public class BelialLaser : MonoBehaviour
         IsAttackEnd = true;
         gameObject.SetActive(false);
         OnLaserFireEnd?.Invoke();
+    }
+
+    public void OnDie()
+    {
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

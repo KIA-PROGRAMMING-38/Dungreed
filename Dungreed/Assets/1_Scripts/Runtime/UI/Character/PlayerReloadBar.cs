@@ -13,9 +13,6 @@ public class PlayerReloadBar : ProgressBar
     private Vector3 pos = Vector3.up * 1.5f;
     private float _startPos;
     private float _endPos;
-    private bool _isReloading;
-    private float _reloadTime;
-    private float _reloadElapsedTime;
 
     private void Start()
     {
@@ -42,37 +39,11 @@ public class PlayerReloadBar : ProgressBar
 
     public void OffReloadBar()
     {
-        Vector2 pos = _cursor.transform.position;
-        pos.x = _startPos;
-        _cursor.transform.position = pos;
-        _reloadTime = 0f;
+        Vector2 localPos = _cursor.localPosition;
+        localPos.x = _startPos;
+        _cursor.localPosition = localPos;
         _base.gameObject.SetActive(false);
         _cursor.gameObject.SetActive(false);
-        _isReloading = false;
-        _reloadElapsedTime = 0f;
-    }
-
-    private void Update()
-    {
-        if (_isReloading)
-        {
-            _base.gameObject.SetActive(true);
-            _cursor.gameObject.SetActive(true);
-
-            _reloadElapsedTime += Time.deltaTime;
-            Vector2 localPos = _cursor.localPosition;
-            localPos.x = Utils.Math.Utility2D.EaseInBounce(_startPos, _endPos, _reloadElapsedTime / _reloadTime);
-            _cursor.localPosition = localPos;
-
-            if(_reloadElapsedTime > _reloadTime)
-            {
-                _reloadElapsedTime = 0f;
-                GameManager.Instance.FxPooler.GetFx(_reloadFxPath, transform.position, Quaternion.identity);
-                _base.gameObject.SetActive(false);
-                _cursor.gameObject.SetActive(false);
-                _isReloading = false;
-            }
-        }
     }
 
     void LateUpdate()
@@ -88,10 +59,20 @@ public class PlayerReloadBar : ProgressBar
         transform.localScale = newScale;
     }
 
-    public override void UpdateProgressBar(float reloadTime)
+    public override void UpdateProgressBar(float ratio)
     {
-        _reloadTime = reloadTime;
-        _isReloading = true;
+        _base.gameObject.SetActive(true);
+        _cursor.gameObject.SetActive(true);
+
+        Vector2 localPos = _cursor.localPosition;
+        localPos.x = Utils.Math.Utility2D.EaseInBounce(_startPos, _endPos, ratio);
+        _cursor.localPosition = localPos;
+
+        if (ratio >= 1f)
+        {
+            GameManager.Instance.FxPooler.GetFx(_reloadFxPath, transform.position, Quaternion.identity);
+            OffReloadBar();
+        }
     }
 
 }

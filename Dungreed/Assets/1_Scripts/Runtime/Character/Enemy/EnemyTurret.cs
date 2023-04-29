@@ -34,8 +34,9 @@ public class EnemyTurret : EnemyBase
     {
         while (true)
         {
+            if(_target == null) yield break;
             _anim.SetTrigger(ID_EnemyAttackTrigger);
-            yield return YieldCache.WaitForSeconds(4f);
+            yield return YieldCache.WaitForSeconds(5f);
         }
     }
 

@@ -10,12 +10,14 @@ public class DungeonManager : MonoBehaviour
     [SerializeField] private FloorBase _startFloor;
 
     private int adventureTime = 0;
+    private DungeonDieScene _dieScene;
     private FloorBase _currentFloor;
     public FloorBase CurrentFloor { get { return _currentFloor; } }
 
     private void Awake()
     {
         Debug.Assert(_floors.Count() != 0);
+        _dieScene = GetComponent<DungeonDieScene>();
     }
 
     public void Start()
@@ -61,23 +63,26 @@ public class DungeonManager : MonoBehaviour
         var data = CurrentPlayer.GetComponent<PlayerData>();
 
         EnemyBase enemy = sender.GetComponent<EnemyBase>();
-
+        BossBase boss = sender.GetComponent<BossBase>();
         if (enemy)
         {
-            Debug.Log(enemy.Data.name);
+            _dieScene.SetReason(enemy.Data.Name);
         }
-
-
+        else if(boss)
+        {
+            _dieScene.SetReason(boss.EnemyData.Name);
+        }
+        
 
         // 플레이어 데이터 갱신
         data.SaveData(adventureTime, 0);
         data.SavePlayerData();
         data.LoadSaveData();
 
-        DungeonToTown();
+        _dieScene.ProcessCutScene(null, ReturnToTown);
     }
 
-    public void DungeonToTown()
+    public void ReturnToTown()
     {
         SceneManager.LoadScene(1);
     }

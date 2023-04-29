@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinemachine;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -24,6 +25,8 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
 
 
     private static readonly string _bossClearFxName = "BossClearFx";
+    private static readonly string _CreditSoundName = "Credit";
+
     public bool IsPlayingCutScene { get; set; } = true;
 
     public void ProcessCutScene(Action before = null, Action after = null)
@@ -37,8 +40,9 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
     private IEnumerator CutScene()
     {
         _beforeAction?.Invoke();
-
-        SoundManager.Instance.EffectPlay("BossDefeat", transform.position);
+        GameManager.Instance.Player.GetComponent<PlayerController>().StopController();
+        SoundManager.Instance.BGMStop();
+        
         StartCoroutine(Flash());
         StartCoroutine(TimeSlow());
 
@@ -48,18 +52,22 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
         GameManager.Instance.CameraManager.CinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 4;
         while(t - 0.1f < _boomParticleTime)
         {
+            GameManager.Instance.CameraManager.CinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 4;
             t += Time.deltaTime;
             boomSpawnElapsedTime += Time.deltaTime;
-            if(boomSpawnElapsedTime > _boomSpawnInterval)
+            if (boomSpawnElapsedTime > _boomSpawnInterval)
             {
                 boomSpawnElapsedTime = 0f;
-                Vector2 randomPosition = (Vector2)_boss.transform.position + UnityEngine.Random.insideUnitCircle * 5f;
+                Vector2 randomPosition = (Vector2)_boss.transform.position + UnityEngine.Random.insideUnitCircle * 3f;
                 GameManager.Instance.FxPooler.GetFx(_bossClearFxName, randomPosition, Quaternion.identity, new Vector3(2,2,1));
-                SoundManager.Instance.EffectPlay("BossDieParticle", false, 0.5f, transform.position);
+                SoundManager.Instance.EffectPlay("BossDieParticle", false, 0.3f, transform.position);
             }
             yield return null;
         }
-        
+        GameManager.Instance.CameraManager.CinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0;
+        // 보스 죽은 모습전환
+        _afterAction?.Invoke();
+
         // 검은색 화면 채우기
         t = 0f;
         _panel.gameObject.SetActive(true);
@@ -73,42 +81,54 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
             _panel.color = color;
             yield return null;
         }
-        GameManager.Instance.CameraManager.CinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0;
 
-        // 보스 죽은 모습전환
-        _afterAction?.Invoke();
-
+        SoundManager.Instance.BGMPlay(_CreditSoundName);
 
         // Typing Effect
-        int index = 0;
+        int length = 1;
         _endingScriptText.gameObject.SetActive(true);
         while (true)
         {
-            if (index > endingScript.Length) break;
-            _endingScriptText.text = endingScript.Substring(0, index);
-            index++;
+            if (length > endingScript.Length) break;
+            _endingScriptText.text = endingScript.Substring(0, length);
+
+            if (endingScript[length - 1] != ' ')
+            {
+                SoundManager.Instance.EffectPlay("Beep", Vector3.zero);
+            }
+
+            length++;
             yield return YieldCache.WaitForSeconds(_endingTypingInterval);
         }
 
         t = 0f;
-        color = _panel.color;
         Color textCol = Color.white;
 
         while (t < _fadeoutTime)
         {
             t += Time.deltaTime;
             textCol.a = color.a = Mathf.Lerp(1, 0, t / _fadeoutTime);   
-            _panel.color = color;
             _endingScriptText.color = textCol;
             yield return null;
         }
 
-
         _endingScriptText.gameObject.SetActive(false);
-        _panel.gameObject.SetActive(false);
-    
+        yield return YieldCache.WaitForSeconds(5);
+
+        _endingScriptText.color = Color.white;
+        _endingScriptText.text = "계속하려면 아무 키나 누르십시오..";
+        _endingScriptText.gameObject.SetActive(true);
+
         GameManager.Instance.CameraManager.VirtualCamera.Follow = GameManager.Instance.Player.transform;
-        SceneManager.LoadScene(1);
+
+        while(true)
+        {
+            if(Input.anyKeyDown)
+            {
+                SceneManager.LoadScene(1);
+            }
+            yield return null;
+        }
     }
 
     private IEnumerator TimeSlow()

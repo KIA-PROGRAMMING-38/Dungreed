@@ -111,7 +111,11 @@ public class PlayerController : BaseController
         if (_isDie == true) return;
 
         CheckRayAll();
-        Flip();
+
+        if(StopControll == false)
+        {
+            Flip();
+        }
 
 
         if (CollisionInfo.IsSlope)
