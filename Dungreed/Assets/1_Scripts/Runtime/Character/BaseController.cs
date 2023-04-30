@@ -4,18 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class BaseController : MonoBehaviour
-{
-    // TODO : Delete
-    [Header("Show CollisionInfo")]
-    [Header("------------------------")]
-    [ShowOnly, SerializeField] private bool IsGrounded;
-    [ShowOnly, SerializeField] private bool IsOnewayGrounded;
-    [ShowOnly, SerializeField] private bool left;
-    [ShowOnly, SerializeField] private bool right;
-    [ShowOnly, SerializeField] private bool IsSlope;
-    [Header("------------------------")]
-    
-
+{ 
     [SerializeField] 
     protected LevelBounds _bounds;
     public LevelBounds Bounds { get { return _bounds; } }
@@ -85,18 +74,8 @@ public class BaseController : MonoBehaviour
         CollisionInfo.Reset();
         VerticalCheck();
         HorizontalCheck();
-        UpdateShowonlyProperty();
     }
 
-    // TODO: Delete
-    public void UpdateShowonlyProperty()
-    {
-        IsGrounded = CollisionInfo.IsGrounded;
-        IsOnewayGrounded = CollisionInfo.IsOnewayGrounded;
-        left = CollisionInfo.left; 
-        right = CollisionInfo.right;
-        IsSlope = CollisionInfo.IsSlope;
-    }
 
     public void CalcRaySpacing()
     {

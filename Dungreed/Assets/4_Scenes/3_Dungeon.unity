@@ -13418,10 +13418,10 @@ MonoBehaviour:
   _panel: {fileID: 369786503}
   _nameText: {fileID: 2088324142}
   _descriptionText: {fileID: 233458918}
-  _panelFadeInTime: 0
+  _panelFadeInTime: 2
   _panelFadeInColor: {r: 0, g: 0, b: 0, a: 0}
-  _textFadeInTime: 0
-  _fadeOutTime: 0
+  _textFadeInTime: 5
+  _fadeOutTime: 2
 --- !u!1001 &1327953419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -96091,7 +96091,7 @@ Tilemap:
       - {fileID: 21300000, guid: 44066c93cabb744439af7ef7a12bef37, type: 3}
       - {fileID: 21300000, guid: 773f2d33ce0daa04b964b327b4cbc734, type: 3}
       - {fileID: 21300000, guid: 54de69f9272e2a441bc5f0b2fcbcd583, type: 3}
-      m_AnimationSpeed: 10
+      m_AnimationSpeed: 10.000001
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   m_TileAssetArray:
