@@ -12,6 +12,7 @@ public class EnemyMelee : EnemyBase
         _isAttacking = false;
         _isTracing = false;
         _velocity= Vector2.zero;
+        _searchTrigger.EnterAction += SetTarget;
     }
 
     protected override void OnDisable()

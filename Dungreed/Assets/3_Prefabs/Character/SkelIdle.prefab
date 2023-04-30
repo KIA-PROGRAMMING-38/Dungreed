@@ -619,11 +619,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af6d29f7c6c15145904d4b9f320ee79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsGrounded: 0
-  IsOnewayGrounded: 0
-  left: 0
-  right: 0
-  IsSlope: 0
   _bounds: {fileID: 0}
   _platformMask:
     serializedVersion: 2
@@ -1010,7 +1005,7 @@ MonoBehaviour:
   _ExitAction:
     m_PersistentCalls:
       m_Calls: []
-  _isOnAwake: 0
+  _isOnAwake: 1
   _state: 0
 --- !u!1 &8501486419051965434
 GameObject:

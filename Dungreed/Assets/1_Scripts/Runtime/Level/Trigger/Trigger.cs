@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,6 +18,8 @@ public abstract class Trigger : MonoBehaviour
     protected Collider2D _collision;
     protected BoxCollider2D _collider;
     [ShowOnly, SerializeField] protected TriggerState _state;
+
+    public Action EnterAction;
 
     public Collider2D Collision { get => _collision; }
     public BoxCollider2D Collider { get => _collider; }

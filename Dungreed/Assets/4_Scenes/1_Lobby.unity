@@ -393,7 +393,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2766593851897901637, guid: 44d526e2b30f117458876a0eddf8bfce, type: 3}
       propertyPath: orthographic size
-      value: 6.96875
+      value: 5.625
       objectReference: {fileID: 0}
     - target: {fileID: 8745707946766258404, guid: 44d526e2b30f117458876a0eddf8bfce, type: 3}
       propertyPath: m_NoiseProfile
@@ -579,7 +579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61cdcaa1c669b404a9b137da11739478, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 150
+  moveSpeed: 100
   _trasnforms:
   - {fileID: 1886581091}
   - {fileID: 1750007058}
@@ -587,7 +587,7 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0}
   endPosition: {x: 0, y: 0}
   _halfWidth: 0
-  _posInterval: 100
+  _posInterval: 0
 --- !u!1 &551560214
 GameObject:
   m_ObjectHideFlags: 0

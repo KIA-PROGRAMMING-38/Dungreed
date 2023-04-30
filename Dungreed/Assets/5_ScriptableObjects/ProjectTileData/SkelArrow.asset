@@ -15,6 +15,7 @@ MonoBehaviour:
   Type: 1
   SpritePath: Arrow/Arrow00
   HitFxPath: ArrowHitFx
+  PrefabPath: 
   SpriteAngleOffset: -90
-  Speed: 30
+  Speed: 20
   Range: 20

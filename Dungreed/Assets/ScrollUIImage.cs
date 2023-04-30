@@ -31,6 +31,7 @@ public class ScrollUIImage : MonoBehaviour
             _trasnforms[i].anchoredPosition = pos;
         }
         endPosition = _trasnforms[^1].anchoredPosition;
+        endPosition.x -= _halfWidth;
     }
 
     public void UpdateRectTransformPosition()

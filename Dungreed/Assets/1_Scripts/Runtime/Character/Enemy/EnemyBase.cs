@@ -34,7 +34,6 @@ public abstract class EnemyBase : MonoBehaviour
         _anim = GetComponentInChildren<Animator>();
         _controller = GetComponentInChildren<EnemyController>();
         _searchTrigger = GetComponentInChildren<Trigger>();
-
         _health.Initialize(_data.MaxHp);
     }
 

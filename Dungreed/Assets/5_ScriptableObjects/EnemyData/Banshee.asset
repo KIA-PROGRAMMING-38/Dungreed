@@ -18,6 +18,6 @@ MonoBehaviour:
   DieSoundName: EnemyDie
   MaxHp: 50
   MoveSpeed: 0
-  AttackDamage: 13
+  AttackDamage: 9
   ProjectileData: {fileID: 0}
   Type: 2

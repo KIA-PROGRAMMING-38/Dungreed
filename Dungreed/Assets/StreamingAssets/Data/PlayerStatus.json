@@ -3,9 +3,9 @@
     "MoveSpeed": 0.0,
     "Defense": 0,
     "JumpPower": 0.0,
-    "MaxHp": 100,
+    "MaxHp": 150,
     "DashDamage": 16,
     "MaxDashCount": 2,
-    "CriticalChance": 10,
+    "CriticalChance": 20,
     "CriticalDamage": 200
 }

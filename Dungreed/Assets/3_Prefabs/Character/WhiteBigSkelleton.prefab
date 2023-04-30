@@ -464,11 +464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af6d29f7c6c15145904d4b9f320ee79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsGrounded: 0
-  IsOnewayGrounded: 0
-  left: 0
-  right: 0
-  IsSlope: 0
   _bounds: {fileID: 0}
   _platformMask:
     serializedVersion: 2
@@ -656,7 +651,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 1.0700326}

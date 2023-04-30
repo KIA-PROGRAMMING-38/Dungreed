@@ -3,6 +3,7 @@
     protected override void TriggerEnter()
     {
         _state = TriggerState.Disable;
+        EnterAction?.Invoke();
         _EnterAction?.Invoke();
     }
 
