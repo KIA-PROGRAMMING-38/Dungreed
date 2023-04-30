@@ -6,7 +6,7 @@ SpriteAtlas:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: UIAtlas
+  m_Name: uiatlas
   m_EditorData:
     serializedVersion: 2
     textureSettings:
@@ -39,7 +39,7 @@ SpriteAtlas:
       blockOffset: 1
       allowAlphaSplitting: 0
       enableRotation: 1
-      enableTightPacking: 1
+      enableTightPacking: 0
       enableAlphaDilation: 0
     secondaryTextureSettings: {}
     variantMultiplier: 1
@@ -60,44 +60,71 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 94a7d74b4163dd344b0c916f6b457404, type: 3}
     - {fileID: 2800000, guid: f1862ddea9ec69e4d9ce0cb1625c12d9, type: 3}
     - {fileID: 2800000, guid: df819d8cc36bcb746921f84d207c30c7, type: 3}
+    - {fileID: 2800000, guid: 75d50ddca308bda45acf2d04e5a143f0, type: 3}
+    - {fileID: 2800000, guid: 7c93a546d7b50014aa70dc09afe09e11, type: 3}
+    - {fileID: 2800000, guid: c8ba071877a920547b3cccbf12cf5e86, type: 3}
+    - {fileID: 2800000, guid: c0512450260335f4ab53d2bb134cd3c6, type: 3}
+    - {fileID: 2800000, guid: 97757596b06b88643a70e148ce566782, type: 3}
+    - {fileID: 2800000, guid: 20eaad2d8adbf2c4fac18a5d2b9c4dce, type: 3}
+    - {fileID: 2800000, guid: 6a348ebfc7ea63840ba3085d035417dd, type: 3}
+    - {fileID: 2800000, guid: 96b90498a40c8fd4f804f11d558bdcb5, type: 3}
+    - {fileID: 2800000, guid: 8f4cad7a453b6b24690e8ee002835448, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 3add7740ef8f1d340b1ef3d7db1ca55d, type: 3}
+  - {fileID: 21300000, guid: c0512450260335f4ab53d2bb134cd3c6, type: 3}
   - {fileID: 21300000, guid: e42f19704a7a6b14a97dc0ebc7363356, type: 3}
   - {fileID: 21300000, guid: 5c287da1bc9063e45a79b49ace994a5a, type: 3}
   - {fileID: 21300000, guid: 71db4463ba3606c4980e7d1906e1052d, type: 3}
   - {fileID: 21300000, guid: dcc1c1f374ee9d141a5a6ad3b6170fbe, type: 3}
   - {fileID: 21300000, guid: c97ce9946fa3d2240b249c14c41b2eb3, type: 3}
+  - {fileID: 21300000, guid: 7c93a546d7b50014aa70dc09afe09e11, type: 3}
+  - {fileID: 21300000, guid: 97757596b06b88643a70e148ce566782, type: 3}
   - {fileID: 21300000, guid: b7e4cd962c4a64640b3ed20f0aa35b91, type: 3}
   - {fileID: 21300000, guid: 903dd908bf558614683af97771d3bf33, type: 3}
+  - {fileID: 21300000, guid: c8ba071877a920547b3cccbf12cf5e86, type: 3}
+  - {fileID: 21300000, guid: 96b90498a40c8fd4f804f11d558bdcb5, type: 3}
   - {fileID: 21300000, guid: 376b48b98bbe6644c92858c24cc4afad, type: 3}
   - {fileID: 21300000, guid: 85ad7dc9fa63612419dfa0e52f806cf5, type: 3}
   - {fileID: 21300000, guid: 0882330af53bc8542b68c0018d560715, type: 3}
+  - {fileID: 21300000, guid: 8f4cad7a453b6b24690e8ee002835448, type: 3}
   - {fileID: 21300000, guid: 94a7d74b4163dd344b0c916f6b457404, type: 3}
   - {fileID: 21300000, guid: df819d8cc36bcb746921f84d207c30c7, type: 3}
+  - {fileID: 21300000, guid: 75d50ddca308bda45acf2d04e5a143f0, type: 3}
+  - {fileID: 21300000, guid: 20eaad2d8adbf2c4fac18a5d2b9c4dce, type: 3}
   - {fileID: 21300000, guid: a62d098de0817134295629c792b93483, type: 3}
   - {fileID: 21300000, guid: c0e6fcaed41f0c846af8ac8d3684968e, type: 3}
   - {fileID: 21300000, guid: f1862ddea9ec69e4d9ce0cb1625c12d9, type: 3}
+  - {fileID: 21300000, guid: 6a348ebfc7ea63840ba3085d035417dd, type: 3}
   m_PackedSpriteNamesToIndex:
   - ReloadFX0
+  - MidCloud0
   - PlayerLifeBase 1
   - DashCountBackground_0
   - PlayerLifeBack
   - EliteLifeBase
   - ReloadBar
+  - FrontCloud
+  - InventoryBase 2
   - DashCount
   - DashCountBase_0
+  - MainLogo
+  - InventorySlot
   - DashCountImage_0
   - BossLifeBack
   - ReloadBase
+  - InventorySlot_Selected
   - ReloadFX1
   - ReloadFX3
+  - BackCloud
+  - InventoryExit
   - LifeBar
   - BossLifeBase
   - ReloadFX2
+  - InventoryExit_Selected
   m_RenderDataMap: {}
-  m_Tag: UIAtlas
+  m_Tag: uiatlas
   m_IsVariant: 0

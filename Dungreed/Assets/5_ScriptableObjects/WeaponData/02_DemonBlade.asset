@@ -29,8 +29,8 @@ MonoBehaviour:
   AttackType: 0
   EquipType: 1
   Rarity: 4
-  MinDamage: 27
-  MaxDamage: 35
+  MinDamage: 22
+  MaxDamage: 27
   AttackSpeedPerSecond: 2.17
   MeleeAttackRange: 5
   MaxAmmoCount: 0

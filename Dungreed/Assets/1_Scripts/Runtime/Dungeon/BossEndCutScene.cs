@@ -50,6 +50,7 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
         float boomSpawnElapsedTime = 0;
         GameManager.Instance.CameraManager.VirtualCamera.Follow = _boss.transform;
         GameManager.Instance.CameraManager.CinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 4;
+        Vector2 bossPos = _boss.transform.position;
         while(t - 0.1f < _boomParticleTime)
         {
             GameManager.Instance.CameraManager.CinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 4;
@@ -58,7 +59,7 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
             if (boomSpawnElapsedTime > _boomSpawnInterval)
             {
                 boomSpawnElapsedTime = 0f;
-                Vector2 randomPosition = (Vector2)_boss.transform.position + UnityEngine.Random.insideUnitCircle * 3f;
+                Vector2 randomPosition = bossPos + (UnityEngine.Random.insideUnitCircle * 4f);
                 GameManager.Instance.FxPooler.GetFx(_bossClearFxName, randomPosition, Quaternion.identity, new Vector3(2,2,1));
                 SoundManager.Instance.EffectPlay("BossDieParticle", false, 0.3f, transform.position);
             }
