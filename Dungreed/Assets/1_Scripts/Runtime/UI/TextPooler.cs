@@ -1,22 +1,38 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Pool;
 
 public class TextPooler : MonoBehaviour
 {
-    [SerializeField] GameObject _origin;
-    ObjectPool<DamageText> _pool;
-    [SerializeField] Canvas _canvas;
+    [SerializeField] private GameObject _origin;
+    private ObjectPool<DamageText> _pool;
+    [SerializeField] private Canvas _canvas;
+
+    private Dictionary<int, string> _damageStrings;
 
     private void Awake()
     {
         _pool = new ObjectPool<DamageText>(CreateAction, GetAction, ReleaseAction, DestroyAction, true, 10, 100);
+        _damageStrings = new Dictionary<int, string>();
     }
 
     public void PopupDamage(DamageInfo damageInfo, Vector2 startPosition)
     {
         DamageText damageText = _pool.Get();
-        damageText.SetUp(damageInfo, startPosition);
+        damageText.SetUp(GetDamageString(damageInfo.Damage), damageInfo.Type, startPosition);
     }
+
+    private string GetDamageString(int damage)
+    {
+        if (_damageStrings.TryGetValue(damage, out string str) == false)
+        {
+            str = damage.ToString();
+            return str;
+        }
+
+        return str;
+    }
+
 
     public DamageText CreateAction()
     {

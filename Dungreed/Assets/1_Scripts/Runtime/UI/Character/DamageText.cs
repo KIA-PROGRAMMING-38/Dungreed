@@ -24,11 +24,11 @@ public class DamageText : MonoBehaviour
 
     public void SetOwner(ObjectPool<DamageText> owner) => _owner = owner;
 
-    public void SetUp(DamageInfo damageInfo, Vector2 startPosition)
+    public void SetUp(string damage, DamageType damageType, Vector2 startPosition)
     {
-        _text.text = damageInfo.Damage.ToString();
+        _text.text = damage;
 
-        _text.color = damageInfo.Type switch
+        _text.color = damageType switch
         {
             DamageType.Normal => _defaultColor,
             DamageType.Critical => _criticalColor,
