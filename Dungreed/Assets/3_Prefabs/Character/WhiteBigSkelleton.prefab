@@ -700,5 +700,5 @@ MonoBehaviour:
   _ExitAction:
     m_PersistentCalls:
       m_Calls: []
-  _isOnAwake: 0
+  _isOnAwake: 1
   _state: 0

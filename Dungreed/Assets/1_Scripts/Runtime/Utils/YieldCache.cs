@@ -19,9 +19,9 @@ public static class YieldCache
 
     public static readonly WaitForFixedUpdate WaitForFixedUpdate = new WaitForFixedUpdate();
 
-    private static readonly Dictionary<float, WaitForSeconds> _timeInterval = new Dictionary<float, WaitForSeconds>();
+    private static readonly Dictionary<float, WaitForSeconds> _timeInterval = new Dictionary<float, WaitForSeconds>(new FloatComparer());
 
-    private static readonly Dictionary<float, WaitForSecondsRealtime> _timeIntervalReal = new Dictionary<float, WaitForSecondsRealtime>();
+    private static readonly Dictionary<float, WaitForSecondsRealtime> _timeIntervalReal = new Dictionary<float, WaitForSecondsRealtime>(new FloatComparer());
 
     public static WaitForSeconds WaitForSeconds(float seconds)
     {
