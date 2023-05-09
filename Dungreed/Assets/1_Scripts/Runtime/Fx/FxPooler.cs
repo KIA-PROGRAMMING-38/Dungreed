@@ -2,10 +2,13 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class FxPooler : MonoBehaviour
+public class FxPooler
 {
-    private void Awake()
+    private Transform _parent;
+
+    public FxPooler(Transform parent)
     {
+        _parent = parent;
         FxPool = new ObjectPool<FxObject>(CreateFx, ActionOnGet, ActionOnRelease, ActionOnDestroy,
   true, 100, 1000);
 
@@ -42,7 +45,7 @@ public class FxPooler : MonoBehaviour
 
     public FxObject CreateFx()
     {
-        FxObject obj = Instantiate(DefaultFxObject, Vector3.zero, Quaternion.identity, transform);        
+        FxObject obj = MonoBehaviour.Instantiate(DefaultFxObject, Vector3.zero, Quaternion.identity, _parent);        
         obj.PoolOwner = this;
         return obj;
     }

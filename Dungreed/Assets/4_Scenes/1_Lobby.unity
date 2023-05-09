@@ -399,7 +399,8 @@ PrefabInstance:
       propertyPath: m_NoiseProfile
       value: 
       objectReference: {fileID: 11400000, guid: 380f7cce0c307854dbc7b72ec2c0de8c, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1200184381655785399, guid: 44d526e2b30f117458876a0eddf8bfce, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 44d526e2b30f117458876a0eddf8bfce, type: 3}
 --- !u!1 &217067696
 GameObject:

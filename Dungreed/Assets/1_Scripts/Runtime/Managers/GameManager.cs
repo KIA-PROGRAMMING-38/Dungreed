@@ -9,7 +9,8 @@ public class GameManager : Singleton<GameManager>
     private GameObject _player;
 
     public GameObject Player { get { return _player; } set { _player = value; } }
-    
+
+    public Transform ObjectPoolTransform;
     public FxPooler FxPooler { get; private set; }
 
     public ProjectilePooler ProjectilePooler { get; private set; }
@@ -22,7 +23,7 @@ public class GameManager : Singleton<GameManager>
     new protected void Awake()
     {
         base.Awake();
-        FxPooler = GetComponentInChildren<FxPooler>();
+        FxPooler = new FxPooler(ObjectPoolTransform);
         ProjectilePooler = GetComponentInChildren<ProjectilePooler>();
         DamageTextPooler = GetComponentInChildren<TextPooler>();
 
