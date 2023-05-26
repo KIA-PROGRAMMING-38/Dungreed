@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Text;
 using TMPro;
@@ -12,7 +13,6 @@ public class PlayerHealthBar : ProgressBar
     [SerializeField] private TextMeshProUGUI _healhText;
 
     private StringBuilder _healthTextBuilder;
-    private IEnumerator _healthChangeCoroutine;
 
     private float _currentHealthRatio = 1f;
 
@@ -24,7 +24,6 @@ public class PlayerHealthBar : ProgressBar
         _progressBarImage.fillAmount = _decreaseProgressBarImage.fillAmount;
         _presenter.OnHealthChanged -= UpdateProgressBar;
         _presenter.OnHealthChanged += UpdateProgressBar;
-        _healthChangeCoroutine = HealthChangeCoroutine();
     }
     private void OnDisable()
     {
@@ -37,38 +36,34 @@ public class PlayerHealthBar : ProgressBar
         _healthTextBuilder.Append($"{cur} / {max}");
         _healhText.text = _healthTextBuilder.ToString();
     }
-  
+
     public override void UpdateProgressBar(int cur, int max)
     {
-        _currentHealthRatio = Mathf.Clamp01(cur/(float)max);
-        StartCoroutine(_healthChangeCoroutine);
+        _currentHealthRatio = Mathf.Clamp01(cur / (float)max);
+        HealthChangeTask().Forget();
         UpdateHealthText(cur, max);
     }
 
-    IEnumerator HealthChangeCoroutine()
+    async UniTaskVoid HealthChangeTask()
     {
-        while (true)
-        {
-            float t = 0f;
-            float startRatio = _currentHealthRatio;
-            float progressFillAmount = _decreaseProgressBarImage.fillAmount;
-            _progressBarImage.fillAmount = _currentHealthRatio;
 
-            while (t-0.1f< _decreaseHealthTime)
+        float t = 0f;
+        float startRatio = _currentHealthRatio;
+        float progressFillAmount = _decreaseProgressBarImage.fillAmount;
+        _progressBarImage.fillAmount = _currentHealthRatio;
+
+        while (t - 0.1f < _decreaseHealthTime)
+        {
+            if (startRatio != _currentHealthRatio)
             {
-                if(startRatio != _currentHealthRatio) 
-                {
-                    t = 0f; 
-                    startRatio = _currentHealthRatio;
-                    _progressBarImage.fillAmount = _currentHealthRatio;
-                    progressFillAmount = _decreaseProgressBarImage.fillAmount;
-                }
-                t += Time.deltaTime;
-                _decreaseProgressBarImage.fillAmount = Mathf.Lerp(progressFillAmount, _currentHealthRatio, t/_decreaseHealthTime);
-                yield return null;
+                t = 0f;
+                startRatio = _currentHealthRatio;
+                _progressBarImage.fillAmount = _currentHealthRatio;
+                progressFillAmount = _decreaseProgressBarImage.fillAmount;
             }
-            StopCoroutine(_healthChangeCoroutine);
-            yield return null;
+            t += Time.deltaTime;
+            _decreaseProgressBarImage.fillAmount = Mathf.Lerp(progressFillAmount, _currentHealthRatio, t / _decreaseHealthTime);
+            await UniTask.Yield();
         }
     }
 }

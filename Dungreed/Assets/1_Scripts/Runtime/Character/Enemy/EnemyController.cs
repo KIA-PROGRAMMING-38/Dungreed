@@ -92,7 +92,7 @@ public class EnemyController : BaseController
 
         if (CollisionInfo.IsOnewayGrounded)
         {
-            StartCoroutine(DisableCoroutine);
+            DisableCollision().Forget();
         }
     }
 

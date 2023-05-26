@@ -1,11 +1,11 @@
-﻿using System.Collections;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 
 public class DelayTrigger : Trigger
 {
     [SerializeField] protected float _delayTime;
     protected bool _delayTrigger;
-    protected IEnumerator _delayInvokeCoroutine;
 
     protected override void Awake()
     {
@@ -15,12 +15,11 @@ public class DelayTrigger : Trigger
     protected override void Start()
     {
         base.Start();
-        _delayInvokeCoroutine = DelayInvoke();
     }
 
     protected override void TriggerEnter()
     {
-        StartCoroutine(_delayInvokeCoroutine);
+        DelayInvoke().Forget();
     }
 
     protected override void TriggerExit()
@@ -28,16 +27,10 @@ public class DelayTrigger : Trigger
         _ExitAction?.Invoke();
     }
 
-    private IEnumerator DelayInvoke()
+    private async UniTaskVoid DelayInvoke()
     {
-        while (true)
-        {
-            _state = TriggerState.Disable;
-            yield return YieldCache.WaitForSeconds(_delayTime);
-            _EnterAction?.Invoke();
-
-            StopCoroutine(_delayInvokeCoroutine);
-            yield return null;
-        }
+        _state = TriggerState.Disable;
+        await UniTask.Delay((int)(1000 * _delayTime));
+        _EnterAction?.Invoke();
     }
 }

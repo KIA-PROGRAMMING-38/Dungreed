@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using TMPro;
@@ -34,17 +35,17 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
         _beforeAction = before;
         _afterAction = after;
 
-        StartCoroutine(CutScene());
+        CutScene().Forget();
     }
 
-    private IEnumerator CutScene()
+    private async UniTaskVoid CutScene()
     {
         _beforeAction?.Invoke();
         GameManager.Instance.Player.GetComponent<PlayerController>().StopController();
         SoundManager.Instance.BGMStop();
         
-        StartCoroutine(Flash());
-        StartCoroutine(TimeSlow());
+        Flash().Forget();
+        TimeSlow().Forget();
 
         float t = 0;
         float boomSpawnElapsedTime = 0;
@@ -63,7 +64,7 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
                 GameManager.Instance.FxPooler.GetFx(_bossClearFxName, randomPosition, Quaternion.identity, new Vector3(2,2,1));
                 SoundManager.Instance.EffectPlay("BossDieParticle", false, 0.3f, transform.position);
             }
-            yield return null;
+            await UniTask.Yield();
         }
         GameManager.Instance.CameraManager.CinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0;
         // 보스 죽은 모습전환
@@ -80,7 +81,7 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
             t += Time.deltaTime;
             color.a = Mathf.Lerp(0, 1, t / _panelFadeInTime);
             _panel.color = color;
-            yield return null;
+            await UniTask.Yield();
         }
 
         SoundManager.Instance.BGMPlay(_CreditSoundName);
@@ -99,7 +100,7 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
             }
 
             length++;
-            yield return YieldCache.WaitForSeconds(_endingTypingInterval);
+            await UniTask.Delay((int)(1000 * _endingTypingInterval));
         }
 
         t = 0f;
@@ -110,11 +111,11 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
             t += Time.deltaTime;
             textCol.a = color.a = Mathf.Lerp(1, 0, t / _fadeoutTime);   
             _endingScriptText.color = textCol;
-            yield return null;
+            await UniTask.Yield();
         }
 
         _endingScriptText.gameObject.SetActive(false);
-        yield return YieldCache.WaitForSeconds(5);
+        await UniTask.Delay(5);
 
         _endingScriptText.color = Color.white;
         _endingScriptText.text = "계속하려면 아무 키나 누르십시오..";
@@ -128,22 +129,22 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
             {
                 SceneManager.LoadScene(1);
             }
-            yield return null;
+            await UniTask.Yield();
         }
     }
 
-    private IEnumerator TimeSlow()
+    private async UniTaskVoid TimeSlow()
     {
         float t = 0;
         while (t - 0.1f < _timeRecoverTime)
         {
             t += Time.unscaledDeltaTime;
             Time.timeScale = Mathf.Lerp(0, 1, t / _timeRecoverTime);
-            yield return null;
+            await UniTask.Yield();
         }
     }
 
-    private IEnumerator Flash()
+    private async UniTaskVoid Flash()
     {
         float t = 0f;
         Color color = Color.white;
@@ -154,7 +155,7 @@ public class BossEndCutScene : MonoBehaviour, ICutScene
             t += Time.unscaledDeltaTime;
             color.a = Mathf.Lerp(1, 0, t / _flashTime);
             _flash.color = color;
-            yield return null;
+            await UniTask.Yield();
         }
         _flash.gameObject.SetActive(false);
     }

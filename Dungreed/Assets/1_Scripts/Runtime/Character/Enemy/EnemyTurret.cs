@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -10,13 +11,11 @@ public class EnemyTurret : EnemyBase
 
     [SerializeField] private Bullet _bulletPrefab;
     ObjectPool<Bullet> _bulletPool;
-    private IEnumerator _shootCoroutine;
 
 
     protected override void Awake()
     {
         base.Awake();
-        _shootCoroutine = Shoot();
         _bulletPool = new ObjectPool<Bullet>(CreateFunc, GetAction, ReleaseAction, DestroyAction, false, 20, 300);
     }
 
@@ -27,16 +26,16 @@ public class EnemyTurret : EnemyBase
 
     protected override void Attack()
     {
-        StartCoroutine(_shootCoroutine);
+        Shoot().Forget();
     }
 
-    public IEnumerator Shoot()
+    public async UniTaskVoid Shoot()
     {
         while (true)
         {
-            if(_target == null) yield break;
+            if (_target == null) break;
             _anim.SetTrigger(ID_EnemyAttackTrigger);
-            yield return YieldCache.WaitForSeconds(5f);
+            await UniTask.Delay(5000);
         }
     }
 

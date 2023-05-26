@@ -1,4 +1,5 @@
 using Cinemachine;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -16,7 +17,6 @@ public class CameraEffecter : MonoBehaviour
     #region  CameraShake
     [Header("--- Camera Shake ---")]
 
-    private IEnumerator _cameraShakeCoroutine;
     private CinemachineBasicMultiChannelPerlin _cinemachineBasicMultiChannelPerlin;
 
     [SerializeField, ShowOnly]
@@ -59,8 +59,6 @@ public class CameraEffecter : MonoBehaviour
     private Action _onTransitionDone;
     private bool _reverseTransition;
 
-    private IEnumerator _transitionCoroutine;
-
     public void CameraInitialize(Camera mainCam, CinemachineVirtualCamera virtualCamera)
     {
         _mainCamera = mainCam;
@@ -71,9 +69,6 @@ public class CameraEffecter : MonoBehaviour
         _cinemachineBasicMultiChannelPerlin = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         _chromaticAberration = GetVolumeComponent<ChromaticAberration>(_volumeProfile);
         _vignette = GetVolumeComponent<Vignette>(_volumeProfile);
-
-        _transitionCoroutine = TransitionCoroutine();
-        _cameraShakeCoroutine = ShakeScreenEffectCoroutine();
     }
 
     T GetVolumeComponent<T>(VolumeProfile profile) where T : VolumeComponent
@@ -96,50 +91,45 @@ public class CameraEffecter : MonoBehaviour
     {
         _cameraShakeDuration = duration;
         _cameraShakeIntensity = intensity;
-        StartCoroutine(_cameraShakeCoroutine);
+        ShakeScreenEffectTask().Forget();
     }
 
     public void PlayScreenShake()
     {
         _cameraShakeDuration = 0.1f;
         _cameraShakeIntensity = 2f;
-        StartCoroutine(_cameraShakeCoroutine);
+        ShakeScreenEffectTask().Forget();
         PlayScreenBlink();
     }
 
 
-    IEnumerator ShakeScreenEffectCoroutine()
+    async UniTaskVoid ShakeScreenEffectTask()
     {
-        while(true)
-        {
             _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = _cameraShakeIntensity;
-            yield return YieldCache.WaitForSeconds(_cameraShakeDuration);
+            await UniTask.Delay((int)(1000 * _cameraShakeDuration));
             _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
-            StopCoroutine(_cameraShakeCoroutine);
-            yield return null;
-        }
     }
     #endregion
 
     #region ChromaticAbberation Method
     public void PlayChromaticAbberation(float duration = 0f, float intensity = 0f)
     {
-        StartCoroutine(ChromaticAberrationEffectCoroutine(duration, intensity));
+        ChromaticAberrationEffectTask(duration, intensity).Forget();
     }
-    IEnumerator ChromaticAberrationEffectCoroutine(float duration, float intensity)
+    async UniTaskVoid ChromaticAberrationEffectTask(float duration, float intensity)
     {
         float t = 0f;
         float effectDuration = duration == 0f ? _caDuration : duration;
         float changeIntensity = 0;
         float caIntensity = intensity == 0f ? _caMaxIntensity : intensity;
         // ±ôºý¿©¾ßÇÔ  -1 ~ 1
-        while (t -0.1f < effectDuration)
+        while (t - 0.1f < effectDuration)
         {
             t += Time.deltaTime;
             float sinVal = Mathf.Sin(Mathf.Lerp(0, Mathf.PI, t / effectDuration));
             changeIntensity = Mathf.Clamp(sinVal, 0, caIntensity);
             _chromaticAberration.intensity.value = changeIntensity;
-            yield return null;
+            await UniTask.Yield();
         }
         _chromaticAberration.intensity.value = 0;
     }
@@ -148,9 +138,9 @@ public class CameraEffecter : MonoBehaviour
     #region Vignette Shake Method
     public void PlayScreenBlink()
     {
-        StartCoroutine(VignetteEffectCoroutine());
+        VignetteEffectTask().Forget();
     }
-    IEnumerator VignetteEffectCoroutine()
+    async UniTaskVoid VignetteEffectTask()
     {
         float t = 0f;
         float currentIntensity = 0f;
@@ -177,7 +167,7 @@ public class CameraEffecter : MonoBehaviour
             // float sinVal = Mathf.Sin(Mathf.Lerp(0, Mathf.PI, t / duration));
             // currentIntensity = Mathf.Clamp(sinVal, 0, maxIntensity);
             // _vignette.intensity.value = currentIntensity;
-            yield return null;
+            await UniTask.Yield();
         }
         _vignette.intensity.value = 0f;
 
@@ -194,36 +184,32 @@ public class CameraEffecter : MonoBehaviour
     {
         _onTransitionDone = transitionDone;
         _reverseTransition = reverse;
-        StartCoroutine(_transitionCoroutine);
+        TransitionTask().Forget();
     }
 
     public void PlayTransitionEffect(bool reverse = false)
     {
         _onTransitionDone = null;
         _reverseTransition = reverse;
-        StartCoroutine(_transitionCoroutine);
+        TransitionTask().Forget();
     }
 
 
-    private IEnumerator TransitionCoroutine()
+    private async UniTaskVoid TransitionTask()
     {
-        while (true)
+
+        float elapsedTime = 0f;
+        _roomTransitionMaterial.SetFloat(_propertyName, 0f);
+        await UniTask.Delay(100, true);
+        while (elapsedTime < _transitionTime)
         {
-            float elapsedTime = 0f;
-            _roomTransitionMaterial.SetFloat(_propertyName, 0f);
-            yield return YieldCache.WaitForSecondsRealtime(0.1f);
-            while (elapsedTime < _transitionTime)
-            {
-                elapsedTime += Time.unscaledDeltaTime;
-                float transitionRatio = _reverseTransition == false ? elapsedTime / _transitionTime : 1 - (elapsedTime / _transitionTime);
-                float val = Utility2D.EaseOutCubic(0, 1, transitionRatio);
-                _roomTransitionMaterial.SetFloat(_propertyName, val);
-                yield return null;
-            }
-            _onTransitionDone?.Invoke();
-            _onTransitionDone = null;
-            StopCoroutine(_transitionCoroutine);
-            yield return null;
+            elapsedTime += Time.unscaledDeltaTime;
+            float transitionRatio = _reverseTransition == false ? elapsedTime / _transitionTime : 1 - (elapsedTime / _transitionTime);
+            float val = Utility2D.EaseOutCubic(0, 1, transitionRatio);
+            _roomTransitionMaterial.SetFloat(_propertyName, val);
+            await UniTask.Yield();
         }
+        _onTransitionDone?.Invoke();
+        _onTransitionDone = null;
     }
 }

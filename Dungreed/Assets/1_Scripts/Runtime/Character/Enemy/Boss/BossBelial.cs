@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
@@ -14,7 +16,7 @@ public class BossBelial : BossBase
         Laser,
         Max
     }
-    
+
     [SerializeField] private BossBelialHand _leftHand;
     [SerializeField] private BossBelialHand _rightHand;
     [SerializeField] private Bullet _bossBullet;
@@ -31,8 +33,6 @@ public class BossBelial : BossBase
     private DamageInfo _bulletDamage;
     ObjectPool<Bullet> _bulletPool;
 
-    List<IEnumerator> _patternCoroutines = new List<IEnumerator>();
-
     public static readonly string BelialLaserSoundName = "BelialLaser";
     public static readonly string BelialBulletSoundName = "BelialBullet";
     public static readonly string BelialSwordSoundName = "BelialSword";
@@ -42,11 +42,12 @@ public class BossBelial : BossBase
     private static readonly int ID_ResetTrigger = Animator.StringToHash("Reset");
     private static readonly int ID_DieTrigger = Animator.StringToHash("Die");
 
-    PatternType _currentPattern;
 
     [SerializeField] BelialSword _swordPrefab;
     private BelialSword[] _swords = new BelialSword[6];
     private Vector3[] _swordSpawnPositions = new Vector3[6];
+
+    private CancellationTokenSource _cancelToken;
 
     public override void Initialize(BossRoom room)
     {
@@ -59,15 +60,10 @@ public class BossBelial : BossBase
 
         _health.Initialize(_enemyData.MaxHp);
 
-        _patternCoroutines.Add(BulletSpawnPattern());
-        _patternCoroutines.Add(SwordSpawnPattern());
-        _patternCoroutines.Add(LaserFirePattern());
-
-
         _ownerRoom.OnBossBattleEnd -= SetDie;
         _ownerRoom.OnBossBattleEnd += SetDie;
         _isBattleStart = false;
-
+        _cancelToken = new CancellationTokenSource();
         FindPlayer();
     }
 
@@ -78,7 +74,7 @@ public class BossBelial : BossBase
 
     protected override void OnDie()
     {
-        StopCoroutine(_patternCoroutines[(int)_currentPattern]);
+        _cancelToken.Cancel();
         _rig2D.gravityScale = 6f;
         _collider.enabled = false;
         _bulletPool.Clear();
@@ -102,6 +98,7 @@ public class BossBelial : BossBase
 
     private void Update()
     {
+        if (_cancelToken.IsCancellationRequested) return;
         if (_ownerRoom.IsBattleStart == false) return;
 
         if (_isActPattern == false)
@@ -114,8 +111,20 @@ public class BossBelial : BossBase
     {
         int pattern = (int)PatternType.Max;
         pattern = Random.Range(0, pattern);
-        _currentPattern = (PatternType)pattern;
-        StartCoroutine(_patternCoroutines[pattern]);
+
+        switch ((PatternType)pattern)
+        {
+            case PatternType.Laser:
+                LaserFirePattern().Forget();
+                break;
+            case PatternType.SwordSpawn:
+                SwordSpawnPattern().Forget();
+                break;
+            case PatternType.BulletSpawn:
+                BulletSpawnPattern().Forget();
+                break;
+        }
+
     }
 
     public void OnBulletAttack()
@@ -124,65 +133,62 @@ public class BossBelial : BossBase
         _bulletSpawnPosition = _firePosition.position;
     }
 
-    private IEnumerator BulletSpawnPattern()
+    private async UniTaskVoid BulletSpawnPattern()
     {
-        while (true)
+        _isActPattern = true;
+        _anim.SetTrigger(ID_AttackTrigger);
+
+        while (_bulletAttackStart == false)
         {
-            _isActPattern = true;
-            _anim.SetTrigger(ID_AttackTrigger);
-
-            while(_bulletAttackStart == false)
-            {
-                yield return null;
-            }
-
-            float patternTime = 7f;
-            float patternElapsedTime = 0f;
-            float spawnInterval = 0.15f;
-            float spawnElapsedTime = 0f;
-            float angle = 0f;
-
-            Vector2 dirVec = transform.position - _player.transform.position;
-            float dot = Vector2.Dot(dirVec, transform.right);
-            float addAngleValue = dot > 0 ? -5f : 5f;
-            _firePosition.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-            while (patternElapsedTime < patternTime)
-            {
-                patternElapsedTime += Time.deltaTime;
-                spawnElapsedTime += Time.deltaTime;
-                if (spawnElapsedTime > spawnInterval)
-                {
-                    SoundManager.Instance.EffectPlay(BelialBulletSoundName,transform.position);
-                    Vector3 left = _firePosition.right * -1f;
-                    Vector3 right = _firePosition.right;
-                    Vector3 up = _firePosition.up;
-                    Vector3 down = _firePosition.up * -1f;
-                    angle += addAngleValue;
-                    _firePosition.transform.rotation = Quaternion.Euler(0, 0, angle);
-                    var leftBullet = _bulletPool.Get();
-                    var rightBullet = _bulletPool.Get();
-                    var upBullet = _bulletPool.Get();
-                    var downBullet = _bulletPool.Get();
-                    leftBullet.InitBullet(_bulletSpawnPosition, left, _bulletDamage);
-                    rightBullet.InitBullet(_bulletSpawnPosition, right, _bulletDamage);
-                    upBullet.InitBullet(_bulletSpawnPosition, up, _bulletDamage);
-                    downBullet.InitBullet(_bulletSpawnPosition, down, _bulletDamage);
-
-                    spawnElapsedTime = 0f;
-                }
-                yield return null;
-            }
-            _bulletAttackStart = false;
-            _anim.SetTrigger(ID_ResetTrigger);
-            yield return YieldCache.WaitForSeconds(_actPatternInterval);           
-            _isActPattern = false;
-            StopCoroutine(_patternCoroutines[(int)PatternType.BulletSpawn]);
-            yield return null;
+            await UniTask.Yield();
         }
+
+        float patternTime = 7f;
+        float patternElapsedTime = 0f;
+        float spawnInterval = 0.15f;
+        float spawnElapsedTime = 0f;
+        float angle = 0f;
+
+        Vector2 dirVec = transform.position - _player.transform.position;
+        float dot = Vector2.Dot(dirVec, transform.right);
+        float addAngleValue = dot > 0 ? -5f : 5f;
+        _firePosition.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        while (patternElapsedTime < patternTime)
+        {
+            if (_cancelToken.IsCancellationRequested) break;
+
+            patternElapsedTime += Time.deltaTime;
+            spawnElapsedTime += Time.deltaTime;
+            if (spawnElapsedTime > spawnInterval)
+            {
+                SoundManager.Instance.EffectPlay(BelialBulletSoundName, transform.position);
+                Vector3 left = _firePosition.right * -1f;
+                Vector3 right = _firePosition.right;
+                Vector3 up = _firePosition.up;
+                Vector3 down = _firePosition.up * -1f;
+                angle += addAngleValue;
+                _firePosition.transform.rotation = Quaternion.Euler(0, 0, angle);
+                var leftBullet = _bulletPool.Get();
+                var rightBullet = _bulletPool.Get();
+                var upBullet = _bulletPool.Get();
+                var downBullet = _bulletPool.Get();
+                leftBullet.InitBullet(_bulletSpawnPosition, left, _bulletDamage);
+                rightBullet.InitBullet(_bulletSpawnPosition, right, _bulletDamage);
+                upBullet.InitBullet(_bulletSpawnPosition, up, _bulletDamage);
+                downBullet.InitBullet(_bulletSpawnPosition, down, _bulletDamage);
+
+                spawnElapsedTime = 0f;
+            }
+            await UniTask.Yield();
+        }
+        _bulletAttackStart = false;
+        _anim.SetTrigger(ID_ResetTrigger);
+        await UniTask.Delay((int)(1000 * _actPatternInterval));
+        _isActPattern = false;
     }
 
-    private IEnumerator SwordSpawnPattern()
+    private async UniTaskVoid SwordSpawnPattern()
     {
         // 8
         Bounds bound = _collider.bounds;
@@ -194,6 +200,7 @@ public class BossBelial : BossBase
 
         for (int i = 0; i < _swordSpawnPositions.Length; ++i)
         {
+            if (_cancelToken.IsCancellationRequested) break;
             _swordSpawnPositions[i].x = minX + swordDistance * i;
             _swordSpawnPositions[i].y = pivot.y;
             _swords[i] = Instantiate(_swordPrefab, _bulletPoolTransform);
@@ -201,81 +208,75 @@ public class BossBelial : BossBase
             _swords[i].SetStartPosition(_swordSpawnPositions[i]);
         }
 
-        while(true)
+        _isActPattern = true;
+
+        for (int i = 0; i < _swords.Length; ++i)
         {
-            _isActPattern = true;
-
-            for (int i = 0; i < _swords.Length; ++i)
-            {
-                SoundManager.Instance.EffectPlay(BelialSwordSoundName, transform.position);
-                _swords[i].Spawn();
-                yield return YieldCache.WaitForSeconds(0.2f);
-            }
-            // 스폰
-            for (int i = 0;i < _swords.Length; ++i)
-            {
-                _swords[i].FireSword();
-                yield return YieldCache.WaitForSeconds(0.2f);
-            }
-
-            yield return YieldCache.WaitForSeconds(_actPatternInterval);
-            _isActPattern = false;
-            StopCoroutine(_patternCoroutines[(int)PatternType.SwordSpawn]);
-            yield return null;
+            if (_cancelToken.IsCancellationRequested) break;
+            SoundManager.Instance.EffectPlay(BelialSwordSoundName, transform.position);
+            _swords[i].Spawn();
+            await UniTask.Delay(200);
         }
+        // 스폰
+        for (int i = 0; i < _swords.Length; ++i)
+        {
+            if (_cancelToken.IsCancellationRequested) break;
+            _swords[i].FireSword();
+            await UniTask.Delay(200);
+        }
+
+        await UniTask.Delay((int)(1000 * _actPatternInterval));
+        _isActPattern = false;
+
     }
 
-    private IEnumerator LaserFirePattern()
+    private async UniTaskVoid LaserFirePattern()
     {
-        while (true)
+        _isActPattern = true;
+        int laserAttackCount = 3;
+        while (laserAttackCount > 0)
         {
-            _isActPattern = true;
-            int laserAttackCount = 3;
-            while (laserAttackCount > 0)
+            if (_cancelToken.IsCancellationRequested) break;
+            int rand = Random.Range(0, 2);
+            if (rand == 0)
             {
-                int rand = Random.Range(0, 2);
-                if (rand == 0)
+                if (_leftHand.IsUseHand == false)
                 {
-                    if (_leftHand.IsUseHand == false)
-                    {
-                        _leftHand.Attack();
-                        laserAttackCount--;
-                    }
-                    else if (_rightHand.IsUseHand == false)
-                    {
-                        _rightHand.Attack();
-                        laserAttackCount--;
-                    }
-                    else
-                    {
-                        yield return null;
-                    }
+                    _leftHand.Attack();
+                    laserAttackCount--;
+                }
+                else if (_rightHand.IsUseHand == false)
+                {
+                    _rightHand.Attack();
+                    laserAttackCount--;
                 }
                 else
                 {
-                    if (_rightHand.IsUseHand == false)
-                    {
-                        _rightHand.Attack();
-                        laserAttackCount--;
-                    }
-                    else if (_leftHand.IsUseHand == false)
-                    {
-                        _leftHand.Attack();
-                        laserAttackCount--;
-                    }
-                    else
-                    {
-                        yield return null;
-                    }
+                    await UniTask.Yield();
                 }
-                yield return YieldCache.WaitForSeconds(1f);
             }
-
-            yield return YieldCache.WaitForSeconds(_actPatternInterval);
-            _isActPattern = false;
-            StopCoroutine(_patternCoroutines[(int)PatternType.Laser]);
-            yield return null;
+            else
+            {
+                if (_rightHand.IsUseHand == false)
+                {
+                    _rightHand.Attack();
+                    laserAttackCount--;
+                }
+                else if (_leftHand.IsUseHand == false)
+                {
+                    _leftHand.Attack();
+                    laserAttackCount--;
+                }
+                else
+                {
+                    await UniTask.Yield();
+                }
+            }
+            await UniTask.Delay(1000);
         }
+
+        await UniTask.Delay((int)(1000 * _actPatternInterval));
+        _isActPattern = false;
     }
 
     #region Pool Functinon

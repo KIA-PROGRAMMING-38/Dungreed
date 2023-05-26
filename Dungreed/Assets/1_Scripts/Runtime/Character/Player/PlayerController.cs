@@ -1,4 +1,5 @@
 
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -97,7 +98,7 @@ public class PlayerController : BaseController
     protected override void Start()
     {
         base.Start();
-        StartCoroutine(IncreaseDashCount());
+        IncreaseDashCount().Forget();
 
         //Initialize();
     }
@@ -156,14 +157,14 @@ public class PlayerController : BaseController
     }
 
 
-    public IEnumerator IncreaseDashCount()
+    public async UniTaskVoid IncreaseDashCount()
     {
         while (true)
         {
             _data.CurrentDashCount = Mathf.Clamp(_data.CurrentDashCount + 1, 0, _data.MaxDashCount);
             CanDash = _data.CurrentDashCount != 0;
             OnDashAction?.Invoke(_data.CurrentDashCount, _data.MaxDashCount);
-            yield return YieldCache.WaitForSeconds(PlayerData.DEFAULT_DASH_COUNT_INTERVAL);
+            await UniTask.Delay((int)(1000 * PlayerData.DEFAULT_DASH_COUNT_INTERVAL));
         }
     }
 

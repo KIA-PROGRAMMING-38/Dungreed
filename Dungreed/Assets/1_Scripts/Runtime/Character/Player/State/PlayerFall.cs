@@ -19,7 +19,7 @@ public class PlayerFall : StateMachineBehaviour
 
         if (true == _controller.CollisionInfo.IsOnewayGrounded)
         {
-            _controller.StartCoroutine(_controller.DisableCoroutine);
+            _controller.DisableCollision().Forget();
             SoundManager.Instance.EffectPlay(_jumpSoundName, animator.transform.position);
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using TMPro;
 using Unity.Mathematics;
@@ -41,14 +42,14 @@ public class DungeonDieScene : MonoBehaviour, ICutScene
     {
         _beforeAction = before;
         _afterAction = after;
-        StartCoroutine(CutScene());
+        CutScene().Forget();
     }
 
-    public IEnumerator CutScene()
+    public async UniTaskVoid CutScene()
     {
         SoundManager.Instance.BGMPlay(DefeatSoundName, false, 1);
         _beforeAction?.Invoke();
-        StartCoroutine(TimeSlow());
+        TimeSlow().Forget();
         float elapsedTime = 0f;
         Color color = _panel.color;
         Color textColor = _dieText.color;
@@ -64,7 +65,7 @@ public class DungeonDieScene : MonoBehaviour, ICutScene
             elapsedTime += Time.deltaTime;
             color.a = Mathf.Lerp(0, 1, elapsedTime / _fadeInTime);
             _panel.color= color;
-            yield return null;
+            await UniTask.Yield();
         }
 
         elapsedTime = 0f;
@@ -72,7 +73,7 @@ public class DungeonDieScene : MonoBehaviour, ICutScene
         {
             elapsedTime += Time.deltaTime;
             _dieTextMask.fillAmount = Mathf.Lerp(0, 1, elapsedTime/_dieTextFadeInTime);
-            yield return null;
+            await UniTask.Yield();
         }
 
         // Typing Effect
@@ -91,7 +92,7 @@ public class DungeonDieScene : MonoBehaviour, ICutScene
                 }
 
                 length++;
-                yield return YieldCache.WaitForSeconds(_reasonTypingInterval);
+                await UniTask.Delay((int)(1000 * _reasonTypingInterval));
             }
         }
 
@@ -106,24 +107,24 @@ public class DungeonDieScene : MonoBehaviour, ICutScene
             textColor.a = reasonTextColor.a = alpha;
             _dieText.color = textColor;
             _reasonText.color = reasonTextColor;
-            yield return null;
+            await UniTask.Yield();
         }
 
         _dieTextMask.gameObject.SetActive(false);
         _reasonText.gameObject.SetActive(false);
-        yield return YieldCache.WaitForSeconds(2f);
+        await UniTask.Delay(2000);
         _afterAction?.Invoke();
-        yield return null;
+        await UniTask.Yield();
     }
 
-    private IEnumerator TimeSlow()
+    private async UniTaskVoid TimeSlow()
     {
         float t = 0;
         while (t - 0.1f < _timeRecoverTime)
         {
             t += Time.unscaledDeltaTime;
             Time.timeScale = Mathf.Lerp(0, 1, t / _timeRecoverTime);
-            yield return null;
+            await UniTask.Yield();
         }
     }
 }

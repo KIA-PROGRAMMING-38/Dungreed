@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -32,9 +33,6 @@ public class Health : MonoBehaviour, IDamageable
 
     public event Action<int, int> OnHealthChanged;
 
-    private IEnumerator _flickingCoroutine;
-    private IEnumerator _invincibleCoroutine;
-
 
     private void Awake()
     {
@@ -43,9 +41,6 @@ public class Health : MonoBehaviour, IDamageable
 
         _flickingMaterial = _flickingMaterial ?? ResourceCache.GetResource<Material>("Materials/DefaultHitMaterial");
         _defaultMaterial = _renderer.material;
-
-        _flickingCoroutine = FlickingCoroutine();
-        _invincibleCoroutine = InvincibleCoroutine();
 
         if (_currentHp == 0)
         {
@@ -129,42 +124,31 @@ public class Health : MonoBehaviour, IDamageable
 
     private void Invincible()
     {
-        StartCoroutine(_invincibleCoroutine);
+        InvincibleTask().Forget();
     }
 
     private void Flicking()
     {
-        StartCoroutine(_flickingCoroutine);
+        FlickingTask().Forget();
     }
 
-    IEnumerator FlickingCoroutine()
+    async UniTaskVoid FlickingTask()
     {
-        while (true)
-        {
             _renderer.material = _flickingMaterial;
 
-            yield return YieldCache.WaitForSeconds(_flickingTime);
+            await UniTask.Delay((int)(1000 * _flickingTime));
 
             _renderer.material = _defaultMaterial;
-            StopCoroutine(_flickingCoroutine);
 
-            yield return null;
-        }
     }
 
-    IEnumerator InvincibleCoroutine()
+    async UniTaskVoid InvincibleTask()
     {
-        while (true)
-        {
-            IsInvincible = true;
-            OnInvincible?.Invoke();
+        IsInvincible = true;
+        OnInvincible?.Invoke();
 
-            yield return YieldCache.WaitForSeconds(InvincibleTime);
+        await UniTask.Delay((int)(1000 * InvincibleTime));
 
-            IsInvincible = false;
-            StopCoroutine(_invincibleCoroutine);
-
-            yield return null;
-        }
+        IsInvincible = false;
     }
 }

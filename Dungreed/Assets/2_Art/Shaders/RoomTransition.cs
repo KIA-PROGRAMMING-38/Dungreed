@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -14,38 +15,23 @@ public class RoomTransition : MonoBehaviour
     private string propertyName = "_Progress";
 
     public event Action OnTransitionDone;
-
-    private IEnumerator _transitionCoroutine;
     // Start is called before the first frame update
     void Start()
     {
-        _transitionCoroutine = TransitionCoroutine();
-        StartCoroutine(_transitionCoroutine);
+        TransitionTask().Forget();
     }
 
-    private void Update()
+    private async UniTaskVoid TransitionTask()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        float elapsedTime = 0f;
+        roomTransitionMaterial.SetFloat(propertyName, 0f);
+        await UniTask.Delay(100);
+        while (elapsedTime < transitionTime)
         {
-            StartCoroutine(_transitionCoroutine);
+            elapsedTime += Time.deltaTime;
+            roomTransitionMaterial.SetFloat(propertyName, Mathf.Clamp01(elapsedTime / transitionTime));
+            await UniTask.Yield();
         }
-    }
-    private IEnumerator TransitionCoroutine()
-    {
-        while(true)
-        {
-            float elapsedTime = 0f;
-            roomTransitionMaterial.SetFloat(propertyName, 0f);
-            yield return YieldCache.WaitForSeconds(0.1f);
-            while (elapsedTime < transitionTime)
-            {
-                elapsedTime += Time.deltaTime;
-                roomTransitionMaterial.SetFloat(propertyName, Mathf.Clamp01(elapsedTime / transitionTime));
-                yield return null;
-            }
-            OnTransitionDone?.Invoke();
-            StopCoroutine(_transitionCoroutine);
-            yield return null;
-        }
+        OnTransitionDone?.Invoke();
     }
 }

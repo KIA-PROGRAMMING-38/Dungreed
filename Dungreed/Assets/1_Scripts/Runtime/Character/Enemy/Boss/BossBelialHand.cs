@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -14,7 +15,6 @@ public class BossBelialHand : MonoBehaviour
     public bool IsUseHand { get; private set; }
 
     public event Action OnDieAction;
-    IEnumerator _attackCoroutine;
 
     private static readonly int ID_AttackTrigger = Animator.StringToHash("Attack");
     private static readonly int ID_ResetTrigger = Animator.StringToHash("Reset");
@@ -24,7 +24,6 @@ public class BossBelialHand : MonoBehaviour
         _anim = GetComponent<Animator>();
 
         _laser.Initialize(damage: 9);
-        _attackCoroutine = AttackCoroutine();
     }
 
     private void OnEnable()
@@ -57,48 +56,43 @@ public class BossBelialHand : MonoBehaviour
         if (IsUseHand) return;
 
         IsUseHand = true;
-        StartCoroutine(_attackCoroutine);
+        AttackTask().Forget();
     }
 
     public void LaserFire()
     {
-        if(_body.isDie == false)
+        if (_body.isDie == false)
         {
             _laser.Fire();
         }
     }
 
-    public IEnumerator AttackCoroutine()
+    public async UniTaskVoid AttackTask()
     {
         GameObject player = GameManager.Instance.Player;
         BoxCollider2D col2D = player.GetComponent<BoxCollider2D>();
-        
-        while (true)
+
+        float t = 0f;
+        Vector2 startPosition = transform.position;
+        Vector2 targetPosition = col2D.bounds.center;
+        // 플레이어 위치로 이동
+        while (t < _trackingTime)
         {
-            float t = 0f;
-            Vector2 startPosition = transform.position;
-            Vector2 targetPosition = col2D.bounds.center;
-            // 플레이어 위치로 이동
-            while (t < _trackingTime)
-            {
-                t += Time.deltaTime;
-                float ratio = t / _trackingTime;
-                Vector2 newPosition = transform.position;
-                newPosition.y = Mathf.Lerp(startPosition.y, targetPosition.y, ratio);
-                transform.position = newPosition;
-                yield return null;
-            }
-            // 기다린 후
-            yield return YieldCache.WaitForSeconds(_attackWaitTime);
-            _anim.SetTrigger(ID_AttackTrigger);
-
-            while(IsUseHand == true)
-            {
-                yield return null;
-            }
-
-            StopCoroutine(_attackCoroutine);
-            yield return null;
+            t += Time.deltaTime;
+            float ratio = t / _trackingTime;
+            Vector2 newPosition = transform.position;
+            newPosition.y = Mathf.Lerp(startPosition.y, targetPosition.y, ratio);
+            transform.position = newPosition;
+            await UniTask.Yield();
         }
+        // 기다린 후
+        await UniTask.Delay((int)(1000 * _attackWaitTime));
+        _anim.SetTrigger(ID_AttackTrigger);
+
+        while (IsUseHand == true)
+        {
+            await UniTask.Yield();
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
@@ -14,12 +15,10 @@ public class DamageText : MonoBehaviour
 
     private ObjectPool<DamageText> _owner;
     private Text _text;
-    private IEnumerator _effectCoroutine;
 
     public void Awake()
     {
         _text = GetComponent<Text>();
-        _effectCoroutine = DamageTextEffectCoroutine();
     }
 
     public void SetOwner(ObjectPool<DamageText> owner) => _owner = owner;
@@ -37,31 +36,26 @@ public class DamageText : MonoBehaviour
 
         _text.rectTransform.anchoredPosition = startPosition;
         _text.rectTransform.localScale = _defaultScale;
-        StartCoroutine(_effectCoroutine);
+        DamageTextEffectTask().Forget();
     }
 
-    private IEnumerator DamageTextEffectCoroutine()
+    private async UniTaskVoid DamageTextEffectTask()
     {
-        while (true)
+        float t = 0f;
+        Color col = _text.color;
+        while (t < _lifeTime)
         {
-            float t = 0f;
-            Color col = _text.color;
-            while (t < _lifeTime)
-            {
-                t += Time.deltaTime;
-                _text.rectTransform.anchoredPosition += Vector2.up * (_speed * Time.deltaTime);
+            t += Time.deltaTime;
+            _text.rectTransform.anchoredPosition += Vector2.up * (_speed * Time.deltaTime);
 
-                float alpha = Mathf.Sin(Mathf.Lerp(0, Mathf.PI, t / _lifeTime));
-                col.a = alpha;
-                _text.color = col;
+            float alpha = Mathf.Sin(Mathf.Lerp(0, Mathf.PI, t / _lifeTime));
+            col.a = alpha;
+            _text.color = col;
 
-                yield return null;
-            }
-            transform.localScale = Vector3.one;
-            _owner.Release(this);
-            StopCoroutine(_effectCoroutine);
-            yield return null;
+            await UniTask.Yield();
         }
+        transform.localScale = Vector3.one;
+        _owner.Release(this);
     }
 
 }

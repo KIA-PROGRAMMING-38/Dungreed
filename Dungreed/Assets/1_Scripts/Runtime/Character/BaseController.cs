@@ -1,11 +1,12 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class BaseController : MonoBehaviour
-{ 
-    [SerializeField] 
+{
+    [SerializeField]
     protected LevelBounds _bounds;
     public LevelBounds Bounds { get { return _bounds; } }
     protected Vector2 _direction;
@@ -20,7 +21,7 @@ public class BaseController : MonoBehaviour
     protected LayerMask _onewayPlatformMask;
     [SerializeField]
     protected LayerMask _enemyMask;
-    public    LayerMask EnemyMask { get { return _enemyMask; } }
+    public LayerMask EnemyMask { get { return _enemyMask; } }
 
     [SerializeField] protected float _raycastDistance = 0.1f;
     [SerializeField] protected int _verticalRayCount = 4;
@@ -35,7 +36,7 @@ public class BaseController : MonoBehaviour
     public Rigidbody2D Rig2D { get { return _rig2D; } }
     public BoxCollider2D Collider { get { return _collider; } }
 
-    public Vector2 BoundCenter { get => _collider.bounds.center;  }
+    public Vector2 BoundCenter { get => _collider.bounds.center; }
     public float BoundWidth { get => _collider.size.x; }
     public float BoundWidthHalf { get => _collider.size.x * 0.5f; }
     public float BoundHeight { get => _collider.size.y; }
@@ -51,8 +52,6 @@ public class BaseController : MonoBehaviour
     public bool IsJumping { get { return _isJumping; } set { _isJumping = value; } }
     public bool IsDownJumping { get { return _isDownJumping; } set { _isDownJumping = value; } }
     [ShowOnly] public CollisionsInfo CollisionInfo;
-   
-    public IEnumerator DisableCoroutine;
 
     public void SetBounds(LevelBounds bounds)
     {
@@ -63,7 +62,6 @@ public class BaseController : MonoBehaviour
     {
         _collider = GetComponent<BoxCollider2D>();
         _rig2D = GetComponent<Rigidbody2D>();
-        DisableCoroutine = DisableCollision();
         CalcRaySpacing();
     }
 
@@ -82,7 +80,7 @@ public class BaseController : MonoBehaviour
         Bounds bounds = _collider.bounds;
 
         _verticalRaySpacing = bounds.size.x / (_verticalRayCount - 1);
-        _horizontalRaySpacing = bounds.size.y / (_horizontalRayCount- 1);
+        _horizontalRaySpacing = bounds.size.y / (_horizontalRayCount - 1);
     }
     public void VerticalCheck()
     {
@@ -105,7 +103,7 @@ public class BaseController : MonoBehaviour
         for (int i = 0; i < _verticalRayCount; i++)
         {
             Vector2 rayOrigin = new Vector2(bounds.min.x + (i * _verticalRaySpacing), bounds.min.y);
-            int hitCount = Physics2D.RaycastNonAlloc(rayOrigin, Vector2.down, _hit,_raycastDistance, _onewayPlatformMask);
+            int hitCount = Physics2D.RaycastNonAlloc(rayOrigin, Vector2.down, _hit, _raycastDistance, _onewayPlatformMask);
 
 
             if (hitCount > 0)
@@ -134,7 +132,7 @@ public class BaseController : MonoBehaviour
 
             if (hitCount > 0)
             {
-                CollisionInfo.left  = (Mathf.Sign(_direction.x) == -1f) ? true : false;
+                CollisionInfo.left = (Mathf.Sign(_direction.x) == -1f) ? true : false;
                 CollisionInfo.right = (Mathf.Sign(_direction.x) == 1f) ? true : false;
                 break;
             }
@@ -145,7 +143,7 @@ public class BaseController : MonoBehaviour
     {
         Vector2 vel = Rig2D.velocity;
         Vector2 pos = transform.position;
-        Bounds levelBounds= _bounds.Bounds;
+        Bounds levelBounds = _bounds.Bounds;
         if (Rig2D.velocity.x < 0 && LeftBound <= levelBounds.min.x)
         {
             pos.x = levelBounds.min.x + BoundWidthHalf;
@@ -171,21 +169,17 @@ public class BaseController : MonoBehaviour
         Rig2D.position = pos;
     }
 
-    public IEnumerator DisableCollision()
+    public async UniTaskVoid DisableCollision()
     {
-        while (true)
-        {
-            _isDownJumping = true;
-            var platformCol = _onewayPlatformCollider;
-            Physics2D.IgnoreCollision(_collider, platformCol);
 
-            yield return YieldCache.WaitForSeconds(0.25f);
+        _isDownJumping = true;
+        var platformCol = _onewayPlatformCollider;
+        Physics2D.IgnoreCollision(_collider, platformCol);
 
-            Physics2D.IgnoreCollision(_collider, platformCol, false);
-            _isDownJumping = false;
-            StopCoroutine(DisableCoroutine);
-            yield return null;
-        }
+        await UniTask.Delay(250);
+
+        Physics2D.IgnoreCollision(_collider, platformCol, false);
+        _isDownJumping = false;
     }
 
     [Serializable]

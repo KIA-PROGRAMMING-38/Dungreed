@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using TMPro;
@@ -34,14 +35,14 @@ public class BossCutScene : MonoBehaviour, ICutScene
     {
         Initialize();
         _cutSceneAfterAction = after;
-        StartCoroutine(ProcessCutSceneCoroutine());
+        ProcessCutSceneTask().Forget();
     }
 
-    private IEnumerator ProcessCutSceneCoroutine()
+    private async UniTaskVoid ProcessCutSceneTask()
     {
         GameManager.Instance.CameraManager.VirtualCamera.Follow = _boss.transform;
         GameManager.Instance.CameraManager.VirtualCamera.ForceCameraPosition(GameManager.Instance.Player.transform.position, Quaternion.identity);
-        yield return YieldCache.WaitForSeconds(1f);
+        await UniTask.Delay(1000);
 
         _nameText.gameObject.SetActive(true);
         _panel.gameObject.SetActive(true);
@@ -60,7 +61,7 @@ public class BossCutScene : MonoBehaviour, ICutScene
             elapsedTime += Time.deltaTime;
             col.a = Mathf.Lerp(0, 1, elapsedTime / _panelFadeInTime);
             _panel.color = col;
-            yield return null;
+            await UniTask.Yield();
         }
 
         elapsedTime = 0;
@@ -72,7 +73,7 @@ public class BossCutScene : MonoBehaviour, ICutScene
             col.a = Utils.Math.Utility2D.EaseOutCubic(0, 1, elapsedTime / _textFadeInTime);
             _nameText.color = col;
             _descriptionText.color = col;
-            yield return null;
+            await UniTask.Yield();
         }
 
         // Desription Typing Effect
@@ -86,7 +87,7 @@ public class BossCutScene : MonoBehaviour, ICutScene
                 SoundManager.Instance.EffectPlay("Beep", Vector3.zero);
             }
             length++;
-            yield return YieldCache.WaitForSeconds(0.3f);
+            await UniTask.Delay(300);
         }
 
         elapsedTime = 0;
@@ -103,7 +104,7 @@ public class BossCutScene : MonoBehaviour, ICutScene
             _panel.color = panelCol;
             _nameText.color = textCol;
             _descriptionText.color = textCol;
-            yield return null;
+            await UniTask.Yield();
         }
         _nameText.gameObject.SetActive(false);
         _panel.gameObject.SetActive(false);

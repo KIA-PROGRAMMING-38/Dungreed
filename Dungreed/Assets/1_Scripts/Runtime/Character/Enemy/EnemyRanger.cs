@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 public class EnemyRanger : EnemyBase
@@ -7,14 +9,14 @@ public class EnemyRanger : EnemyBase
     [SerializeField] private Transform _firePosition;
     [SerializeField] private LayerMask _projectileCollisionLayerMask;
 
+    private CancellationTokenSource _cancelSource;
     private BoxCollider2D _targetCollider;
-    IEnumerator _shootCoroutine;
 
 
     protected override void Start()
     {
         base.Start();
-        _shootCoroutine = Shoot();
+        _cancelSource = new CancellationTokenSource();
     }
 
     protected override void Attack()
@@ -24,17 +26,17 @@ public class EnemyRanger : EnemyBase
     public override void SetTarget()
     {
         base.SetTarget();
-        _targetCollider = _target.GetComponent<BoxCollider2D>();    
-        StartCoroutine(_shootCoroutine);
+        _targetCollider = _target.GetComponent<BoxCollider2D>();
+        Shoot().Forget();
     }
 
-    public IEnumerator Shoot()
+    public async UniTaskVoid Shoot()
     {
         while(true)
         {
-            if(_target == null)
+            if(_target == null || _cancelSource.IsCancellationRequested)
             {
-                yield break;
+                break;
             }
 
             _anim.SetTrigger(ID_EnemyTraceTrigger);
@@ -59,9 +61,9 @@ public class EnemyRanger : EnemyBase
                     }
                     transform.localScale = newScale;
                 }
-                yield return null;
+                await UniTask.Yield();
             }
-            yield return YieldCache.WaitForSeconds(0.2f);
+            await UniTask.Delay(200);
             _anim.SetTrigger(ID_EnemyAttackTrigger);
             SoundManager.Instance.EffectPlay(Data.AttackSoundName, transform.position);
             var projectile = GameManager.Instance.ProjectilePooler.GetProjectile();
@@ -70,8 +72,8 @@ public class EnemyRanger : EnemyBase
             projectile.InitProjectTile(_firePosition.position, _hand.transform.right, _data.ProjectileData, damageInfo);
             projectile.OwnerObject = gameObject;
             projectile.SetCollisionMask(_projectileCollisionLayerMask);
-            yield return YieldCache.WaitForSeconds(1f);
-            yield return null;
+            await UniTask.Delay(1000);
+            await UniTask.Yield();
         }
     }
 
@@ -80,5 +82,6 @@ public class EnemyRanger : EnemyBase
         base.Die();
         CreateDieFx();
         gameObject.SetActive(false);
+        _cancelSource.Cancel();
     }
 }
