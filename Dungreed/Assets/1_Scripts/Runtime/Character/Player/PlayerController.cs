@@ -2,8 +2,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.XR;
 
 public class PlayerController : BaseController
 {
